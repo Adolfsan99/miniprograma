@@ -3,9 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miniprograma</title>
+    <title>✅</title>
+    <style>
+        h1,a{
+        font-family: Arial, Helvetica, sans-serif;
+        color: aliceblue;
+        }
+        html {
+        background: linear-gradient(135deg, #834545, #1a17cdba);
+        }
+        body {
+        margin: auto;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 40%;
+        }
+        p{
+        font-size: 40px;
+        margin: inherit;
+        }
+        button {
+        background-color: #000;
+        color: white;
+        padding: 0px;
+        border: revert-layer;
+        border-radius: 0;
+        margin: 20px,5px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: background-color 0.3s ease;
+        height: 150px;
+        width: 150px;
+        border-radius: 20px;
+        }
+        button:hover {
+        background-color: #183743;
+        }
+        @media only screen and (max-width: 600px) {
+            button {
+                padding: 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
-<body style="background-color: #242424;">
+<body>
+
+<h1>✅Todo.html</h1>
+<div>
+    <button onclick="crearTarea()"><p>✏️</p>Crear tarea</button>
+    <button onclick="verTareas()"><p>📑</p>Ver tareas</button>
+    <button onclick="actualizarTareas()"><p>🪄</p>Actualizar tareas</button>
+    <button onclick="borrarDatos()"><p>🔃</p>Reiniciar datos</button>  
+    <button onclick="exportarDatos()"><p>💾</p>Exportar datos</button>
+    <button onclick="importarDatos()"><p>📥</p>Importar datos</button>
+    <button onclick="aleatorio()"><p>🎲</p>Generar n° aleatorio</button>
+    <button onclick="porcentaje()"><p>📊</p>Generar porcentaje</button>
+</div>
+    <h1>Creado por: <a href="https://github.com/Adolfsan99">Adolfo Sánchez López</a></h1>
+
     <script src="script.js"></script>
 </body>
 </html>
