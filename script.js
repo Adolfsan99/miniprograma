@@ -26,7 +26,7 @@ function porcentaje() {
 }
 
 function crearTarea() {
-    alert("Ingresa la tarea en el siguiente formato:\n \nValores para prioridad: 1,2,3\nValores para estado: p = 🔴, e = 🟠, f = 🟢\n \nEjemplo: 1,p,Lavar los platos");
+    alert("Ingresa la tarea en el siguiente formato:\n \nValores para Prioridad: 1,2,3\nValores para estado: \np = 🔴\ne = 🟠\nf = 🟢\n \nEjemplos:\n1,p,Lavar los platos = 🔴 Prioridad 1, Lavar los platos\n1,e,Almorzar = 🟠 Prioridad 1, Almorzar\n1,f,Repasar y estudiar = 🟢 Prioridad 1, Repasar y estudiar");
     var tarea = prompt("¿Qué quieres hacer?");
     var partesTarea = tarea.split(',');
 
@@ -69,7 +69,7 @@ function verTareas() {
     var tareasPrioridad1 = tareas.filter(tarea => tarea.prioridad === 1);
     var tareasOrganizadas = tareasPrioridad1.sort((a, b) => a.estado.localeCompare(b.estado));
 
-    var mensaje = "Tareas disponibles\n \nSolo se mostrarán las tareas prioritarias de orden 1, actualiza tus tareas para que desaparezcan las tareas completadas.\n \n";
+    var mensaje = "Tareas disponibles\n \nSolo se mostrarán las tareas prioritarias de orden 1, actualiza tus tareas para que desaparezcan las tareas prioritarias de orden 1 completadas y aparezcan nuevas tareas.\n \n";
     tareasOrganizadas.forEach(tarea => {
         mensaje += "" + tarea.estado + " Prioridad " + tarea.prioridad + ", " + tarea.descripcion + "\n";
     });
@@ -160,6 +160,21 @@ function importarDatos() {
 }
 
 function borrarDatos() {
-    localStorage.clear();
-    alert("🔃 Datos reiniciados exitosamente.");
+    // Generar dos números aleatorios entre 1 y 10
+    var numero1 = Math.floor(Math.random() * 10) + 1;
+    var numero2 = Math.floor(Math.random() * 10) + 1;
+
+    // Pedir al usuario que resuelva la suma
+    var respuestaUsuario = prompt(`Para confirmar el borrado de datos\nresuelve la siguiente suma: ${numero1} + ${numero2}`);
+
+    // Verificar si la respuesta es correcta
+    var sumaCorrecta = numero1 + numero2;
+
+    if (parseInt(respuestaUsuario) === sumaCorrecta) {
+        localStorage.clear();
+        alert("🔃 Datos reiniciados exitosamente.");
+    } else {
+        alert("⚠️ Los datos no han sido borrados.");
+    }
 }
+
