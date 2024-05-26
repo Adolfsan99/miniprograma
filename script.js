@@ -50,7 +50,18 @@ function verTareas() {
         'd': 'Domingo'
     };
 
-    var mensaje = "Tareas disponibles\n";
+    // Calcular el progreso
+    var totalTareas = tareas.length;
+    var tareasCompletadas = tareas.filter(tarea => tarea.estado === '🟢').length;
+    var progreso = totalTareas > 0 ? Math.round((tareasCompletadas / totalTareas) * 100) : 0;
+
+    // Generar la barra de progreso
+    var progresoBarra = '';
+    for (var i = 0; i < 10; i++) {
+        progresoBarra += i < progreso / 10 ? '█' : '░';
+    }
+
+    var mensaje = `Tareas disponibles | Progreso: ${progresoBarra} ${progreso}%\n`;
     for (var dia in dias) {
         var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1); // Filtrar solo las tareas de prioridad 1
         if (tareasDia.length > 0) {
@@ -63,6 +74,8 @@ function verTareas() {
 
     alert("📋 " + mensaje);
 }
+
+
 
 function editarTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
@@ -169,6 +182,7 @@ function actualizarTareas() {
     if (parseInt(respuestaUsuario) === sumaCorrecta) {
         var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
         var nuevasTareas = [];
+        var tareasCompletadas = [];
 
         // Recorrer todas las tareas
         for (var i = 0; i < tareas.length; i++) {
@@ -182,16 +196,18 @@ function actualizarTareas() {
             else if (tarea.prioridad === 3) {
                 tarea.prioridad = 2; // Cambiar la prioridad a 2
             }
-            // Verificar si la tarea tiene prioridad 1 y estado 🟢, no añadirla a nuevasTareas
+            // Verificar si la tarea tiene prioridad 1 y estado 🟢
             else if (tarea.prioridad === 1 && tarea.estado === '🟢') {
+                tareasCompletadas.push(tarea); // Agregar la tarea al registro de tareas completadas
                 continue; // No añadir la tarea a nuevasTareas
             }
 
             nuevasTareas.push(tarea); // Agregar la tarea al arreglo de nuevas tareas
         }
 
-        // Actualizar el LocalStorage con las nuevas tareas
+        // Actualizar el LocalStorage con las nuevas tareas y el registro de tareas completadas
         localStorage.setItem('tareas', JSON.stringify(nuevasTareas));
+        localStorage.setItem('tareasCompletadas', JSON.stringify(tareasCompletadas));
 
         alert("🪄 Tareas actualizadas exitosamente.");
     } else {
@@ -319,3 +335,36 @@ function porcentaje() {
     var porcentaje_operacion = (numero_porcentaje_partes / numero_porcentaje_total) * 100;
     alert("📊 El porcentaje de " + numero_porcentaje_partes + "/" + numero_porcentaje_total + " es: " + Math.floor(porcentaje_operacion) + "%");
 }
+
+function verTareasCompletadas() {
+    var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
+
+    // Verificar si no hay tareas completadas
+    if (tareasCompletadas.length === 0) {
+        alert("📋 No hay tareas completadas para mostrar.");
+        return;
+    }
+
+    var mensaje = "Tareas Completadas:\n\n";
+    tareasCompletadas.forEach(tarea => {
+        mensaje += `${tarea.estado} Prioridad ${tarea.prioridad}, ${tarea.descripcion}\n`;
+    });
+
+    // Generar dos números aleatorios entre 1 y 10
+    var numero1 = Math.floor(Math.random() * 10) + 1;
+    var numero2 = Math.floor(Math.random() * 10) + 1;
+
+    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
+    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2}\n`);
+
+    // Verificar si la respuesta es correcta
+    var sumaCorrecta = numero1 + numero2;
+
+    if (parseInt(respuestaUsuario) === sumaCorrecta) {
+        localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
+        alert("🗑️ Registro de tareas completadas eliminado exitosamente.");
+    } else {
+        alert("⚠️ El registro de tareas completadas no ha sido eliminado.");
+    }
+}
+
