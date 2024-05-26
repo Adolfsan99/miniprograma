@@ -78,35 +78,55 @@ function verTareas() {
 }
 
 function actualizarTareas() {
-    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
-    var nuevasTareas = [];
+    var confirmacion = confirm("¿Está seguro de actualizar las tareas?\n\nSe recomienda que la mayoría o todas las tareas de prioridad 1 de su lista estén completas, de lo contrario, se añadirán más tareas de prioridad 1 a la lista de tareas.");
 
-    // Recorrer todas las tareas
-    for (var i = 0; i < tareas.length; i++) {
-        var tarea = tareas[i];
-
-        // Verificar si la tarea tiene prioridad 2
-        if (tarea.prioridad === 2) {
-            tarea.prioridad = 1; // Cambiar la prioridad a 1
-        }
-        // Verificar si la tarea tiene prioridad 3
-        else if (tarea.prioridad === 3) {
-            tarea.prioridad = 2; // Cambiar la prioridad a 2
-        }
-        // Verificar si la tarea tiene prioridad 1 y estado 🟢, no añadirla a nuevasTareas
-        else if (tarea.prioridad === 1 && tarea.estado === '🟢') {
-            continue; // No añadir la tarea a nuevasTareas
-        }
-
-        nuevasTareas.push(tarea); // Agregar la tarea al arreglo de nuevas tareas
+    if (!confirmacion) {
+        alert("⚠️ Las tareas no han sido actualizadas.");
+        return;
     }
 
-    // Actualizar el LocalStorage con las nuevas tareas
-    localStorage.setItem('tareas', JSON.stringify(nuevasTareas));
+    // Generar dos números aleatorios entre 1 y 10
+    var numero1 = Math.floor(Math.random() * 10) + 1;
+    var numero2 = Math.floor(Math.random() * 10) + 1;
+    
+    // Pedir al usuario que resuelva la suma
+    var respuestaUsuario = prompt(`Para confirmar la actualización de las tareas, resuelve la siguiente suma: ${numero1} + ${numero2}`);
 
-    alert("🪄 Tareas actualizadas exitosamente.");
+    // Verificar si la respuesta es correcta
+    var sumaCorrecta = numero1 + numero2;
+
+    if (parseInt(respuestaUsuario) === sumaCorrecta) {
+        var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+        var nuevasTareas = [];
+
+        // Recorrer todas las tareas
+        for (var i = 0; i < tareas.length; i++) {
+            var tarea = tareas[i];
+
+            // Verificar si la tarea tiene prioridad 2
+            if (tarea.prioridad === 2) {
+                tarea.prioridad = 1; // Cambiar la prioridad a 1
+            }
+            // Verificar si la tarea tiene prioridad 3
+            else if (tarea.prioridad === 3) {
+                tarea.prioridad = 2; // Cambiar la prioridad a 2
+            }
+            // Verificar si la tarea tiene prioridad 1 y estado 🟢, no añadirla a nuevasTareas
+            else if (tarea.prioridad === 1 && tarea.estado === '🟢') {
+                continue; // No añadir la tarea a nuevasTareas
+            }
+
+            nuevasTareas.push(tarea); // Agregar la tarea al arreglo de nuevas tareas
+        }
+
+        // Actualizar el LocalStorage con las nuevas tareas
+        localStorage.setItem('tareas', JSON.stringify(nuevasTareas));
+
+        alert("🪄 Tareas actualizadas exitosamente.");
+    } else {
+        alert("⚠️ Las tareas no han sido actualizadas.");
+    }
 }
-
 
 function exportarDatos() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
