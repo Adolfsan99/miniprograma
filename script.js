@@ -1,5 +1,5 @@
 function crearTarea() {
-    var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n\nPrioridad (1,2,3), Estado (p: 🔴, e: 🟠, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n \nEjemplo: 1,p,Lavar los platos,mi");
+    var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n\nPrioridad (1,2,3), Estado (p: 🔴, e: 🟠, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n\nEjemplo 1: 1,p,Lavar los platos,mi\nEjemplo 2: 1,p,26/05/2024 - Ir a comprar en el supermercado,x\n\n*Realice los ejemplos y despues dirigaje a (Ver tareas) para entender mejor esta funcionalidad.");
 
     if (tarea === null) {
         // El usuario ha cancelado el prompt
@@ -266,16 +266,19 @@ function verTareasCompletadas() {
     var numero2 = Math.floor(Math.random() * 10) + 1;
 
     // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
-    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2}\n`);
+    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2}`);
 
-    // Verificar si la respuesta es correcta
-    var sumaCorrecta = numero1 + numero2;
+    // Verificar si el usuario ha ingresado una respuesta
+    if (respuestaUsuario !== null) {
+        // Verificar si la respuesta es correcta
+        var sumaCorrecta = numero1 + numero2;
 
-    if (parseInt(respuestaUsuario) === sumaCorrecta) {
-        localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
-        alert("🗑️ Registro de tareas completadas eliminado exitosamente.");
-    } else {
-        alert("⚠️ El registro de tareas completadas no ha sido eliminado.");
+        if (parseInt(respuestaUsuario) === sumaCorrecta) {
+            localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
+            alert("🗑️ Registro de tareas completadas eliminado exitosamente.");
+        } else {
+            alert("⚠️ El registro de tareas completadas no ha sido eliminado.");
+        }
     }
 }
 
@@ -285,7 +288,7 @@ function crearOEditarNota() {
     var notaExistente = localStorage.getItem('nota') || '';
     
     // Pedir al usuario que ingrese o edite la nota, mostrando la nota existente
-    var nota = prompt("Escribe o edita tu nota:\n\n*Se recomienda crear las notas de la siguiente manera:\n'*Nota 1,*Nota 2,*Nota 3'\n\nEjemplo: *Cocinar,*Barrer,*Limpiar", notaExistente);
+    var nota = prompt("Escribe o edita tu nota:\n\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n\nEjemplo 1: *Cocinar,*Barrer,*Limpiar\nEjemplo 2: 📌Recordatorios,*Beber agua,*Limpiar el polvo,,📜Diario,Mayo 26 - Sigo programando una aplicacion de productividad,Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, las comas ( , ) sirven para separar las notas.", notaExistente);
 
     // Verificar si el usuario presionó "Cancelar"
     if (nota === null) {
@@ -307,7 +310,7 @@ function verNota() {
     if (nota) {
         // Reemplazar todas las comas por saltos de línea
         var notaFormateada = nota.replace(/,/g, '\n');
-        alert("Notas:\n" + notaFormateada);
+        alert("Notas:\n\n" + notaFormateada);
     } else {
         alert("Actualmente, no hay ninguna nota para mostrar.");
     }
@@ -387,7 +390,10 @@ function importarDatos() {
                 }
 
                 localStorage.setItem('tareas', JSON.stringify(datos.tareas));
+                localStorage.setItem('tareasCompletadas', JSON.stringify(datos.tareasCompletadas || [])); // Incluir tareasCompletadas
+
                 localStorage.setItem('nota', datos.nota || '');
+                
                 alert("📥 Datos importados exitosamente.");
                 location.reload(); // Recargar la página para reflejar los cambios en el LocalStorage
             } catch (error) {
@@ -401,10 +407,10 @@ function importarDatos() {
     input.click();
 }
 
-
 function exportarDatos() {
     var datos = {
         tareas: JSON.parse(localStorage.getItem('tareas')) || [],
+        tareasCompletadas: JSON.parse(localStorage.getItem('tareasCompletadas')) || [], // Incluir tareasCompletadas
         nota: localStorage.getItem('nota') || ''
     };
 
@@ -419,7 +425,6 @@ function exportarDatos() {
 
     alert("💾 Datos exportados exitosamente.");
 }
-
 
 function borrarDatos() {
     // Generar dos números aleatorios entre 1 y 10
