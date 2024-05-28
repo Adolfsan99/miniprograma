@@ -11,7 +11,7 @@ function crearTarea() {
     var partesTarea = tarea.split(',');
 
     if (partesTarea.length < 4) {
-        alert("⚠️ Formato de tarea inválido.");
+        alert("⚠️No se pudo crear la tarea\nFormato de tarea inválido.");
         return;
     }
 
@@ -33,20 +33,20 @@ function crearTarea() {
             estadoEmoji = '🟢';
             break;
         default:
-            alert("⚠️ Formato de tarea inválido.");
+            alert("⚠️Estado inválido.");
             return;
     }
 
     // Verificar si la prioridad es válida
     if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
-        alert("⚠️ Formato de tarea inválido.");
+        alert("⚠️Prioridad inválido.");
         return;
     }
 
     // Verificar si el día es válido
     var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
     if (!diasValidos.includes(dia)) {
-        alert("⚠️ Formato de tarea inválido.");
+        alert("⚠️Día inválido.");
         return;
     }
 
@@ -54,7 +54,7 @@ function crearTarea() {
     tareas.push({ prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia });
     localStorage.setItem('tareas', JSON.stringify(tareas));
 
-    alert("✅ Tarea creada exitosamente.");
+    alert("📝Tarea creada exitosamente.");
 }
 
 
@@ -105,7 +105,7 @@ function editarTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
 
     if (tareas.length === 0) {
-        alert("Actualmente, no tienes tareas para editar.");
+        alert("⚠️Actualmente, no tienes tareas para editar.");
         return;
     }
 
@@ -119,7 +119,7 @@ function editarTarea() {
     tareaSeleccionada = parseInt(tareaSeleccionada) - 1;
 
     if (isNaN(tareaSeleccionada) || tareaSeleccionada < 0 || tareaSeleccionada >= tareas.length) {
-        alert("⚠️ Selección inválida.");
+        alert("⚠️Tarea inválida.");
         return;
     }
 
@@ -137,7 +137,7 @@ function editarTarea() {
     if (nuevoDia === null) return; // Usuario canceló
 
     if (isNaN(nuevaPrioridad) || nuevaPrioridad < 1 || nuevaPrioridad > 3) {
-        alert("⚠️ Prioridad inválida.");
+        alert("⚠️Prioridad inválida.");
         return;
     }
 
@@ -153,7 +153,7 @@ function editarTarea() {
             estadoEmoji = '🟢';
             break;
         default:
-            alert("⚠️ Estado inválido.");
+            alert("⚠️Estado inválido.");
             return;
     }
 
@@ -184,7 +184,7 @@ function editarTarea() {
             diaTexto = 'Sin asignar';
             break;
         default:
-            alert("⚠️ Día inválido.");
+            alert("⚠️Día inválido.");
             return;
     }
 
@@ -195,7 +195,7 @@ function editarTarea() {
 
     localStorage.setItem('tareas', JSON.stringify(tareas));
 
-    alert("✅ Tarea editada exitosamente.");
+    alert("✏️Tarea editada exitosamente.");
 }
 
 // Función para obtener el nombre completo del día a partir de su abreviatura
@@ -259,9 +259,9 @@ function actualizarTareas() {
         // Actualizar el registro de tareas completadas en el LocalStorage
         localStorage.setItem('tareasCompletadas', JSON.stringify(tareasCompletadas));
 
-        alert("🪄 Tareas actualizadas exitosamente.");
+        alert("🪄Tareas actualizadas exitosamente.");
     } else {
-        alert("⚠️ Las tareas no han sido actualizadas.");
+        alert("⚠️Las tareas no han sido actualizadas.");
     }
 }
 
@@ -286,7 +286,7 @@ function verTareasCompletadas() {
 
     // Verificar si no hay tareas completadas
     if (tareasCompletadas.length === 0) {
-        alert("Actualmente, no hay ninguna tarea completada para mostrar.");
+        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
         return;
     }
 
@@ -295,7 +295,7 @@ function verTareasCompletadas() {
     var emojiNivel = obtenerEmojiNivel(nivel);
     var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
 
-    var mensaje = `✅Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n\n`;
+    var mensaje = `Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n\n`;
     tareasCompletadas.forEach(tarea => {
         mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
     });
@@ -315,9 +315,9 @@ function verTareasCompletadas() {
 
         if (parseInt(respuestaUsuario) === sumaCorrecta) {
             localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
-            alert("🗑️ Registro de tareas completadas eliminado exitosamente.");
+            alert("🗑️Registro de tareas completadas eliminado exitosamente.");
         } else {
-            alert("⚠️ El registro de tareas completadas no ha sido eliminado.");
+            alert("⚠️El registro de tareas completadas no ha sido eliminado.");
         }
     }
 }
@@ -338,10 +338,10 @@ function crearOEditarNota() {
 
     // Verificar si el usuario ingresó una nota vacía
     if (nota.trim() === "") {
-        alert("⚠️ No se ha ingresado ninguna nota.");
+        alert("⚠️No se ha ingresado ninguna nota.");
     } else {
         localStorage.setItem('nota', nota);
-        alert("✅ Nota guardada exitosamente.");
+        alert("✅Nota guardada exitosamente.");
     }
 }
 
@@ -354,7 +354,7 @@ function verNota() {
         var notaFormateada = nota.replace(/;/g, '\n');
         alert("Notas:\n\n" + notaFormateada);
     } else {
-        alert("Actualmente, no hay ninguna nota para mostrar.");
+        alert("⚠️Actualmente, no hay ninguna nota para mostrar.");
     }
 }
 
@@ -365,20 +365,20 @@ function aleatorio() {
 
     // Verificar si el usuario presionó "Cancelar" o ingresó un valor no válido
     if (numero_aleatorio_rango_inicial === null || isNaN(numero_aleatorio_rango_inicial)) {
-    alert("⚠️ Ingresa un valor numérico válido para el rango inicial.");
+    alert("⚠️Ingresa un valor numérico válido para el rango inicial.");
     return;
     }
 
     var numero_aleatorio_rango_final = parseInt(prompt("Ingresa el rango final de tu numero aleatorio\n\n*Si escogiste 1 en el rango inicial, puedes utilizar 100 en el rango final para generar un numero aleatorio entre 1 y 100"));
 
     if (isNaN(numero_aleatorio_rango_inicial) || isNaN(numero_aleatorio_rango_final)) {
-        alert("⚠️ Ingresa valores numéricos válidos.");
+        alert("⚠️Ingresa valores numéricos válidos.");
         return;
     }
 
     var numero_aleatorio = Math.floor(Math.random() * (numero_aleatorio_rango_final - numero_aleatorio_rango_inicial + 1)) + numero_aleatorio_rango_inicial;
     console.log("El número aleatorio es: ", numero_aleatorio);
-    alert("🎲 El número aleatorio es: " + numero_aleatorio);
+    alert("🎲El número aleatorio es: " + numero_aleatorio);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -389,7 +389,7 @@ function porcentaje() {
     
     // Verificar si el usuario presionó "Cancelar" o ingresó un valor no válido
     if (numero_porcentaje_partes === null || isNaN(numero_porcentaje_partes)) {
-        alert("⚠️ Ingresa un valor numérico válido para las partes.");
+        alert("⚠️Ingresa un valor numérico válido para las partes.");
         return;
     }
 
@@ -398,7 +398,7 @@ function porcentaje() {
     
     // Verificar si el usuario presionó "Cancelar" o ingresó un valor no válido
     if (numero_porcentaje_total === null || isNaN(numero_porcentaje_total)) {
-        alert("⚠️ Ingresa un valor numérico válido para el total.");
+        alert("⚠️Ingresa un valor numérico válido para el total.");
         return;
     }
 
@@ -406,7 +406,7 @@ function porcentaje() {
     var porcentaje_operacion = (numero_porcentaje_partes / numero_porcentaje_total) * 100;
     
     // Mostrar el resultado
-    alert("📊 El porcentaje de " + numero_porcentaje_partes + "/" + numero_porcentaje_total + " es: " + Math.floor(porcentaje_operacion) + "%");
+    alert("📊El porcentaje de " + numero_porcentaje_partes + "/" + numero_porcentaje_total + " es: " + Math.floor(porcentaje_operacion) + "%");
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -424,7 +424,7 @@ function importarDatos() {
         reader.onload = function (readerEvent) {
             var content = readerEvent.target.result;
             if (!content) {
-                alert("⚠️ El archivo seleccionado está vacío.");
+                alert("⚠️El archivo seleccionado está vacío.");
                 return;
             }
 
@@ -439,10 +439,10 @@ function importarDatos() {
 
                 localStorage.setItem('nota', datos.nota || '');
                 
-                alert("📥 Datos importados exitosamente.");
+                alert("📥Datos importados exitosamente.");
                 location.reload(); // Recargar la página para reflejar los cambios en el LocalStorage
             } catch (error) {
-                alert("⚠️ Error al importar el archivo: " + error.message);
+                alert("⚠️Error al importar el archivo: " + error.message);
             }
         };
 
@@ -485,7 +485,7 @@ function exportarDatos() {
     document.body.appendChild(link);
     link.click();
 
-    alert("💾 Datos exportados exitosamente.");
+    alert("💾Datos exportados exitosamente.");
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -496,16 +496,16 @@ function borrarDatos() {
     var numero2 = Math.floor(Math.random() * 10) + 1;
 
     // Pedir al usuario que resuelva la suma
-    var respuestaUsuario = prompt(`Para confirmar el borrado de datos\nresuelve la siguiente suma: ${numero1} + ${numero2}`);
+    var respuestaUsuario = prompt(`Para confirmar el formateo de datos\nresuelve la siguiente suma: ${numero1} + ${numero2}`);
 
     // Verificar si la respuesta es correcta
     var sumaCorrecta = numero1 + numero2;
 
     if (parseInt(respuestaUsuario) === sumaCorrecta) {
         localStorage.clear();
-        alert("🔃 Datos reiniciados exitosamente.");
+        alert("🔃Datos formateados exitosamente.");
     } else {
-        alert("⚠️ Los datos no han sido borrados.");
+        alert("⚠️Los datos no han sido borrados.");
     }
 }
 
