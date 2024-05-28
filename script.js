@@ -242,32 +242,21 @@ function actualizarTareas() {
 
     if (parseInt(respuestaUsuario) === sumaCorrecta) {
         var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
-        var nuevasTareas = [];
-        var tareasCompletadas = [];
+        var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
 
-        // Recorrer todas las tareas
-        for (var i = 0; i < tareas.length; i++) {
-            var tarea = tareas[i];
-
-            // Verificar si la tarea tiene prioridad 2
-            if (tarea.prioridad === 2) {
-                tarea.prioridad = 1; // Cambiar la prioridad a 1
+        // Filtrar las tareas completadas y añadirlas a tareasCompletadas
+        var nuevasTareas = tareas.filter(tarea => {
+            if (tarea.prioridad === 1 && tarea.estado === '🟢') {
+                tareasCompletadas.push(tarea); // Añadir la tarea a tareasCompletadas
+                return false; // No añadir la tarea a nuevasTareas
             }
-            // Verificar si la tarea tiene prioridad 3
-            else if (tarea.prioridad === 3) {
-                tarea.prioridad = 2; // Cambiar la prioridad a 2
-            }
-            // Verificar si la tarea tiene prioridad 1 y estado 🟢
-            else if (tarea.prioridad === 1 && tarea.estado === '🟢') {
-                tareasCompletadas.push(tarea); // Agregar la tarea al registro de tareas completadas
-                continue; // No añadir la tarea a nuevasTareas
-            }
+            return true; // Mantener la tarea en nuevasTareas
+        });
 
-            nuevasTareas.push(tarea); // Agregar la tarea al arreglo de nuevas tareas
-        }
-
-        // Actualizar el LocalStorage con las nuevas tareas y el registro de tareas completadas
+        // Actualizar el LocalStorage con las tareas filtradas
         localStorage.setItem('tareas', JSON.stringify(nuevasTareas));
+
+        // Actualizar el registro de tareas completadas en el LocalStorage
         localStorage.setItem('tareasCompletadas', JSON.stringify(tareasCompletadas));
 
         alert("🪄 Tareas actualizadas exitosamente.");
@@ -276,6 +265,7 @@ function actualizarTareas() {
     }
 }
 
+
 //////////////////////////////////////////////////////////////////////////////
 
 function calcularNivel(numTareasCompletadas) {
@@ -283,7 +273,7 @@ function calcularNivel(numTareasCompletadas) {
 }
 
 function obtenerEmojiNivel(nivel) {
-    var emojis = ["🐸", "🐭", "🐶", "🦊", "🐺", "🐯", "🦁", "🐻", "🐘", "🐉"];
+    var emojis = ["🐭", "🐸", "🐶", "🦊", "🐺", "🐯", "🦁", "🐻", "🐘", "🐉"];
     return emojis[Math.min(nivel - 1, emojis.length - 1)];
 }
 
@@ -307,7 +297,7 @@ function verTareasCompletadas() {
 
     var mensaje = `✅Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n\n`;
     tareasCompletadas.forEach(tarea => {
-        mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
+        mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
     });
 
     // Generar tres números aleatorios entre 1 y 10
