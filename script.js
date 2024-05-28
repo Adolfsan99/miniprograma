@@ -250,6 +250,14 @@ function actualizarTareas() {
                 tareasCompletadas.push(tarea); // Añadir la tarea a tareasCompletadas
                 return false; // No añadir la tarea a nuevasTareas
             }
+            // Verificar si la tarea tiene prioridad 2
+            if (tarea.prioridad === 2) {
+                tarea.prioridad = 1; // Cambiar la prioridad a 1
+            }
+            // Verificar si la tarea tiene prioridad 3
+            if (tarea.prioridad === 3) {
+                tarea.prioridad = 2; // Cambiar la prioridad a 2
+            }
             return true; // Mantener la tarea en nuevasTareas
         });
 
@@ -264,7 +272,6 @@ function actualizarTareas() {
         alert("⚠️Las tareas no han sido actualizadas.");
     }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////
 
