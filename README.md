@@ -16,10 +16,6 @@ La aplicación propone una solución integral para la gestión de tareas y notas
 
 # Funcionalidades
 
-En conjunto, la aplicación ofrece una solución completa y versátil para la gestión de tareas y notas, ayudando a los usuarios a mantenerse organizados, aumentar su productividad y mejorar su calidad de vida.
-
-El propósito de las funcionalidades implementadas hasta ahora en el script es proporcionar una herramienta de gestión de tareas y notas que sea versátil, fácil de usar y que permita al usuario organizar sus actividades diarias de manera eficiente. Cada funcionalidad está diseñada para cumplir con un conjunto específico de objetivos:
-
 * Crear tarea: Permite al usuario agregar nuevas tareas especificando su prioridad, estado, descripción y día de vencimiento. Esto facilita la creación rápida y precisa de tareas con la información necesaria para su seguimiento.
 
 * Ver tareas: Ofrece una visión general de las tareas pendientes organizadas por día de vencimiento. Además, muestra el progreso del usuario con una barra de progreso y resalta las tareas prioritarias para una mejor atención.
