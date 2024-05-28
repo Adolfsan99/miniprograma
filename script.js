@@ -1,3 +1,5 @@
+//////////////////////////////////////////////////////////////////////////////
+
 function crearTarea() {
     var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n\nPrioridad (1,2,3), Estado (p: 🔴, e: 🟡, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n\nEjemplo 1: 1,p,Lavar los platos,mi\nEjemplo 2: 1,p,26/05/2024 - Ir a comprar en el supermercado,x\n\n*Realice los ejemplos y despues dirigaje a (Ver tareas) para entender mejor esta funcionalidad.");
 
@@ -56,6 +58,8 @@ function crearTarea() {
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
+
 function verTareas() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
     var dias = {
@@ -95,6 +99,7 @@ function verTareas() {
     alert(mensaje);
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function editarTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
@@ -106,7 +111,7 @@ function editarTarea() {
 
     var mensaje = "Selecciona la tarea que deseas editar:\n\n";
     tareas.forEach((tarea, index) => {
-        mensaje += `${index + 1}. ${tarea.estado} Prioridad ${tarea.prioridad}, ${tarea.descripcion}, ${tarea.dia}\n`;
+        mensaje += `${index + 1}. Prioridad ${tarea.prioridad}, ${tarea.estado}, ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}.\n`;
     });
 
     var tareaSeleccionada = prompt(mensaje);
@@ -155,29 +160,29 @@ function editarTarea() {
     var diaTexto;
     switch (nuevoDia.toLowerCase()) {
         case 's':
-            diaTexto = '📆Sábado';
+            diaTexto = 'Sábado';
             break;
         case 'd':
-            diaTexto = '📆Domingo';
+            diaTexto = 'Domingo';
             break;
         case 'l':
-            diaTexto = '📆Lunes';
+            diaTexto = 'Lunes';
             break;
         case 'm':
-            diaTexto = '📆Martes';
+            diaTexto = 'Martes';
             break;
         case 'mi':
-            diaTexto = '📆Miércoles';
+            diaTexto = 'Miércoles';
             break;
         case 'j':
-            diaTexto = '📆Jueves';
+            diaTexto = 'Jueves';
             break;
         case 'v':
-            diaTexto = '📆Viernes';
+            diaTexto = 'Viernes';
             break;
         case 'x':
-                diaTexto = '📆Sin asignar';
-            break;    
+            diaTexto = 'Sin asignar';
+            break;
         default:
             alert("⚠️ Día inválido.");
             return;
@@ -193,6 +198,31 @@ function editarTarea() {
     alert("✅ Tarea editada exitosamente.");
 }
 
+// Función para obtener el nombre completo del día a partir de su abreviatura
+function obtenerNombreDia(abreviaturaDia) {
+    switch (abreviaturaDia.toLowerCase()) {
+        case 's':
+            return 'Sábado';
+        case 'd':
+            return 'Domingo';
+        case 'l':
+            return 'Lunes';
+        case 'm':
+            return 'Martes';
+        case 'mi':
+            return 'Miércoles';
+        case 'j':
+            return 'Jueves';
+        case 'v':
+            return 'Viernes';
+        case 'x':
+            return 'Sin asignar';
+        default:
+            return 'Desconocido';
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 function actualizarTareas() {
     // Generar dos números aleatorios entre 1 y 10
@@ -246,13 +276,14 @@ function actualizarTareas() {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function calcularNivel(numTareasCompletadas) {
     return Math.floor(numTareasCompletadas / 10) + 1;
 }
 
 function obtenerEmojiNivel(nivel) {
-    var emojis = ["🌱", "🌿", "🌷", "🌼", "🌟", "🌠", "✨", "🏅", "🏆", "👑"];
+    var emojis = ["🐸", "🐭", "🐶", "🦊", "🐺", "🐯", "🦁", "🐻", "🐘", "🐉"];
     return emojis[Math.min(nivel - 1, emojis.length - 1)];
 }
 
@@ -274,7 +305,7 @@ function verTareasCompletadas() {
     var emojiNivel = obtenerEmojiNivel(nivel);
     var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
 
-    var mensaje = `✅Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\nTienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n\n`;
+    var mensaje = `✅Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n\n`;
     tareasCompletadas.forEach(tarea => {
         mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
     });
@@ -301,6 +332,8 @@ function verTareasCompletadas() {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
 function crearOEditarNota() {
     // Cargar la nota existente, si la hay
     var notaExistente = localStorage.getItem('nota') || '';
@@ -322,6 +355,7 @@ function crearOEditarNota() {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function verNota() {
     var nota = localStorage.getItem('nota');
@@ -334,6 +368,7 @@ function verNota() {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function aleatorio() {
     var numero_aleatorio_rango_inicial = parseInt(prompt("Ingresa el rango inicial de tu numero aleatorio\n\n*Normalmente suele ser 1", "1"));
@@ -356,6 +391,7 @@ function aleatorio() {
     alert("🎲 El número aleatorio es: " + numero_aleatorio);
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function porcentaje() {
     // Solicitar el número de partes
@@ -383,6 +419,7 @@ function porcentaje() {
     alert("📊 El porcentaje de " + numero_porcentaje_partes + "/" + numero_porcentaje_total + " es: " + Math.floor(porcentaje_operacion) + "%");
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function importarDatos() {
     var input = document.createElement('input');
@@ -425,6 +462,8 @@ function importarDatos() {
     input.click();
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
 function exportarDatos() {
     var datos = {
         tareas: JSON.parse(localStorage.getItem('tareas')) || [],
@@ -459,6 +498,7 @@ function exportarDatos() {
     alert("💾 Datos exportados exitosamente.");
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
 function borrarDatos() {
     // Generar dos números aleatorios entre 1 y 10
@@ -478,3 +518,5 @@ function borrarDatos() {
         alert("⚠️ Los datos no han sido borrados.");
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////
