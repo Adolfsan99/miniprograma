@@ -1,5 +1,5 @@
 function crearTarea() {
-    var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n\nPrioridad (1,2,3), Estado (p: 🔴, e: 🟠, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n\nEjemplo 1: 1,p,Lavar los platos,mi\nEjemplo 2: 1,p,26/05/2024 - Ir a comprar en el supermercado,x\n\n*Realice los ejemplos y despues dirigaje a (Ver tareas) para entender mejor esta funcionalidad.");
+    var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n\nPrioridad (1,2,3), Estado (p: 🔴, e: 🟡, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n\nEjemplo 1: 1,p,Lavar los platos,mi\nEjemplo 2: 1,p,26/05/2024 - Ir a comprar en el supermercado,x\n\n*Realice los ejemplos y despues dirigaje a (Ver tareas) para entender mejor esta funcionalidad.");
 
     if (tarea === null) {
         // El usuario ha cancelado el prompt
@@ -25,7 +25,7 @@ function crearTarea() {
             estadoEmoji = '🔴';
             break;
         case 'e':
-            estadoEmoji = '🟠';
+            estadoEmoji = '🟡';
             break;
         case 'f':
             estadoEmoji = '🟢';
@@ -122,7 +122,7 @@ function editarTarea() {
     if (nuevaPrioridad === null) return; // Usuario canceló
     nuevaPrioridad = parseInt(nuevaPrioridad);
 
-    var nuevoEstado = prompt("Ingresa el nuevo estado (p: 🔴, e: 🟠, f: 🟢):", "p");
+    var nuevoEstado = prompt("Ingresa el nuevo estado (p: 🔴, e: 🟡, f: 🟢):", "p");
     if (nuevoEstado === null) return; // Usuario canceló
 
     var nuevaDescripcion = prompt("Ingresa la nueva descripción:", tareas[tareaSeleccionada].descripcion);
@@ -142,7 +142,7 @@ function editarTarea() {
             estadoEmoji = '🔴';
             break;
         case 'e':
-            estadoEmoji = '🟠';
+            estadoEmoji = '🟡';
             break;
         case 'f':
             estadoEmoji = '🟢';
@@ -247,6 +247,19 @@ function actualizarTareas() {
 }
 
 
+function calcularNivel(numTareasCompletadas) {
+    return Math.floor(numTareasCompletadas / 10) + 1;
+}
+
+function obtenerEmojiNivel(nivel) {
+    var emojis = ["🌱", "🌿", "🌷", "🌼", "🌟", "🌠", "✨", "🏅", "🏆", "👑"];
+    return emojis[Math.min(nivel - 1, emojis.length - 1)];
+}
+
+function calcularTareasRestantes(numTareasCompletadas) {
+    return 10 - (numTareasCompletadas % 10);
+}
+
 function verTareasCompletadas() {
     var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
 
@@ -256,22 +269,28 @@ function verTareasCompletadas() {
         return;
     }
 
-    var mensaje = "Tareas Completadas:\n\n";
+    var numTareasCompletadas = tareasCompletadas.length;
+    var nivel = calcularNivel(numTareasCompletadas);
+    var emojiNivel = obtenerEmojiNivel(nivel);
+    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
+
+    var mensaje = `✅Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\nTienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n\n`;
     tareasCompletadas.forEach(tarea => {
-        mensaje += `${tarea.estado} Prioridad ${tarea.prioridad}, ${tarea.descripcion}\n`;
+        mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
     });
 
-    // Generar dos números aleatorios entre 1 y 10
+    // Generar tres números aleatorios entre 1 y 10
     var numero1 = Math.floor(Math.random() * 10) + 1;
     var numero2 = Math.floor(Math.random() * 10) + 1;
+    var numero3 = Math.floor(Math.random() * 10) + 1;
 
     // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
-    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2}`);
+    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3}`);
 
     // Verificar si el usuario ha ingresado una respuesta
     if (respuestaUsuario !== null) {
         // Verificar si la respuesta es correcta
-        var sumaCorrecta = numero1 + numero2;
+        var sumaCorrecta = numero1 + numero2 + numero3;
 
         if (parseInt(respuestaUsuario) === sumaCorrecta) {
             localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
@@ -282,13 +301,12 @@ function verTareasCompletadas() {
     }
 }
 
-
 function crearOEditarNota() {
     // Cargar la nota existente, si la hay
     var notaExistente = localStorage.getItem('nota') || '';
     
     // Pedir al usuario que ingrese o edite la nota, mostrando la nota existente
-    var nota = prompt("Escribe o edita tu nota:\n\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n\nEjemplo 1: *Cocinar,*Barrer,*Limpiar\nEjemplo 2: 📌Recordatorios,*Beber agua,*Limpiar el polvo,,📜Diario,Mayo 26 - Sigo programando una aplicacion de productividad,Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, las comas ( , ) sirven para separar las notas.", notaExistente);
+    var nota = prompt("Escribe o edita tu nota:\n\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n\nEjemplo 1: *Cocinar;*Barrer;*Limpiar\nEjemplo 2: 📌Recordatorios;*Beber agua;*Limpiar el polvo;;📜Diario;Mayo 26 - Sigo programando una aplicacion de productividad;Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, el punto y coma ( ; ) sirve para separar las notas.", notaExistente);
 
     // Verificar si el usuario presionó "Cancelar"
     if (nota === null) {
@@ -309,7 +327,7 @@ function verNota() {
     var nota = localStorage.getItem('nota');
     if (nota) {
         // Reemplazar todas las comas por saltos de línea
-        var notaFormateada = nota.replace(/,/g, '\n');
+        var notaFormateada = nota.replace(/;/g, '\n');
         alert("Notas:\n\n" + notaFormateada);
     } else {
         alert("Actualmente, no hay ninguna nota para mostrar.");
@@ -416,15 +434,31 @@ function exportarDatos() {
 
     var jsonContent = JSON.stringify(datos);
 
+    // Obtener la fecha y hora actual
+    var fecha = new Date();
+    var dia = String(fecha.getDate()).padStart(2, '0');
+    var mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Enero es 0
+    var anio = fecha.getFullYear();
+    var horas = String(fecha.getHours()).padStart(2, '0');
+    var minutos = String(fecha.getMinutes()).padStart(2, '0');
+    var segundos = String(fecha.getSeconds()).padStart(2, '0');
+
+    // Formatear la fecha y hora como DD-MM-YYYY HH-MM-SS
+    var fechaFormateada = `${dia}-${mes}-${anio} ${horas}.${minutos}`;
+
+    // Crear el nombre del archivo con la fecha y hora
+    var nombreArchivo = `Todo.html - ${fechaFormateada}.json`;
+
     var encodedUri = "data:text/json;charset=utf-8," + encodeURIComponent(jsonContent);
     var link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "tareas_y_notas.json");
+    link.setAttribute("download", nombreArchivo);
     document.body.appendChild(link);
     link.click();
 
     alert("💾 Datos exportados exitosamente.");
 }
+
 
 function borrarDatos() {
     // Generar dos números aleatorios entre 1 y 10
