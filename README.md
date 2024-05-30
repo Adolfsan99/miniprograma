@@ -1,6 +1,6 @@
    # ✅Todo.html -❓Guía de usuario
 
-A continuación, encontrarás una descripción completa de cada botón y cómo puedes utilizarlo para mejorar tu experiencia con nuestra aplicación. **¡Sigue leyendo para descubrir cómo sacar el máximo provecho de todas las características que ofrecemos!**
+A continuación, encontrarás una descripción completa de cada botón y cómo puedes utilizarlo para mejorar tu experiencia con mi aplicación. **¡Sigue leyendo para descubrir cómo sacar el máximo provecho de todas las características que ofrece!**
 
 ## 📝Ver/crear tarea
 
@@ -253,7 +253,7 @@ Para borrar todos los datos de la aplicación, sigue estos pasos:
 
 ## 🎉¡Has Completado la Guía!
 
-¡Felicidades! Has llegado al final de esta guía. Esperamos que hayas encontrado útiles las instrucciones proporcionadas y que te sientas más cómodo utilizando nuestra aplicación.
+¡Felicidades! Has llegado al final de esta guía. Esperamos que hayas encontrado útiles las instrucciones proporcionadas y que te sientas más cómodo utilizando mi aplicación.
 
 **Recomendaciones Finales:**
 
