@@ -959,7 +959,7 @@ function borrarDatos() {
 function textToHtml() {
     var ubicacionActual = window.location.origin;
     // Agregar la ruta o el nombre del archivo que deseas
-    var nuevaUbicacion = ubicacionActual + "/textto.html";
+    var nuevaUbicacion = ubicacionActual + "/miniprograma/textto.html";
     // Redirigir a la nueva ubicación
     window.location.href = nuevaUbicacion;
 }
@@ -967,7 +967,7 @@ function textToHtml() {
 function comoUsar() {
     var ubicacionActual = window.location.origin;
     // Agregar la ruta o el nombre del archivo que deseas
-    var nuevaUbicacion = ubicacionActual + "/guia.md";
+    var nuevaUbicacion = ubicacionActual + "/miniprograma/guia.md";
     // Abrir la nueva ubicación en una nueva pestaña
     window.open(nuevaUbicacion, "_blank");
 }
