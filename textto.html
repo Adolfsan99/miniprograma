@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TextTo.html</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Detecta el idioma preferido del navegador
+            const userLang = navigator.language || navigator.userLanguage;
+            // Asigna el idioma detectado al atributo 'lang' del elemento <html>
+            document.documentElement.lang = userLang;
+        });
+    </script>
     <link rel="icon" type="image/x-icon" href="favicon.png" />
     <style>
 
@@ -180,17 +188,19 @@
         border-radius: 100px;
         }
         #output {
-            font-family: Arial, sans-serif;
-            justify-content: left;
-            color: #fff;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-            border: 1px solid #ccc;
-            padding: 25px;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 40px;
+        font-family: Arial, sans-serif;
+        justify-content: center;
+        color: #fff;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+        border: 1px solid #ccc;
+        padding: 25px;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 40px;
+        word-break: break-word;
+        text-align: justify; /* Centra el texto horizontalmente */
         }
         textarea{
         margin: 20px 10px 10px 10px;

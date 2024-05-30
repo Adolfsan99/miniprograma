@@ -498,28 +498,28 @@ function editarTarea() {
     var diaTexto;
     switch (nuevoDia.toLowerCase()) {
         case 's':
-            diaTexto = 'Sábado';
+            diaTexto = '📆s';
             break;
         case 'd':
-            diaTexto = 'Domingo';
+            diaTexto = '📆d';
             break;
         case 'l':
-            diaTexto = 'Lunes';
+            diaTexto = '📆l';
             break;
         case 'm':
-            diaTexto = 'Martes';
+            diaTexto = '📆m';
             break;
         case 'mi':
-            diaTexto = 'Miércoles';
+            diaTexto = '📆mi';
             break;
         case 'j':
-            diaTexto = 'Jueves';
+            diaTexto = '📆j';
             break;
         case 'v':
-            diaTexto = 'Viernes';
+            diaTexto = '📆v';
             break;
         case 'x':
-            diaTexto = 'Sin asignar';
+            diaTexto = '📆x';
             break;
         default:
             alert("⚠️Día inválido.");

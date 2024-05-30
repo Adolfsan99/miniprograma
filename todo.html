@@ -1,9 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo.html</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Detecta el idioma preferido del navegador
+            const userLang = navigator.language || navigator.userLanguage;
+            // Asigna el idioma detectado al atributo 'lang' del elemento <html>
+            document.documentElement.lang = userLang;
+        });
+    </script>
     <link rel="icon" type="image/x-icon" href="favicon.png" />
     <style>
         a {
