@@ -540,21 +540,21 @@ function editarTarea() {
 function obtenerNombreDia(abreviaturaDia) {
     switch (abreviaturaDia.toLowerCase()) {
         case 's':
-            return 'Sábado';
+            return '📆s';
         case 'd':
-            return 'Domingo';
+            return '📆d';
         case 'l':
-            return 'Lunes';
+            return '📆l';
         case 'm':
-            return 'Martes';
+            return '📆m';
         case 'mi':
-            return 'Miércoles';
+            return '📆mi';
         case 'j':
-            return 'Jueves';
+            return '📆j';
         case 'v':
-            return 'Viernes';
+            return '📆v';
         case 'x':
-            return 'Sin asignar';
+            return '📆x';
         default:
             return 'Desconocido';
     }
