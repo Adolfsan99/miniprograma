@@ -448,7 +448,7 @@ function editarTarea() {
     var mensaje = "Selecciona la tarea que deseas editar:\n";
     tareas.forEach((tarea, index) => {
 
-        mensaje += `${index + 1}, ${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
+        mensaje += `${index + 1}, p${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
         /*mensaje += `${index + 1}. Prioridad ${tarea.prioridad}, ${tarea.estado}, ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}.\n`;*/
     });
 
