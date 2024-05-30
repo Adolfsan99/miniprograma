@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo.html</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <style>
+        a {
+        text-decoration: none;
+        }
+		div.todo{
+		margin: auto;
+		padding: 0px;
+		display: grid;
+        text-align: center;
+		align-items: center;
+		min-height: fit-content;
+		width: auto;
+		}
+        h1,a{
+        font-family: Arial, Helvetica, sans-serif;
+        color: aliceblue;
+        margin: 8px 0;
+        }
+        html {
+        background: linear-gradient(90deg, #834545, #1a17cdba);
+        }
+        body {
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        }
+        div {
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: auto;
+        }
+        div.app {
+        padding: 0px;
+        display: contents;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: auto;
+        }
+        div.box0{
+        margin: inherit;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #3b3b3b;
+        }
+        div.box1{
+        margin: inherit;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #45837a99;
+        }
+        div.box2{
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #45835470;
+        }
+        div.box3{
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #83458287;
+        }
+		div.creditos{
+		align-content: center;
+		}
+        p{
+        font-size: 40px;
+        margin: inherit;
+        }
+        button {
+        background-color: #0000002b;
+        color: white;
+        padding: 16px;
+        border: initial;
+        border-radius: 0;
+        margin: 4px 2px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        height: 140px;
+        width: 140px;
+        border-radius: 100px;
+        }
+		button.todo{
+			height: 150px;
+		}
+        button:hover {
+        background-color: #183743;
+        }
+        @media only screen and (max-width: 600px) {
+            button {
+            padding: 8px;
+            font-size: 0.7rem;
+            width: 100px;
+            height: 100px;
+            }
+            p {
+            font-size: 30px;
+            margin: inherit;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="app">
+	<div class="todo">
+        <a href="" onclick="verTareasCompletadas()"><h1>✅Todo.html<div id="clock"></div></h1></a>
+	</div>
+
+    <div class="box1">
+    <button onclick="verOCrearTarea()"><p>📝</p>Ver/editar tarea</button>
+    <button onclick="verOCrearRutina()"><p>🔃</p>Ver/editar rutina</button>
+	<!--<button onclick="verTareas()"><p>📑</p>Ver tareas</button>
+	<button onclick="verTareasCompletadas()"><p>✅</p>Ver registro</button>
+    <button onclick="crearTarea()"><p>📝</p>Crear tarea</button>-->
+	<button onclick="editarTarea()"><p>✏️</p>Editar tareas</button>
+    <button onclick="actualizarTareas()"><p>🪄</p>Actualizar tareas</button>
+    </div>
+
+    <div class="box2">
+    <button onclick="verOEscribirNota()"><p>📋</p>Ver/escribir nota</button>
+	<!--<button onclick="verNota()"><p>📋</p>Ver nota</button>
+    <button onclick="crearOEditarNota()"><p>📋</p>Crear/editar nota</button>-->
+    <button onclick="aleatorio()"><p>🎲</p>Generar n° aleatorio</button>
+    <button onclick="porcentaje()"><p>📊</p>Calcular porcentaje</button>
+	<button onclick="textToHtml()"><p>✒️</p>TextTo.html</button>
+    </div>
+
+    <div class="box3">
+    <button onclick="importarDatos()"><p>📥</p>Importar datos</button>
+    <button onclick="exportarDatos()"><p>💾</p>Exportar datos</button>
+    <button onclick="borrarDatos()"><p>🗑️</p>Formatear datos</button>
+    <button onclick="comoUsar()"><p>❓</p>Guía de usuario</button>
+    </div>
+
+    <div class="creditos">
+        <h1>Creado por:‎ ‎ </h1>
+        <h1><a href="https://github.com/Adolfsan99">‎Adolfo Sánchez</a></h1>
+    </div>
+
+</div>
+
+
+    <script src="script.js"></script>
+	<script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // El '0' debe ser '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();  // Llamada inicial para establecer el reloj inmediatamente
+    </script>
+
+</body>
+</html>

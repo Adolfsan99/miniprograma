@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextTo.html</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <style>
+
+a {
+        text-decoration: none;
+        }
+		div.todo{
+		margin: auto;
+		padding: 0px;
+		display: grid;
+        text-align: center;
+		align-items: center;
+		min-height: fit-content;
+		width: auto;
+		}
+        h1,a{
+        font-family: Arial, Helvetica, sans-serif;
+        color: aliceblue;
+        margin: 8px 0;
+        }
+        html {
+        background: linear-gradient(90deg, #834545, #1a17cdba);
+        }
+        div {
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: auto;
+        }
+        div.app {
+        padding: 0px;
+        display: contents;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: auto;
+        }
+        div.box0{
+        margin: inherit;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #3b3b3b;
+        }
+        div.box1{
+        margin: inherit;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #45837a99;
+        }
+        div.box2{
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #45835470;
+        }
+        div.box3{
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #83458287;
+        }
+		div.creditos{
+		align-content: center;
+		}
+        p{
+        font-size: 40px;
+        margin: inherit;
+        }
+
+        html {
+        background: linear-gradient(90deg, #834545, #1a17cdba);
+        }
+        div.todo{
+		margin: auto;
+		padding: 0px;
+		display: grid;
+        text-align: center;
+		align-items: center;
+		min-height: fit-content;
+		width: auto;
+		}
+        div.box0{
+        margin: inherit;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #3b3b3b;
+        }
+        div.box1{
+        margin: inherit;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #45837a99;
+        }
+        div.box2{
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #45835470;
+        }
+        div.box3{
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        background-color: #83458287;
+        }
+		div.creditos{
+		align-content: center;
+		}
+        body {
+        margin: auto;
+        padding: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: fit-content;
+        width: 100%;
+        }
+        button {
+        background-color: #0000002b;
+        color: white;
+        padding: 16px;
+        border: initial;
+        border-radius: 0;
+        margin: 4px 2px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        border-radius: 100px;
+        }
+        #output {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 25px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 100px;
+        }
+        textarea{
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+<div class="todo">
+        <h1>✒️TextTo.html<div id="clock"></div></h1>
+</div>
+    <div class="box1">
+    <form id="textForm">
+        <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50" placeholder="Escribe tu texto aquí..."></textarea><br><br>
+    </div>
+    <div class="box2">
+        <button type="button" onclick="displayText()">OK</button>
+        <button type="button" onclick="exportText()">Exportar</button>
+        <button type="button" onclick="exitFunction()">Regresar a ✅Todo.html</button>
+    </div>
+    </form>
+    <div class="box3">
+    <div id="output"></div>
+    </div>
+    <div class="creditos">
+        <h1>Creado por:‎ ‎ </h1>
+        <h1><a href="https://github.com/Adolfsan99">‎Adolfo Sánchez</a></h1>
+    </div>
+
+    <script>
+        function displayText() {
+            const textInput = document.getElementById('textInput').value;
+            const outputDiv = document.getElementById('output');
+            outputDiv.textContent = textInput;
+        }
+
+        async function exportText() {
+            const textInput = document.getElementById('textInput').value;
+            const blob = new Blob([textInput], { type: 'text/plain' });
+
+            const options = {
+                types: [{
+                    description: 'Text Files',
+                    accept: {
+                        'text/plain': ['.txt'],
+                    },
+                }],
+            };
+
+            try {
+                const handle = await window.showSaveFilePicker(options);
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err) {
+                console.error('Error al guardar el archivo:', err);
+            }
+        }
+
+        function exitFunction() {
+                var ubicacionActual = window.location.origin;
+                // Agregar la ruta o el nombre del archivo que deseas
+                var nuevaUbicacion = ubicacionActual + "/todo.html";
+                // Redirigir a la nueva ubicación
+                window.location.href = nuevaUbicacion;
+        }
+    </script>
+    	<script>
+            function updateClock() {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // El '0' debe ser '12'
+                const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+                document.getElementById('clock').textContent = timeString;
+            }
+    
+            setInterval(updateClock, 1000);
+            updateClock();  // Llamada inicial para establecer el reloj inmediatamente
+        </script>
+</body>
+</html>
