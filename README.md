@@ -40,13 +40,6 @@ Sigue el siguiente formato para crear una tarea:
 
 **Nota**: Solo se mostrarán las tareas con Prioridad 1. Realiza los ejemplos para entender mejor esta funcionalidad.
 
-
-Por supuesto, aquí tienes la explicación detallada para editar tarea y ver/escribir nota, siguiendo un formato similar al anterior:
-
----
-
-¡Claro! Aquí tienes el texto en formato Markdown explicando el uso de la funcionalidad `verOCrearRutina`:
-
 ---
 
 ## 🔃Ver/crear rutina
@@ -117,10 +110,6 @@ Si la suma es correcta, las tareas se crearán y se guardarán exitosamente.
 
 ---
 
-Este documento proporciona una guía completa para utilizar la funcionalidad `verOCrearRutina`, asegurando que los usuarios puedan gestionar sus rutinas de manera efectiva y con la validación necesaria.
-
----
-
 ## ✏️Editar tareas
 
 Para editar una tarea, sigue estos simples pasos:
@@ -162,10 +151,6 @@ Sigue el siguiente formato para crear una nota:
 
 ---
 
-x Aquí tienes la explicación detallada para la funcionalidad de actualizar, adaptada a tu solicitud:
-
----
-
 ## 🪄Actualizar tareas
 
 Para mantener tu lista de tareas organizada y actualizada, sigue estos pasos:
@@ -190,10 +175,6 @@ Al finalizar el proceso de actualización, se te solicitará ingresar una suma d
 
 ---
 
-Aquí tienes la explicación detallada para la funcionalidad de registro, siguiendo el formato que solicitaste:
-
----
-
 ## ✅Registro
 
 Para acceder al registro de tus tareas completadas y seguir tu progreso, sigue estos pasos:
@@ -215,10 +196,6 @@ Al finalizar la visualización del registro, se te solicitará ingresar una suma
 **Nota importante**
 
 - Al limpiar el registro, se eliminarán tanto las tareas completadas como las orbes asociadas. Esto significa que tu nivel también se reiniciará.
-
----
-
-x Entendido, aquí tienes la explicación para la generación de números aleatorios:
 
 ---
 
@@ -271,9 +248,6 @@ Para exportar tus datos en formato JSON desde la aplicación, sigue estos pasos:
 Para borrar todos los datos de la aplicación, sigue estos pasos:
 
 1. **Presiona el botón "Formatear datos"**: Este botón te permitirá eliminar todos los datos almacenados en la aplicación, restableciéndola a su estado inicial.
-
----
-Por supuesto, aquí tienes un texto para indicar la finalización de la guía y dar algunas recomendaciones adicionales:
 
 ---
 
