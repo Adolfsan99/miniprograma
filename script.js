@@ -965,9 +965,5 @@ function textToHtml() {
 }
 
 function comoUsar() {
-    var ubicacionActual = window.location.origin;
-    // Agregar la ruta o el nombre del archivo que deseas
-    var nuevaUbicacion = ubicacionActual + "/miniprograma/guia.md";
-    // Abrir la nueva ubicación en una nueva pestaña
-    window.open(nuevaUbicacion, "_blank");
+    window.open("https://github.com/Adolfsan99/miniprograma/blob/main/README.md", "_blank");
 }
