@@ -6,8 +6,6 @@ A continuación, encontrarás una descripción completa de cada botón y cómo p
 
 Para crear una tarea o ver la lista de tareas, sigue estos simples pasos:
 
-## Uso
-
 1. **Presiona el botón "Ver/Crear Tarea"**: Este botón te llevará a la página donde podrás ver las tareas existentes o crear una nueva.
 
 **Formato para Crear Tareas**
@@ -44,70 +42,33 @@ Sigue el siguiente formato para crear una tarea:
 
 ## 🔃Ver/crear rutina
 
-## Descripción
-La funcionalidad `verOCrearRutina` permite a los usuarios crear, visualizar y actualizar una lista de tareas rutinarias. Las tareas se ingresan en un formato específico y se guardan en el `localStorage` para su uso posterior. Además, se añade una capa de confirmación mediante la resolución de una suma para garantizar que las tareas se creen correctamente.
+1. **Presiona el botón "🔃Ver/crear rutina"**: Este botón te llevará a la página donde podrás ver las rutinas existentes o crear una nueva.
 
-## Uso
+2. **Entrada en el Prompt
 
-### Visualización y Edición de la Rutina
-1. **Cargar Rutina Existente**: Al invocar la función, se carga la rutina existente desde el `localStorage` (si existe).
-2. **Formato Visual**: La rutina se muestra en un formato legible, convirtiendo los códigos abreviados en descripciones completas. Por ejemplo:
-      ```
-      Prioridad 1,🔴,Lavar los platos,Lunes
-      Prioridad 1,🔴,Lavar los platos,Martes
-      ```
-3. **Prompt para Nueva Rutina**: Se presenta un `prompt` al usuario para ingresar la nueva rutina. El formato de entrada es:
-      ```
-      Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...
-      ```
+```
+*Ingresa la nueva rutina con el formato:
+
+'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...'
+```
       - **Prioridad**: Un número del 1 al 3.
       - **Estado**: `p` (🔴), `e` (🟡), `f` (🟢).
       - **Descripción**: La descripción de la tarea.
       - **Día**: `l` (Lunes), `m` (Martes), `mi` (Miércoles), `j` (Jueves), `v` (Viernes), `s` (Sábado), `d` (Domingo), `x` (Sin asignar).
 
-### Validación y Guardado
-1. **Verificación de Entrada**: Si la entrada está vacía, se muestra una alerta de creación inválida.
-2. **Comparación y Guardado**: La rutina nueva se compara con la existente. Si hay cambios, se guarda la nueva rutina en el `localStorage` y se muestra una alerta de confirmación.
-
 ### Creación de Tareas desde la Rutina
-1. **Procesamiento de Rutina**: Las tareas de la rutina se procesan y validan:
-      - Verificación de formato.
-      - Conversión de estado y día a descripciones completas.
-2. **Confirmación de Creación**: Antes de crear las tareas, se muestra una alerta de confirmación.
-3. **Verificación Adicional**: Se presenta una suma de tres números aleatorios. El usuario debe resolver la suma correctamente para confirmar la creación de tareas.
-4. **Guardado de Tareas**: Si la suma es correcta, las tareas se guardan en el `localStorage` y se muestra una alerta de éxito.
 
-## Ejemplo de Uso
-
-```javascript
-// Invocar la función para ver o crear una rutina
-verOCrearRutina();
-```
-
-### Entrada en el Prompt
-
-```
-🔃Rutina actual:
-Prioridad 1,🔴,Lavar los platos,Lunes
-Prioridad 1,🔴,Lavar los platos,Martes
-
-*Ingresa la nueva rutina con el formato: 'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...'
-```
-
-### Confirmación de Creación de Tareas
-
-```
-⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?
-```
-
-### Verificación de Suma
-
-```
-Para confirmar, resuelve la siguiente suma: 34 + 58 + 12
-```
-
-Si la suma es correcta, las tareas se crearán y se guardarán exitosamente.
-
+3. **Confirmación de Creación**: Antes de crear las tareas, se muestra una alerta de confirmación.
+   
+4. **Verificación Adicional**: Se presenta una suma de tres números aleatorios. El usuario debe resolver la suma correctamente para confirmar la creación de tareas.
+   
+5. **Guardado de Tareas**: Si la suma es correcta, las tareas se guardan y se muestra una alerta de éxito.
+   
+6. **Formato Visual**: La rutina se muestra en un formato legible, convirtiendo los códigos abreviados en descripciones completas. Por ejemplo:
+      ```
+      Prioridad 1,🔴,Lavar los platos,Lunes
+      Prioridad 1,🔴,Lavar los platos,Martes
+      ```
 ---
 
 ## ✏️Editar tareas
@@ -171,7 +132,7 @@ Al finalizar el proceso de actualización, se te solicitará ingresar una suma d
 
 - Se recomienda que la mayoría o todas las tareas de prioridad 1 estén completadas antes de realizar la actualización.
    
-- Esta acción también limpiará el **registro**, lo que implica **eliminar las tareas completadas, así como las orbes y el nivel asociados**.
+- Esta acción también limpiará el porcentaje en (Ver/editar tareas).
 
 ---
 
@@ -195,7 +156,7 @@ Al finalizar la visualización del registro, se te solicitará ingresar una suma
 
 **Nota importante**
 
-- Al limpiar el registro, se eliminarán tanto las tareas completadas como las orbes asociadas. Esto significa que tu nivel también se reiniciará.
+- Al limpiar el registro, **se eliminarán tanto las tareas completadas como las orbes asociadas. Esto significa que tu nivel también se reiniciará**.
 
 ---
 
@@ -255,8 +216,4 @@ Para borrar todos los datos de la aplicación, sigue estos pasos:
 
 ¡Felicidades! Has llegado al final de esta guía. Esperamos que hayas encontrado útiles las instrucciones proporcionadas y que te sientas más cómodo utilizando mi aplicación.
 
-**Recomendaciones Finales:**
-
-**Explora y Experimenta**: Tómate el tiempo para explorar todas las funciones de la aplicación y experimentar con ellas. La mejor manera de aprender es haciendo.
-
-**Mantén tus Datos Seguros**: No olvides exportar tus datos de forma regular, la exportación de datos es util para tener una experiencia en multiples dispositivos, importa tus datos solo cuando sientas que sea necesario.
+Tómate el tiempo para explorar todas las funciones de la aplicación y experimentar con ellas. La mejor manera de aprender es haciendo y no olvides exportar tus datos de forma regular, la exportación de datos es util para tener una experiencia en multiples dispositivos, importa tus datos solo cuando sientas que sea necesario.
