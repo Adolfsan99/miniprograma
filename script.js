@@ -448,7 +448,7 @@ function editarTarea() {
     var mensaje = "Selecciona la tarea que deseas editar:\n";
     tareas.forEach((tarea, index) => {
 
-        mensaje += `${index + 1}, p${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
+        mensaje += `${index + 1}: ${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
         /*mensaje += `${index + 1}. Prioridad ${tarea.prioridad}, ${tarea.estado}, ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}.\n`;*/
     });
 
@@ -498,28 +498,28 @@ function editarTarea() {
     var diaTexto;
     switch (nuevoDia.toLowerCase()) {
         case 's':
-            diaTexto = '📆s';
+            diaTexto = 's';
             break;
         case 'd':
-            diaTexto = '📆d';
+            diaTexto = 'd';
             break;
         case 'l':
-            diaTexto = '📆l';
+            diaTexto = 'l';
             break;
         case 'm':
-            diaTexto = '📆m';
+            diaTexto = 'm';
             break;
         case 'mi':
-            diaTexto = '📆mi';
+            diaTexto = 'mi';
             break;
         case 'j':
-            diaTexto = '📆j';
+            diaTexto = 'j';
             break;
         case 'v':
-            diaTexto = '📆v';
+            diaTexto = 'v';
             break;
         case 'x':
-            diaTexto = '📆x';
+            diaTexto = 'x';
             break;
         default:
             alert("⚠️Día inválido.");
@@ -540,21 +540,21 @@ function editarTarea() {
 function obtenerNombreDia(abreviaturaDia) {
     switch (abreviaturaDia.toLowerCase()) {
         case 's':
-            return '📆s';
+            return 's';
         case 'd':
-            return '📆d';
+            return 'd';
         case 'l':
-            return '📆l';
+            return 'l';
         case 'm':
-            return '📆m';
+            return 'm';
         case 'mi':
-            return '📆mi';
+            return 'mi';
         case 'j':
-            return '📆j';
+            return 'j';
         case 'v':
-            return '📆v';
+            return 'v';
         case 'x':
-            return '📆x';
+            return 'x';
         default:
             return 'Desconocido';
     }
