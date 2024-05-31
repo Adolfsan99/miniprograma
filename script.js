@@ -553,53 +553,71 @@ function verTareasCompletadas() {
 }
 
 
-
-/*
-function verTareasCompletadas() {
-    var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
-
-    // Verificar si no hay tareas completadas
-    if (tareasCompletadas.length === 0) {
-        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
-        return;
-    }
-
-    var numTareasCompletadas = tareasCompletadas.length;
-    var nivel = calcularNivel(numTareasCompletadas);
-    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
-
-    var mensaje = `🟢Tareas completadas - Tu nivel: ${nivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n`;
-    tareasCompletadas.forEach(tarea => {
-        mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
-    });
-
-    // Generar tres números aleatorios entre 1 y 10
-    var numero1 = Math.floor(Math.random() * 10) + 1;
-    var numero2 = Math.floor(Math.random() * 10) + 1;
-    var numero3 = Math.floor(Math.random() * 10) + 1;
-    var numero4 = Math.floor(Math.random() * 10) + 1;
-
-    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
-    var respuestaUsuario = prompt(`${mensaje}*Para confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3} + ${numero4}`);
-
-    // Verificar si el usuario ha ingresado una respuesta
-    if (respuestaUsuario !== null) {
-        // Verificar si la respuesta es correcta
-        var sumaCorrecta = numero1 + numero2 + numero3 + numero4;
-
-        if (parseInt(respuestaUsuario) === sumaCorrecta) {
-            localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
-            alert("🗑️Registro de tareas completadas eliminado exitosamente.");
-        } else {
-            alert("⚠️El registro de tareas completadas no ha sido eliminado.");
-        }
-    }
-}
-*/
-
 //////////////////////////////////////////////////////////////////////////////
 
 
+function verOEscribirNota() {
+    // Cargar la nota existente, si la hay
+    var nota = localStorage.getItem('nota') || '';
+
+    // Reemplazar todas las comas por saltos de línea para mostrar la nota formateada
+    var notaFormateada = nota.replace(/;/g, '\n');
+    var nuevaNota = prompt("📋Nota:\n" + notaFormateada + "", nota);
+
+    // Verificar si el usuario presionó "Cancelar"
+    if (nuevaNota === null) {
+        return; // Salir de la función sin hacer nada
+    }
+
+    // Verificar si la entrada contiene la palabra "exportar"
+    if (nuevaNota.endsWith(";exportar")) {
+        // Remover ";exportar" de la entrada
+        nuevaNota = nuevaNota.replace(";exportar", "");
+
+        // Generar el nombre del archivo basado en la fecha y hora actuales
+        var fecha = new Date();
+        var dia = String(fecha.getDate()).padStart(2, '0');
+        var mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+        var año = fecha.getFullYear();
+        var horas = String(fecha.getHours()).padStart(2, '0');
+        var minutos = String(fecha.getMinutes()).padStart(2, '0');
+        var nombreArchivo = `Todo.html Notes - ${dia}-${mes}-${año} ${horas}.${minutos}.txt`;
+
+        // Crear un blob con las notas
+        var blob = new Blob([nuevaNota.replace(/;/g, '\n')], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+
+        // Crear un enlace para descargar el archivo
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = nombreArchivo;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert("✅Notas exportadas exitosamente.");
+
+        return; // Salir de la función después de exportar
+    }
+
+    // Si el usuario ingresó una nota vacía, solicitar confirmación
+    if (nuevaNota.trim() === "") {
+        var confirmacion = confirm("⚠️¿Estás seguro de que deseas guardar la nota en blanco?");
+        if (!confirmacion) {
+            return; // Salir de la función sin hacer nada si el usuario cancela
+        }
+    }
+
+    // Guardar la nota actualizada o nueva
+    localStorage.setItem('nota', nuevaNota);
+    alert("✅Nota guardada exitosamente.");
+}
+
+
+
+
+/*
 function verOEscribirNota() {
     // Cargar la nota existente, si la hay
     var nota = localStorage.getItem('nota') || '';
@@ -625,7 +643,7 @@ function verOEscribirNota() {
     localStorage.setItem('nota', nuevaNota);
     alert("✅Nota guardada exitosamente.");
 }
-
+*/
 
 
 ///
@@ -1085,6 +1103,49 @@ function verNota() {
         alert("Notas:\n*" + notaFormateada);
     } else {
         alert("⚠️Actualmente, no hay ninguna nota para mostrar.");
+    }
+}
+*/
+
+/*
+function verTareasCompletadas() {
+    var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
+
+    // Verificar si no hay tareas completadas
+    if (tareasCompletadas.length === 0) {
+        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
+        return;
+    }
+
+    var numTareasCompletadas = tareasCompletadas.length;
+    var nivel = calcularNivel(numTareasCompletadas);
+    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
+
+    var mensaje = `🟢Tareas completadas - Tu nivel: ${nivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n`;
+    tareasCompletadas.forEach(tarea => {
+        mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
+    });
+
+    // Generar tres números aleatorios entre 1 y 10
+    var numero1 = Math.floor(Math.random() * 10) + 1;
+    var numero2 = Math.floor(Math.random() * 10) + 1;
+    var numero3 = Math.floor(Math.random() * 10) + 1;
+    var numero4 = Math.floor(Math.random() * 10) + 1;
+
+    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
+    var respuestaUsuario = prompt(`${mensaje}*Para confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3} + ${numero4}`);
+
+    // Verificar si el usuario ha ingresado una respuesta
+    if (respuestaUsuario !== null) {
+        // Verificar si la respuesta es correcta
+        var sumaCorrecta = numero1 + numero2 + numero3 + numero4;
+
+        if (parseInt(respuestaUsuario) === sumaCorrecta) {
+            localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
+            alert("🗑️Registro de tareas completadas eliminado exitosamente.");
+        } else {
+            alert("⚠️El registro de tareas completadas no ha sido eliminado.");
+        }
     }
 }
 */
