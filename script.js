@@ -517,6 +517,62 @@ function verTareasCompletadas() {
         mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
     });
 
+    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
+    var respuestaUsuario = prompt(`${mensaje}*Para confirmar la eliminación de las tareas completadas, escribe "borrar"`);
+
+    // Verificar si el usuario ha ingresado una respuesta
+    if (respuestaUsuario !== null) {
+        // Verificar si la respuesta es correcta
+        if (respuestaUsuario.trim().toLowerCase() === "borrar") {
+            var confirmacion = confirm("⚠️¿Estás seguro de que deseas eliminar el registro de tareas completadas?");
+            if (confirmacion) {
+                // Generar tres números aleatorios entre 1 y 10
+                var numero1 = Math.floor(Math.random() * 10) + 1;
+                var numero2 = Math.floor(Math.random() * 10) + 1;
+                var numero3 = Math.floor(Math.random() * 10) + 1;
+                var sumaCorrecta = numero1 + numero2 + numero3;
+                
+                // Pedir al usuario que resuelva la suma
+                var respuestaSuma = prompt(`Para confirmar, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3}`);
+                
+                // Verificar si el usuario ha ingresado una respuesta
+                if (respuestaSuma !== null) {
+                    // Verificar si la respuesta es correcta
+                    if (!isNaN(parseInt(respuestaSuma)) && parseInt(respuestaSuma) === sumaCorrecta) {
+                        localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
+                        alert("🗑️Registro de tareas completadas eliminado exitosamente.");
+                    } else {
+                        alert("⚠️Respuesta incorrecta. El registro de tareas completadas no ha sido eliminado.");
+                    }
+                }
+            }
+        } else {
+            //alert("⚠️El registro de tareas completadas no ha sido eliminado.");
+        }
+    }
+}
+
+
+
+/*
+function verTareasCompletadas() {
+    var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
+
+    // Verificar si no hay tareas completadas
+    if (tareasCompletadas.length === 0) {
+        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
+        return;
+    }
+
+    var numTareasCompletadas = tareasCompletadas.length;
+    var nivel = calcularNivel(numTareasCompletadas);
+    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
+
+    var mensaje = `🟢Tareas completadas - Tu nivel: ${nivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n`;
+    tareasCompletadas.forEach(tarea => {
+        mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
+    });
+
     // Generar tres números aleatorios entre 1 y 10
     var numero1 = Math.floor(Math.random() * 10) + 1;
     var numero2 = Math.floor(Math.random() * 10) + 1;
@@ -539,7 +595,7 @@ function verTareasCompletadas() {
         }
     }
 }
-
+*/
 
 //////////////////////////////////////////////////////////////////////////////
 
