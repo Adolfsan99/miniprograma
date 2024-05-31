@@ -27,7 +27,7 @@ function verOCrearTarea() {
         'x': '📆Sin asignar'
     };
 
-    var diaActualEmoji = '🌅';
+    var diaActualEmoji = '📆⭐';
 
     // Calcular el progreso
     var totalTareas = tareas.length;
