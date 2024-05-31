@@ -101,11 +101,6 @@
 		div.creditos{
 		align-content: center;
 		}
-        p{
-        font-size: 40px;
-        margin: inherit;
-        }
-
         html {
         background: linear-gradient(90deg, #834545, #1a17cdba);
         }
@@ -208,6 +203,11 @@
         display: flex;
         flex-direction: column;
         }
+        p{
+        font-family: Arial, Helvetica, sans-serif;
+        color: aliceblue;
+        margin: 8px 8px;
+        }
     </style>
 </head>
 <body>
@@ -220,13 +220,14 @@
         <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50" placeholder="Escribe tu texto aquí..."></textarea><br><br>
     </div>
     <div class="box2">
+        <!-- INCLUIR EL CONTADOR AQUI -->
+        <p id="charCounter">Número de caracteres: 0</p>
         <button type="button" onclick="displayText()">OK</button>
         <button type="button" onclick="exportText()">Exportar</button>
         <button type="button" onclick="exitFunction()">Regresar a ✅Todo.html</button>
     </div>
-    </form>
     <div class="box3">
-    <div id="output"></div>
+        <div id="output"></div>
     </div>
     <div class="creditos">
         <h1>Creado por:‎ ‎ </h1>
@@ -237,7 +238,13 @@
         function displayText() {
             const textInput = document.getElementById('textInput').value;
             const outputDiv = document.getElementById('output');
+            const charCounter = document.getElementById('charCounter');
+
+            // Actualizar el contenido del outputDiv con el texto ingresado
             outputDiv.textContent = textInput;
+
+            // Actualizar el contador de caracteres
+            charCounter.textContent = `Número de caracteres: ${textInput.length}`;
         }
 
         async function exportText() {
