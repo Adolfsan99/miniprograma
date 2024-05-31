@@ -1,111 +1,21 @@
 //////////////////////////////////////////////////////////////////////////////
-/*
-function crearTarea() {
-    var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n*Prioridad (1,2,3), Estado (p: 🔴, e: 🟡, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n*Ejemplo 1: 1,p,Lavar los platos,mi\nEjemplo 2: 1,p,26/05/2024 - Ir a comprar en el supermercado,x\n*Realice los ejemplos y despues dirigaje a (Ver tareas) para entender mejor esta funcionalidad.");
 
-    if (tarea === null) {
-        // El usuario ha cancelado el prompt
-        return;
-    }
-
-    var partesTarea = tarea.split(',');
-
-    if (partesTarea.length < 4) {
-        document.title = "⚠️No se pudo crear la tarea";
-        alert("*Formato de tarea inválido.");
-        return;
-    }
-
-    var prioridad = parseInt(partesTarea[0]);
-    var estado = partesTarea[1].toLowerCase();
-    var descripcion = partesTarea.slice(2, -1).join(','); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
-    var dia = partesTarea[partesTarea.length - 1].toLowerCase();
-
-    // Verificar si el estado es válido
-    var estadoEmoji;
-    switch (estado) {
-        case 'p':
-            estadoEmoji = '🔴';
-            break;
-        case 'e':
-            estadoEmoji = '🟡';
-            break;
-        case 'f':
-            estadoEmoji = '🟢';
-            break;
-        default:
-            document.title = "⚠️No se pudo crear la tarea";
-            alert("*Estado inválido.");
-            return;
-    }
-
-    // Verificar si la prioridad es válida
-    if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
-        document.title = "⚠️No se pudo crear la tarea";
-        alert("*Prioridad inválida.");
-        return;
-    }
-
-    // Verificar si el día es válido
-    var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
-    if (!diasValidos.includes(dia)) {
-        document.title = "⚠️No se pudo crear la tarea";
-        alert("*Día inválido.");
-        return;
-    }
-
-    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
-    tareas.push({ prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia });
-    localStorage.setItem('tareas', JSON.stringify(tareas));
-    document.title = "📝Tarea creada ";
-    alert("Tarea creada exitosamente.");
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-function verTareas() {
-    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
-    var dias = {
-        's': '📆Sábado',
-        'd': '📆Domingo',
-        'l': '📆Lunes',
-        'm': '📆Martes',
-        'mi': '📆Miércoles',
-        'j': '📆Jueves',
-        'v': '📆Viernes',
-        'x': '📆Sin asignar'
-    };
-
-    // Calcular el progreso
-    var totalTareas = tareas.length;
-    var tareasCompletadas = tareas.filter(tarea => tarea.estado === '🟢').length;
-    var progreso = totalTareas > 0 ? Math.round((tareasCompletadas / totalTareas) * 100) : 0;
-
-    // Generar la barra de progreso
-    var progresoBarra = '';
-    for (var i = 0; i < 10; i++) {
-        progresoBarra += i < progreso / 10 ? '█' : '░';
-    }
-
-    var mensaje = `Tareas disponibles - ✅Tu progreso ${progresoBarra} ${progreso}%\n*Solo aparecerán las tareas de Prioridad 1\n`;
-    for (var dia in dias) {
-        var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1); // Filtrar solo las tareas de prioridad 1
-        if (tareasDia.length > 0) {
-            mensaje += `${dias[dia]}:\n`;
-            tareasDia.forEach(tarea => {
-                mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
-                //mensaje += `${tarea.estado} Prioridad ${tarea.prioridad}, ${tarea.descripcion}\n`;
-            });
-        }
-    }
-
-    alert(mensaje);
-}
-*/
-///
 function verOCrearTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+    var fechaActual = new Date();
+    var diaSemana = fechaActual.getDay();
+    var diaActual = "";
+
+    switch (diaSemana) {
+        case 0: diaActual = 'd'; break; // Domingo
+        case 1: diaActual = 'l'; break; // Lunes
+        case 2: diaActual = 'm'; break; // Martes
+        case 3: diaActual = 'mi'; break; // Miércoles
+        case 4: diaActual = 'j'; break; // Jueves
+        case 5: diaActual = 'v'; break; // Viernes
+        case 6: diaActual = 's'; break; // Sábado
+    }
+
     var dias = {
         's': '📆Sábado',
         'd': '📆Domingo',
@@ -116,6 +26,8 @@ function verOCrearTarea() {
         'v': '📆Viernes',
         'x': '📆Sin asignar'
     };
+
+    var diaActualEmoji = '🌅';
 
     // Calcular el progreso
     var totalTareas = tareas.length;
@@ -130,9 +42,10 @@ function verOCrearTarea() {
 
     var mensaje = `📝Tareas disponibles - ✅Tu progreso ${progresoBarra} ${progreso}%\n`;
     for (var dia in dias) {
+        var diaMensaje = dia === diaActual ? dias[dia].replace('📆', diaActualEmoji) : dias[dia];
         var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1); // Filtrar solo las tareas de prioridad 1
         if (tareasDia.length > 0) {
-            mensaje += `${dias[dia]}:\n`;
+            mensaje += `${diaMensaje}:\n`;
             tareasDia.forEach(tarea => {
                 mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
             });
@@ -148,6 +61,12 @@ function verOCrearTarea() {
     } else if (nuevaTarea.trim() === '') {
         alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
         return; // El usuario no ingresó ninguna tarea válida
+    }
+
+    // Verificar la longitud de la nueva tarea
+    if (nuevaTarea.length > 70) {
+        alert("⚠️Tarea demasiado larga. La tarea debe tener 70 caracteres o menos.");
+        return; // El usuario ingresó una tarea demasiado larga
     }
 
     // Procesar la nueva tarea ingresada por el usuario
@@ -189,7 +108,7 @@ function verOCrearTarea() {
     // Verificar si el día es válido
     var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
     if (!diasValidos.includes(dia)) {
-        alert("⚠️Día inválido- La tarea no se creará.");
+        alert("⚠️Día inválido. La tarea no se creará.");
         return;
     }
 
@@ -200,100 +119,6 @@ function verOCrearTarea() {
     alert("📝Tarea creada exitosamente.");
 }
 
-///
-/*
-function verOCrearRutina() {
-    // Cargar la rutina existente, si la hay
-    var rutina = localStorage.getItem('rutina') || '';
-
-    // Reemplazar todas las comas por saltos de línea para mostrar la rutina formateada
-    var rutinaFormateada = rutina.replace(/;/g, '\n');
-    var nuevaRutina = prompt(
-        "🔃Rutina actual:\n" + rutinaFormateada + "\n*Ingresa la nueva rutina con el formato: 'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...'",
-        rutina
-    );
-
-    // Verificar si el usuario presionó "Cancelar"
-    if (nuevaRutina === null) {
-        return; // Salir de la función sin hacer nada
-    }
-
-    // Si el usuario ingresó una rutina vacía, solicitar confirmación
-    if (nuevaRutina.trim() === "") {
-        alert("⚠️Creación rutina inválida");
-        return;
-    }
-
-    // Guardar la rutina actualizada solo si ha cambiado
-    if (nuevaRutina !== rutina) {
-        localStorage.setItem('rutina', nuevaRutina);
-        alert("✅Rutina guardada exitosamente.");
-    }
-
-    // Procesar las tareas de la rutina y añadirlas a las tareas
-    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
-    var partesRutina = nuevaRutina.split(';').filter(t => t.trim() !== ''); // Filtrar para eliminar cualquier tarea vacía
-
-    // Validar y agregar las tareas
-    for (var tarea of partesRutina) {
-        var partesTarea = tarea.split(',');
-
-        if (partesTarea.length < 4) {
-            alert("⚠️Formato de tarea inválido. La tarea no se creará.");
-            return;
-        }
-
-        var prioridad = parseInt(partesTarea[0]);
-        var estado = partesTarea[1].toLowerCase();
-        var descripcion = partesTarea.slice(2, -1).join(','); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
-        var dia = partesTarea[partesTarea.length - 1].toLowerCase();
-
-        // Verificar si el estado es válido
-        var estadoEmoji;
-        switch (estado) {
-            case 'p':
-                estadoEmoji = '🔴';
-                break;
-            case 'e':
-                estadoEmoji = '🟡';
-                break;
-            case 'f':
-                estadoEmoji = '🟢';
-                break;
-            default:
-                alert("⚠️Estado inválido. La tarea no se creará.");
-                return;
-        }
-
-        // Verificar si la prioridad es válida
-        if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
-            alert("⚠️Prioridad inválida. La tarea no se creará.");
-            return;
-        }
-
-        // Verificar si el día es válido
-        var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
-        if (!diasValidos.includes(dia)) {
-            alert("⚠️Día inválido. La tarea no se creará.");
-            return;
-        }
-
-        // Crear la nueva tarea
-        var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
-        tareas.push(nuevaTareaObj);
-    }
-
-    // Confirmar la creación de las tareas a partir de la rutina
-    var confirmacion = confirm("⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?");
-    if (!confirmacion) {
-        return; // Salir de la función sin hacer nada si el usuario cancela
-    } else {
-        // Guardar las tareas actualizadas en localStorage
-        localStorage.setItem('tareas', JSON.stringify(tareas));
-        alert("✅Tareas creadas exitosamente a partir de la rutina.");
-    }
-}
-*/
 
 function verOCrearRutina() {
     // Cargar la rutina existente, si la hay
@@ -352,17 +177,10 @@ function verOCrearRutina() {
         return;
     }
 
-    // Guardar la rutina actualizada solo si ha cambiado
-    if (nuevaRutina !== rutina) {
-        localStorage.setItem('rutina', nuevaRutina);
-        alert("✅Rutina guardada exitosamente.");
-    }
-
-    // Procesar las tareas de la rutina y añadirlas a las tareas
-    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+    // Procesar las tareas de la rutina y validar
     var partesRutina = nuevaRutina.split(';').filter(t => t.trim() !== ''); // Filtrar para eliminar cualquier tarea vacía
 
-    // Validar y agregar las tareas
+    // Validar las tareas
     for (var tarea of partesRutina) {
         var partesTarea = tarea.split(',');
 
@@ -375,6 +193,12 @@ function verOCrearRutina() {
         var estado = partesTarea[1].toLowerCase();
         var descripcion = partesTarea.slice(2, -1).join(','); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
         var dia = partesTarea[partesTarea.length - 1].toLowerCase();
+
+        // Verificar la longitud de la descripción
+        if (descripcion.length > 64) {
+            alert("⚠️Descripción demasiado larga. La descripción debe tener 64 caracteres o menos.");
+            return; // Descripción demasiado larga
+        }
 
         // Verificar si el estado es válido
         var estadoEmoji;
@@ -405,35 +229,63 @@ function verOCrearRutina() {
             alert("⚠️Día inválido. La tarea no se creará.");
             return;
         }
-
-        // Crear la nueva tarea
-        var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
-        tareas.push(nuevaTareaObj);
     }
 
-    // Confirmar la creación de las tareas a partir de la rutina
-    var confirmacion = confirm("⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?");
-    if (!confirmacion) {
-        return; // Salir de la función sin hacer nada si el usuario cancela
-    }
+    // Guardar la rutina actualizada solo si ha cambiado y es válida
+    if (nuevaRutina !== rutina) {
+        localStorage.setItem('rutina', nuevaRutina);
+        alert("✅Rutina guardada exitosamente.");
+        
+        // Procesar y agregar las tareas a las tareas existentes
+        var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+        for (var tarea of partesRutina) {
+            var partesTarea = tarea.split(',');
 
-    // Generar tres números aleatorios para la suma
-    var num1 = Math.floor(Math.random() * 10);
-    var num2 = Math.floor(Math.random() * 10);
-    var num3 = Math.floor(Math.random() * 10);
-    var sumaCorrecta = num1 + num2 + num3;
-    var sumaUsuario = parseInt(prompt(`Para confirmar, resuelve la siguiente suma: ${num1} + ${num2} + ${num3}`));
+            var prioridad = parseInt(partesTarea[0]);
+            var estado = partesTarea[1].toLowerCase();
+            var descripcion = partesTarea.slice(2, -1).join(',');
+            var dia = partesTarea[partesTarea.length - 1].toLowerCase();
 
-    if (sumaUsuario === sumaCorrecta) {
-        // Guardar las tareas actualizadas en localStorage
-        localStorage.setItem('tareas', JSON.stringify(tareas));
-        alert("✅Tareas creadas exitosamente a partir de la rutina.");
-    } else {
-        alert("⚠️Respuesta incorrecta. Las tareas no se crearán.");
+            var estadoEmoji;
+            switch (estado) {
+                case 'p':
+                    estadoEmoji = '🔴';
+                    break;
+                case 'e':
+                    estadoEmoji = '🟡';
+                    break;
+                case 'f':
+                    estadoEmoji = '🟢';
+                    break;
+            }
+
+            var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
+            tareas.push(nuevaTareaObj);
+        }
+
+        // Confirmar la creación de las tareas a partir de la rutina
+        var confirmacion = confirm("⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?");
+        if (!confirmacion) {
+            return; // Salir de la función sin hacer nada si el usuario cancela
+        }
+
+        // Generar tres números aleatorios para la suma
+        var num1 = Math.floor(Math.random() * 10);
+        var num2 = Math.floor(Math.random() * 10);
+        var num3 = Math.floor(Math.random() * 10);
+        var sumaCorrecta = num1 + num2 + num3;
+        var sumaUsuario = parseInt(prompt(`Para confirmar, resuelve la siguiente suma: ${num1} + ${num2} + ${num3}`));
+
+        if (sumaUsuario === sumaCorrecta) {
+            // Guardar las tareas actualizadas en localStorage
+            localStorage.setItem('tareas', JSON.stringify(tareas));
+            alert("✅Tareas creadas exitosamente a partir de la rutina.");
+        } else {
+            alert("⚠️Respuesta incorrecta. Las tareas no se crearán.");
+        }
     }
 }
 
-///
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -447,9 +299,7 @@ function editarTarea() {
 
     var mensaje = "Selecciona la tarea que deseas editar:\n";
     tareas.forEach((tarea, index) => {
-
         mensaje += `${index + 1}: ${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
-        /*mensaje += `${index + 1}. Prioridad ${tarea.prioridad}, ${tarea.estado}, ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}.\n`;*/
     });
 
     var tareaSeleccionada = prompt(mensaje);
@@ -471,7 +321,13 @@ function editarTarea() {
     var nuevaDescripcion = prompt("Ingresa la nueva descripción:", tareas[tareaSeleccionada].descripcion);
     if (nuevaDescripcion === null) return; // Usuario canceló
 
-    var nuevoDia = prompt("Ingresa el nuevo día (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar):", tareas[tareaSeleccionada].dia);
+    // Verificar la longitud de la nueva descripción
+    if (nuevaDescripcion.length > 64) {
+        alert("⚠️Descripción demasiado larga. La descripción debe tener 64 caracteres o menos.");
+        return; // Descripción demasiado larga
+    }
+
+    var nuevoDia = prompt("Ingresa el nuevo día (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n*Escribe 'borrar' para eliminar la tarea:", tareas[tareaSeleccionada].dia);
     if (nuevoDia === null) return; // Usuario canceló
 
     if (isNaN(nuevaPrioridad) || nuevaPrioridad < 1 || nuevaPrioridad > 3) {
@@ -495,46 +351,52 @@ function editarTarea() {
             return;
     }
 
-    var diaTexto;
-    switch (nuevoDia.toLowerCase()) {
-        case 's':
-            diaTexto = 's';
-            break;
-        case 'd':
-            diaTexto = 'd';
-            break;
-        case 'l':
-            diaTexto = 'l';
-            break;
-        case 'm':
-            diaTexto = 'm';
-            break;
-        case 'mi':
-            diaTexto = 'mi';
-            break;
-        case 'j':
-            diaTexto = 'j';
-            break;
-        case 'v':
-            diaTexto = 'v';
-            break;
-        case 'x':
-            diaTexto = 'x';
-            break;
-        default:
-            alert("⚠️Día inválido.");
-            return;
+    if (nuevoDia.toLowerCase() === 'borrar') {
+        tareas.splice(tareaSeleccionada, 1);
+        alert("🗑️Tarea borrada exitosamente.");
+    } else {
+        var diaTexto;
+        switch (nuevoDia.toLowerCase()) {
+            case 's':
+                diaTexto = 's';
+                break;
+            case 'd':
+                diaTexto = 'd';
+                break;
+            case 'l':
+                diaTexto = 'l';
+                break;
+            case 'm':
+                diaTexto = 'm';
+                break;
+            case 'mi':
+                diaTexto = 'mi';
+                break;
+            case 'j':
+                diaTexto = 'j';
+                break;
+            case 'v':
+                diaTexto = 'v';
+                break;
+            case 'x':
+                diaTexto = 'x';
+                break;
+            default:
+                alert("⚠️Día inválido.");
+                return;
+        }
+
+        tareas[tareaSeleccionada].prioridad = nuevaPrioridad;
+        tareas[tareaSeleccionada].estado = estadoEmoji;
+        tareas[tareaSeleccionada].descripcion = nuevaDescripcion;
+        tareas[tareaSeleccionada].dia = diaTexto;
+
+        alert("✏️Tarea editada exitosamente.");
     }
 
-    tareas[tareaSeleccionada].prioridad = nuevaPrioridad;
-    tareas[tareaSeleccionada].estado = estadoEmoji;
-    tareas[tareaSeleccionada].descripcion = nuevaDescripcion;
-    tareas[tareaSeleccionada].dia = nuevoDia.toLowerCase();
-
     localStorage.setItem('tareas', JSON.stringify(tareas));
-
-    alert("✏️Tarea editada exitosamente.");
 }
+
 
 // Función para obtener el nombre completo del día a partir de su abreviatura
 function obtenerNombreDia(abreviaturaDia) {
@@ -679,100 +541,9 @@ function verTareasCompletadas() {
 }
 
 
-/* NIVELES OLD
-function calcularNivel(numTareasCompletadas) {
-    return Math.floor(numTareasCompletadas / 10) + 1;
-}
-
-function obtenerEmojiNivel(nivel) {
-    var emojis = ["🐭", "🐸", "🐶", "🦊", "🐺", "🐯", "🦁", "🐻", "🐘", "🐉"];
-    return emojis[Math.min(nivel - 1, emojis.length - 1)];
-}
-
-function calcularTareasRestantes(numTareasCompletadas) {
-    return 10 - (numTareasCompletadas % 10);
-}
-
-function verTareasCompletadas() {
-    var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
-
-    // Verificar si no hay tareas completadas
-    if (tareasCompletadas.length === 0) {
-        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
-        return;
-    }
-
-    var numTareasCompletadas = tareasCompletadas.length;
-    var nivel = calcularNivel(numTareasCompletadas);
-    var emojiNivel = obtenerEmojiNivel(nivel);
-    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
-
-    var mensaje = `Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n*`;
-    tareasCompletadas.forEach(tarea => {
-        mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
-    });
-
-    // Generar tres números aleatorios entre 1 y 10
-    var numero1 = Math.floor(Math.random() * 10) + 1;
-    var numero2 = Math.floor(Math.random() * 10) + 1;
-    var numero3 = Math.floor(Math.random() * 10) + 1;
-
-    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
-    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3}`);
-
-    // Verificar si el usuario ha ingresado una respuesta
-    if (respuestaUsuario !== null) {
-        // Verificar si la respuesta es correcta
-        var sumaCorrecta = numero1 + numero2 + numero3;
-
-        if (parseInt(respuestaUsuario) === sumaCorrecta) {
-            localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
-            alert("🗑️Registro de tareas completadas eliminado exitosamente.");
-        } else {
-            alert("⚠️El registro de tareas completadas no ha sido eliminado.");
-        }
-    }
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
-/*
-function crearOEditarNota() {
-    // Cargar la nota existente, si la hay
-    var notaExistente = localStorage.getItem('nota') || '';
-    
-    // Pedir al usuario que ingrese o edite la nota, mostrando la nota existente
-    var nota = prompt("Escribe o edita tu nota:\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n*Ejemplo 1: *Cocinar;*Barrer;*Limpiar\nEjemplo 2: 📌Recordatorios;*Beber agua;*Limpiar el polvo;;📜Diario;Mayo 26 - Sigo programando una aplicacion de productividad;Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, el punto y coma ( ; ) sirve para separar las notas.", notaExistente);
-
-    // Verificar si el usuario presionó "Cancelar"
-    if (nota === null) {
-        return; // Salir de la función sin hacer nada
-    }
-
-    // Verificar si el usuario ingresó una nota vacía
-    if (nota.trim() === "") {
-        alert("⚠️No se ha ingresado ninguna nota.");
-    } else {
-        localStorage.setItem('nota', nota);
-        alert("✅Nota guardada exitosamente.");
-    }
-}
-
 //////////////////////////////////////////////////////////////////////////////
 
-function verNota() {
-    var nota = localStorage.getItem('nota');
-    if (nota) {
-        // Reemplazar todas las comas por saltos de línea
-        var notaFormateada = nota.replace(/;/g, '\n');
-        alert("Notas:\n*" + notaFormateada);
-    } else {
-        alert("⚠️Actualmente, no hay ninguna nota para mostrar.");
-    }
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
 
-///
 function verOEscribirNota() {
     // Cargar la nota existente, si la hay
     var nota = localStorage.getItem('nota') || '';
@@ -967,3 +738,297 @@ function textToHtml() {
 function comoUsar() {
     window.open("https://github.com/Adolfsan99/miniprograma/blob/main/README.md", "_blank");
 }
+
+
+/* OLD FUNCTIONS */
+/*
+function crearTarea() {
+    var tarea = prompt("Ingresa la tarea siguiendo el siguiente formato.\n'Prioridad,Estado,Descripción,Día'\n*Prioridad (1,2,3), Estado (p: 🔴, e: 🟡, f: 🟢)\nDescripción, Días (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n*Ejemplo 1: 1,p,Lavar los platos,mi\nEjemplo 2: 1,p,26/05/2024 - Ir a comprar en el supermercado,x\n*Realice los ejemplos y despues dirigaje a (Ver tareas) para entender mejor esta funcionalidad.");
+
+    if (tarea === null) {
+        // El usuario ha cancelado el prompt
+        return;
+    }
+
+    var partesTarea = tarea.split(',');
+
+    if (partesTarea.length < 4) {
+        document.title = "⚠️No se pudo crear la tarea";
+        alert("*Formato de tarea inválido.");
+        return;
+    }
+
+    var prioridad = parseInt(partesTarea[0]);
+    var estado = partesTarea[1].toLowerCase();
+    var descripcion = partesTarea.slice(2, -1).join(','); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
+    var dia = partesTarea[partesTarea.length - 1].toLowerCase();
+
+    // Verificar si el estado es válido
+    var estadoEmoji;
+    switch (estado) {
+        case 'p':
+            estadoEmoji = '🔴';
+            break;
+        case 'e':
+            estadoEmoji = '🟡';
+            break;
+        case 'f':
+            estadoEmoji = '🟢';
+            break;
+        default:
+            document.title = "⚠️No se pudo crear la tarea";
+            alert("*Estado inválido.");
+            return;
+    }
+
+    // Verificar si la prioridad es válida
+    if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
+        document.title = "⚠️No se pudo crear la tarea";
+        alert("*Prioridad inválida.");
+        return;
+    }
+
+    // Verificar si el día es válido
+    var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
+    if (!diasValidos.includes(dia)) {
+        document.title = "⚠️No se pudo crear la tarea";
+        alert("*Día inválido.");
+        return;
+    }
+
+    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+    tareas.push({ prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia });
+    localStorage.setItem('tareas', JSON.stringify(tareas));
+    document.title = "📝Tarea creada ";
+    alert("Tarea creada exitosamente.");
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+function verTareas() {
+    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+    var dias = {
+        's': '📆Sábado',
+        'd': '📆Domingo',
+        'l': '📆Lunes',
+        'm': '📆Martes',
+        'mi': '📆Miércoles',
+        'j': '📆Jueves',
+        'v': '📆Viernes',
+        'x': '📆Sin asignar'
+    };
+
+    // Calcular el progreso
+    var totalTareas = tareas.length;
+    var tareasCompletadas = tareas.filter(tarea => tarea.estado === '🟢').length;
+    var progreso = totalTareas > 0 ? Math.round((tareasCompletadas / totalTareas) * 100) : 0;
+
+    // Generar la barra de progreso
+    var progresoBarra = '';
+    for (var i = 0; i < 10; i++) {
+        progresoBarra += i < progreso / 10 ? '█' : '░';
+    }
+
+    var mensaje = `Tareas disponibles - ✅Tu progreso ${progresoBarra} ${progreso}%\n*Solo aparecerán las tareas de Prioridad 1\n`;
+    for (var dia in dias) {
+        var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1); // Filtrar solo las tareas de prioridad 1
+        if (tareasDia.length > 0) {
+            mensaje += `${dias[dia]}:\n`;
+            tareasDia.forEach(tarea => {
+                mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
+                //mensaje += `${tarea.estado} Prioridad ${tarea.prioridad}, ${tarea.descripcion}\n`;
+            });
+        }
+    }
+
+    alert(mensaje);
+}
+*/
+
+///
+/*
+function verOCrearRutina() {
+    // Cargar la rutina existente, si la hay
+    var rutina = localStorage.getItem('rutina') || '';
+
+    // Reemplazar todas las comas por saltos de línea para mostrar la rutina formateada
+    var rutinaFormateada = rutina.replace(/;/g, '\n');
+    var nuevaRutina = prompt(
+        "🔃Rutina actual:\n" + rutinaFormateada + "\n*Ingresa la nueva rutina con el formato: 'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...'",
+        rutina
+    );
+
+    // Verificar si el usuario presionó "Cancelar"
+    if (nuevaRutina === null) {
+        return; // Salir de la función sin hacer nada
+    }
+
+    // Si el usuario ingresó una rutina vacía, solicitar confirmación
+    if (nuevaRutina.trim() === "") {
+        alert("⚠️Creación rutina inválida");
+        return;
+    }
+
+    // Guardar la rutina actualizada solo si ha cambiado
+    if (nuevaRutina !== rutina) {
+        localStorage.setItem('rutina', nuevaRutina);
+        alert("✅Rutina guardada exitosamente.");
+    }
+
+    // Procesar las tareas de la rutina y añadirlas a las tareas
+    var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+    var partesRutina = nuevaRutina.split(';').filter(t => t.trim() !== ''); // Filtrar para eliminar cualquier tarea vacía
+
+    // Validar y agregar las tareas
+    for (var tarea of partesRutina) {
+        var partesTarea = tarea.split(',');
+
+        if (partesTarea.length < 4) {
+            alert("⚠️Formato de tarea inválido. La tarea no se creará.");
+            return;
+        }
+
+        var prioridad = parseInt(partesTarea[0]);
+        var estado = partesTarea[1].toLowerCase();
+        var descripcion = partesTarea.slice(2, -1).join(','); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
+        var dia = partesTarea[partesTarea.length - 1].toLowerCase();
+
+        // Verificar si el estado es válido
+        var estadoEmoji;
+        switch (estado) {
+            case 'p':
+                estadoEmoji = '🔴';
+                break;
+            case 'e':
+                estadoEmoji = '🟡';
+                break;
+            case 'f':
+                estadoEmoji = '🟢';
+                break;
+            default:
+                alert("⚠️Estado inválido. La tarea no se creará.");
+                return;
+        }
+
+        // Verificar si la prioridad es válida
+        if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
+            alert("⚠️Prioridad inválida. La tarea no se creará.");
+            return;
+        }
+
+        // Verificar si el día es válido
+        var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
+        if (!diasValidos.includes(dia)) {
+            alert("⚠️Día inválido. La tarea no se creará.");
+            return;
+        }
+
+        // Crear la nueva tarea
+        var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
+        tareas.push(nuevaTareaObj);
+    }
+
+    // Confirmar la creación de las tareas a partir de la rutina
+    var confirmacion = confirm("⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?");
+    if (!confirmacion) {
+        return; // Salir de la función sin hacer nada si el usuario cancela
+    } else {
+        // Guardar las tareas actualizadas en localStorage
+        localStorage.setItem('tareas', JSON.stringify(tareas));
+        alert("✅Tareas creadas exitosamente a partir de la rutina.");
+    }
+}
+*/
+
+/* NIVELES OLD
+function calcularNivel(numTareasCompletadas) {
+    return Math.floor(numTareasCompletadas / 10) + 1;
+}
+
+function obtenerEmojiNivel(nivel) {
+    var emojis = ["🐭", "🐸", "🐶", "🦊", "🐺", "🐯", "🦁", "🐻", "🐘", "🐉"];
+    return emojis[Math.min(nivel - 1, emojis.length - 1)];
+}
+
+function calcularTareasRestantes(numTareasCompletadas) {
+    return 10 - (numTareasCompletadas % 10);
+}
+
+function verTareasCompletadas() {
+    var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
+
+    // Verificar si no hay tareas completadas
+    if (tareasCompletadas.length === 0) {
+        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
+        return;
+    }
+
+    var numTareasCompletadas = tareasCompletadas.length;
+    var nivel = calcularNivel(numTareasCompletadas);
+    var emojiNivel = obtenerEmojiNivel(nivel);
+    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
+
+    var mensaje = `Tareas completadas - Tu nivel: ${nivel}${emojiNivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n*`;
+    tareasCompletadas.forEach(tarea => {
+        mensaje += `${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}\n`;
+    });
+
+    // Generar tres números aleatorios entre 1 y 10
+    var numero1 = Math.floor(Math.random() * 10) + 1;
+    var numero2 = Math.floor(Math.random() * 10) + 1;
+    var numero3 = Math.floor(Math.random() * 10) + 1;
+
+    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
+    var respuestaUsuario = prompt(`${mensaje}\nPara confirmar la eliminación de las tareas completadas, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3}`);
+
+    // Verificar si el usuario ha ingresado una respuesta
+    if (respuestaUsuario !== null) {
+        // Verificar si la respuesta es correcta
+        var sumaCorrecta = numero1 + numero2 + numero3;
+
+        if (parseInt(respuestaUsuario) === sumaCorrecta) {
+            localStorage.removeItem('tareasCompletadas'); // Eliminar el registro de tareas completadas
+            alert("🗑️Registro de tareas completadas eliminado exitosamente.");
+        } else {
+            alert("⚠️El registro de tareas completadas no ha sido eliminado.");
+        }
+    }
+}
+*/
+//////////////////////////////////////////////////////////////////////////////
+/*
+function crearOEditarNota() {
+    // Cargar la nota existente, si la hay
+    var notaExistente = localStorage.getItem('nota') || '';
+    
+    // Pedir al usuario que ingrese o edite la nota, mostrando la nota existente
+    var nota = prompt("Escribe o edita tu nota:\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n*Ejemplo 1: *Cocinar;*Barrer;*Limpiar\nEjemplo 2: 📌Recordatorios;*Beber agua;*Limpiar el polvo;;📜Diario;Mayo 26 - Sigo programando una aplicacion de productividad;Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, el punto y coma ( ; ) sirve para separar las notas.", notaExistente);
+
+    // Verificar si el usuario presionó "Cancelar"
+    if (nota === null) {
+        return; // Salir de la función sin hacer nada
+    }
+
+    // Verificar si el usuario ingresó una nota vacía
+    if (nota.trim() === "") {
+        alert("⚠️No se ha ingresado ninguna nota.");
+    } else {
+        localStorage.setItem('nota', nota);
+        alert("✅Nota guardada exitosamente.");
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+function verNota() {
+    var nota = localStorage.getItem('nota');
+    if (nota) {
+        // Reemplazar todas las comas por saltos de línea
+        var notaFormateada = nota.replace(/;/g, '\n');
+        alert("Notas:\n*" + notaFormateada);
+    } else {
+        alert("⚠️Actualmente, no hay ninguna nota para mostrar.");
+    }
+}
+*/
