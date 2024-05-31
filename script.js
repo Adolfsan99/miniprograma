@@ -518,7 +518,7 @@ function verTareasCompletadas() {
     });
 
     // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
-    var respuestaUsuario = prompt(`${mensaje}*Para confirmar la eliminación de las tareas completadas, escribe "borrar"`);
+    var respuestaUsuario = prompt(`${mensaje}*Para la eliminación de las tareas completadas, escribe "borrar"`);
 
     // Verificar si el usuario ha ingresado una respuesta
     if (respuestaUsuario !== null) {
@@ -556,7 +556,7 @@ function verTareasCompletadas() {
 //////////////////////////////////////////////////////////////////////////////
 
 
-function verOEscribirNota() {
+async function verOEscribirNota() {
     // Cargar la nota existente, si la hay
     var nota = localStorage.getItem('nota') || '';
 
@@ -585,18 +585,30 @@ function verOEscribirNota() {
 
         // Crear un blob con las notas
         var blob = new Blob([nuevaNota.replace(/;/g, '\n')], { type: 'text/plain' });
-        var url = URL.createObjectURL(blob);
 
-        // Crear un enlace para descargar el archivo
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = nombreArchivo;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // Configurar las opciones del diálogo de guardado
+        const options = {
+            suggestedName: nombreArchivo,
+            types: [{
+                description: 'Text Files',
+                accept: {
+                    'text/plain': ['.txt'],
+                },
+            }],
+        };
 
-        alert("✅Notas exportadas exitosamente.");
+        try {
+            // Mostrar el diálogo de guardado de archivos
+            const handle = await window.showSaveFilePicker(options);
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+
+            alert("✅Notas exportadas exitosamente.");
+        } catch (err) {
+            console.error('Error al guardar el archivo:', err);
+            alert("❌Error al exportar las notas.");
+        }
 
         return; // Salir de la función después de exportar
     }
