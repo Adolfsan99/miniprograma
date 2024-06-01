@@ -210,6 +210,15 @@ function verOCrearRutina() {
     // Procesar las tareas de la rutina y validar
     var partesRutina = nuevaRutina.split(';').filter(t => t.trim() !== ''); // Filtrar para eliminar cualquier tarea vacía
 
+    // Verificar si la palabra clave "crear" está al final
+    var ultimaParte = partesRutina[partesRutina.length - 1].trim().toLowerCase();
+    var crearAlFinal = (ultimaParte === 'crear');
+
+    // Si "crear" está al final, eliminarlo de las partes de la rutina
+    if (crearAlFinal) {
+        partesRutina.pop();
+    }
+
     // Validar las tareas
     for (var tarea of partesRutina) {
         var partesTarea = tarea.split(',');
@@ -263,59 +272,61 @@ function verOCrearRutina() {
 
     // Guardar la rutina actualizada solo si ha cambiado y es válida
     if (nuevaRutina !== rutina) {
-        localStorage.setItem('rutina', nuevaRutina);
+        localStorage.setItem('rutina', partesRutina.join(';'));
         alert("✅Rutina guardada exitosamente.");
-        
-        // Procesar y agregar las tareas a las tareas existentes
-        var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
-        for (var tarea of partesRutina) {
-            var partesTarea = tarea.split(',');
 
-            var prioridad = parseInt(partesTarea[0]);
-            var estado = partesTarea[1].toLowerCase();
-            var descripcion = partesTarea.slice(2, -1).join(',');
-            var dia = partesTarea[partesTarea.length - 1].toLowerCase();
-
-            var estadoEmoji;
-            switch (estado) {
-                case 'p':
-                    estadoEmoji = '🔴';
-                    break;
-                case 'e':
-                    estadoEmoji = '🟡';
-                    break;
-                case 'f':
-                    estadoEmoji = '🟢';
-                    break;
+        // Si "crear" estaba al final, confirmar la creación de las tareas a partir de la rutina
+        if (crearAlFinal) {
+            // Confirmar la creación de las tareas a partir de la rutina
+            var confirmacion = confirm("⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?");
+            if (!confirmacion) {
+                return; // Salir de la función sin hacer nada si el usuario cancela
             }
 
-            var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
-            tareas.push(nuevaTareaObj);
-        }
+            // Generar tres números aleatorios para la suma
+            var num1 = Math.floor(Math.random() * 10);
+            var num2 = Math.floor(Math.random() * 10);
+            var num3 = Math.floor(Math.random() * 10);
+            var sumaCorrecta = num1 + num2 + num3;
+            var sumaUsuario = parseInt(prompt(`Para confirmar, resuelve la siguiente suma: ${num1} + ${num2} + ${num3}`));
 
-        // Confirmar la creación de las tareas a partir de la rutina
-        var confirmacion = confirm("⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?");
-        if (!confirmacion) {
-            return; // Salir de la función sin hacer nada si el usuario cancela
-        }
+            if (sumaUsuario === sumaCorrecta) {
+                // Procesar y agregar las tareas a las tareas existentes
+                var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+                for (var tarea of partesRutina) {
+                    var partesTarea = tarea.split(',');
 
-        // Generar tres números aleatorios para la suma
-        var num1 = Math.floor(Math.random() * 10);
-        var num2 = Math.floor(Math.random() * 10);
-        var num3 = Math.floor(Math.random() * 10);
-        var sumaCorrecta = num1 + num2 + num3;
-        var sumaUsuario = parseInt(prompt(`Para confirmar, resuelve la siguiente suma: ${num1} + ${num2} + ${num3}`));
+                    var prioridad = parseInt(partesTarea[0]);
+                    var estado = partesTarea[1].toLowerCase();
+                    var descripcion = partesTarea.slice(2, -1).join(',');
+                    var dia = partesTarea[partesTarea.length - 1].toLowerCase();
 
-        if (sumaUsuario === sumaCorrecta) {
-            // Guardar las tareas actualizadas en localStorage
-            localStorage.setItem('tareas', JSON.stringify(tareas));
-            alert("✅Tareas creadas exitosamente a partir de la rutina.");
-        } else {
-            alert("⚠️Respuesta incorrecta. Las tareas no se crearán.");
+                    var estadoEmoji;
+                    switch (estado) {
+                        case 'p':
+                            estadoEmoji = '🔴';
+                            break;
+                        case 'e':
+                            estadoEmoji = '🟡';
+                            break;
+                        case 'f':
+                            estadoEmoji = '🟢';
+                            break;
+                    }
+
+                    var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
+                    tareas.push(nuevaTareaObj);
+                }
+
+                // Guardar las tareas actualizadas en localStorage
+                localStorage.setItem('tareas', JSON.stringify(tareas));
+                alert("✅Tareas creadas exitosamente a partir de la rutina.");
+            } else {
+                alert("⚠️Respuesta incorrecta. Las tareas no se crearán.");
+            }
         }
     }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -854,7 +865,7 @@ function textToHtml() {
 function walllist() {
     var ubicacionActual = window.location.origin;
     // Agregar la ruta o el nombre del archivo que deseas
-    var nuevaUbicacion = ubicacionActual + "/walllist/walllist";
+    var nuevaUbicacion = ubicacionActual + "/wallist/walllist";
     // Redirigir a la nueva ubicación
     window.location.href = nuevaUbicacion;
 }
