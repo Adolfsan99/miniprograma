@@ -2,7 +2,7 @@
 
 ## - ❓Guía de usuario
 
-A continuación, encontrarás una descripción completa de cada funcionalidad y cómo puedes sacar partido para mejorar tu productividad con nuestra aplicación. 
+A continuación, encontrarás una descripción completa de cada funcionalidad y cómo puedes sacar partido para mejorar tu productividad con mi aplicación. 
 
 **¡Sigue leyendo para descubrir cómo sacar el máximo provecho de todas las características que ofrecemos!**
 
@@ -92,16 +92,16 @@ Instrucciones para gestionar una tarea existente en la aplicación.
 ### Cómo gestionar una tarea
 
 1. **Verificar tareas existentes**:
-   - La función comprueba si hay tareas almacenadas en `localStorage`. Si no hay tareas, muestra una alerta: "⚠️Actualmente, no tienes tareas para gestionar.".
+   - La función comprueba si hay tareas almacenadas . Si no hay tareas, muestra una alerta: "⚠️Actualmente, no tienes tareas para gestionar.".
 
 2. **Seleccionar una tarea para gestionar**:
    - Se muestra un mensaje con la lista de tareas, cada una con su prioridad, estado, descripción y día.
    - El usuario selecciona la tarea que desea gestionar ingresando el número correspondiente.
 
-3. **gestionar detalles de la tarea**:
+3. **Gestionar detalles de la tarea**:
    - **Nueva Prioridad**: Se solicita al usuario que ingrese la nueva prioridad (`1`, `2`, `3`).
    - **Nuevo Estado**: Se solicita al usuario que ingrese el nuevo estado (`p`: 🔴, `e`: 🟡, `f`: 🟢).
-   - **Nueva Descripción**: Se solicita al usuario que ingrese la nueva descripción.
+   - **Nueva Descripción**: Se solicita al usuario que ingrese la nueva `descripción`.
    - **Nuevo Día**: Se solicita al usuario que ingrese el nuevo día (`l`: Lunes, `m`: Martes, `mi`: Miércoles, `j`: Jueves, `v`: Viernes, `s`: Sábado, `d`: Domingo, `x`: Sin asignar). El usuario puede escribir 'borrar' para eliminar la tarea.
 
 4. **Validaciones**:
@@ -152,7 +152,7 @@ Instrucciones para gestionar una tarea existente en la aplicación.
 
 - Si el usuario cancela cualquier prompt, la edición se detiene.
 - Si se ingresa una tarea inválida, se muestra una alerta: "⚠️Tarea inválida."
-- Los cambios se guardan en `localStorage` una vez que se completan las ediciones.
+- Los cambios se actualizan una vez que se completan las ediciones.
 
 ---
 
@@ -169,7 +169,18 @@ Esta función te permite ver tu rutina actual y crear una nueva rutina de tareas
 
 2. **Editar o crear una nueva rutina**:
    - Para editar tu rutina actual o crear una nueva, sigue estos pasos:
-     - Ingresa cada tarea siguiendo este formato: 'Prioridad,Estado,Descripción,Día'. Por ejemplo: '1,p,Lavar los platos,Miércoles'.
+     - Ingresa cada tarea siguiendo este formato: 
+
+      ```
+     'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;'. 
+      ```
+
+     Por ejemplo: 
+     
+      ```
+     '1,p,Lavar los platos,mi';1,p,Barrer,j';.
+           ```
+
      - Separa cada tarea con un punto y coma (';').
      - Si deseas crear la rutina y sus tareas, al final de la lista escribe ';crear'.
 
@@ -310,10 +321,10 @@ El registro de tareas completadas te muestra las tareas que has finalizado, tu n
 ### Descripción
 Esta función te permite ver, escribir y exportar notas en la aplicación.
 
-### Cómo usar Ver/Escribir Nota
+### Cómo usar Ver o escribir nota
 
-1. **Presiona el botón "Ver/Escribir Nota":**
-   - Este botón te llevará a la página donde podrás ver o escribir tus notas.
+1. **Abrir la función**:
+   - Al abrir la función, te llevará a la alerta donde podrás ver o escribir tus notas.
 
 2. **Formato para Crear Notas:**
    - Sigue el siguiente formato para crear una nota:
@@ -330,21 +341,26 @@ Esta función te permite ver, escribir y exportar notas en la aplicación.
 Cocinar;Barrer;Limpiar
 ```
 - **Salida:**
-  - Cocinar
-  - Barrer
-  - Limpiar
+```
+  Cocinar
+  Barrer
+  Limpiar
+```
 
 **Ejemplo 2:**
 ```
 📌Recordatorios;-Beber agua;-Limpiar el polvo;;📜Diario;-Mayo 26, Sigo programando una aplicación de productividad;-Mayo 27, Realicé de forma efectiva mi trabajo gracias a esta app.
 ```
 - **Salida:**
+
+```
   - 📌Recordatorios
     - Beber agua
     - Limpiar el polvo
   - 📜Diario
     - Mayo 26, Sigo programando una aplicación de productividad
     - Mayo 27, Realicé de forma efectiva mi trabajo gracias a esta app.
+```
 
 ### Notas Adicionales:
 - Asegúrate de guardar la nota antes de cerrar la página.
@@ -378,7 +394,6 @@ Cocinar;Barrer;Limpiar
 
 - Esta herramienta fue creada para superar las limitaciones del menú contextual de muchas aplicaciones, que a menudo solo permite copiar texto. Si encuentras un sitio web con un menú contextual limitado, puedes pegar el texto en "TextTo.html" para realizar diversas operaciones, como leer en voz alta, traducir, contar caracteres y corregir texto en tiempo real. Sin embargo, las funcionalidades disponibles pueden variar según el navegador y las extensiones utilizadas.
 - El contador de caracteres se actualiza cuando presionas OK.
-- La exportación del texto te permite guardar el contenido como un archivo de texto en tu dispositivo, util para futuros usos o referencia.
 
 ---
 
@@ -515,7 +530,7 @@ Esta función borra todos los datos almacenados en la aplicación, restablecién
 
 ## 🎉¡Has Completado la Guía!
 
-¡Felicidades! Has llegado al final de esta guía. Esperamos que hayas encontrado útiles las instrucciones proporcionadas y que te sientas más cómodo utilizando nuestra aplicación.
+¡Felicidades! Has llegado al final de esta guía. Esperamos que hayas encontrado útiles las instrucciones proporcionadas y que te sientas más cómodo utilizando mi aplicación.
 
 **Recomendaciones Finales:**
 

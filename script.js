@@ -334,11 +334,11 @@ function editarTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
 
     if (tareas.length === 0) {
-        alert("⚠️Actualmente, no tienes tareas para editar.");
+        alert("⚠️Actualmente, no tienes tareas para gestionar.");
         return;
     }
 
-    var mensaje = "Selecciona la tarea que deseas editar:\n";
+    var mensaje = "Selecciona la tarea que deseas gestionar:\n";
     tareas.forEach((tarea, index) => {
         mensaje += `${index + 1}: ${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
     });
