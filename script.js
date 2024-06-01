@@ -1,3 +1,33 @@
+checkLocalStorageUsage()
+
+function checkLocalStorageUsage() {
+    var total = 0;
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      var value = localStorage.getItem(key);
+      total += (key.length + value.length) * 2; // Cada carácter en UTF-16 ocupa 2 bytes
+    }
+    // Tamaño total del Local Storage permitido por el navegador (generalmente alrededor de 5 MB a 10 MB)
+    var totalAllowed = (1024 * 1024 * 5); // Por ejemplo, 5 MB
+  
+    // Convertir bytes a megabytes (MB)
+    var totalUsedMB = (total / (1024 * 1024)).toFixed(2);
+    var totalAllowedMB = (totalAllowed / (1024 * 1024)).toFixed(2);
+  
+    // Calcular el espacio disponible
+    var availableSpaceMB = (totalAllowedMB - totalUsedMB).toFixed(2);
+  
+    if (totalUsedMB >= (totalAllowedMB * 0.9)) { // Si se ha utilizado más del 90% del espacio permitido
+      alert("¡Atención! Has utilizado " + totalUsedMB + " MB de un total de " + totalAllowedMB + " MB en el Local Storage. Quedan disponibles " + availableSpaceMB + " MB.");
+    } else {
+      console.log("Espacio utilizado en el LocalStorage: " + totalUsedMB + "/" + totalAllowedMB + "MBs");
+      console.log("Espacio disponible en el LocalStorage: " + availableSpaceMB + " MB");
+    }
+  }
+  
+
+
+  
 //////////////////////////////////////////////////////////////////////////////
 
 function verOCrearTarea() {
@@ -17,14 +47,14 @@ function verOCrearTarea() {
     }
 
     var dias = {
-        's': '📆Sábado',
-        'd': '📆Domingo',
-        'l': '📆Lunes',
-        'm': '📆Martes',
-        'mi': '📆Miércoles',
-        'j': '📆Jueves',
-        'v': '📆Viernes',
-        'x': '📆Sin asignar'
+        's': '📆-Sábado-',
+        'd': '📆-Domingo-',
+        'l': '📆-Lunes-',
+        'm': '📆-Martes-',
+        'mi': '📆-Miércoles-',
+        'j': '📆-Jueves-',
+        'v': '📆-Viernes-',
+        'x': '📆-Sin asignar-'
     };
 
     var diaActualEmoji = '📆⭐';
@@ -45,9 +75,9 @@ function verOCrearTarea() {
         var diaMensaje = dia === diaActual ? dias[dia].replace('📆', diaActualEmoji) : dias[dia];
         var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1); // Filtrar solo las tareas de prioridad 1
         if (tareasDia.length > 0) {
-            mensaje += `${diaMensaje}:\n`;
+            mensaje += `${diaMensaje}\n`;
             tareasDia.forEach(tarea => {
-                mensaje += `${tarea.estado} ${tarea.descripcion}\n`;
+                mensaje += `${tarea.estado}${tarea.descripcion}\n`;
             });
         }
     }
@@ -491,7 +521,7 @@ function calcularNivel(numTareasCompletadas) {
 }
 
 function obtenerEmojiNivel(nivel) {
-    var emojis = ["1🐭", "2🐸", "3🐶", "4🦊", "5🐺", "6🐯", "7🦁", "8🐻", "9🐘", "10🐉"];
+    var emojis = ["1🐭", "2🐸", "3🐵", "4🦊", "5🐺", "6🐯", "7🦁", "8🐻", "9🐼", "10🐉"];
     return emojis[Math.min(nivel - 1, emojis.length - 1)];
 }
 
