@@ -362,10 +362,16 @@ Cocinar;Barrer;Limpiar
     - Mayo 27, Realicé de forma efectiva mi trabajo gracias a esta app.
 ```
 
-### Notas Adicionales:
+### Notas adicionales:
 - Asegúrate de guardar la nota antes de cerrar la página.
 - El uso de ";" (punto y coma) entre las notas permite separarlas correctamente.
 - Si deseas exportar la nota, incluye ";exportar" al final de la nota. Esto generará un archivo de texto con el contenido de la nota en formato .txt.
+
+---
+
+## - 📌Walllist
+
+### Tiene su propia guia, se esta trabajando en ella.
 
 ---
 
@@ -489,7 +495,7 @@ Esta función te permite importar datos desde un archivo JSON.
 
 5. **La página se recargará automáticamente para reflejar los cambios en el almacenamiento local.**
 
-**Notas adicionales:**
+### Notas adicionales:
 - Asegúrate de seleccionar un archivo JSON válido para la importación.
 - Los datos importados reemplazarán cualquier información existente en la aplicación.
 ---
@@ -506,7 +512,7 @@ Esta función te permite exportar los datos de la aplicación en formato JSON.
 
 3. **Guarda el archivo en tu dispositivo.**
 
-**Notas adicionales:**
+### Notas adicionales:
 - Los datos exportados se guardarán en un archivo JSON que puedes utilizar para respaldar o transferir información de la aplicación.
 ---
 
@@ -524,7 +530,7 @@ Esta función borra todos los datos almacenados en la aplicación, restablecién
 
 4. **Si la suma es correcta, todos los datos de la aplicación serán eliminados.**
 
-**Notas adicionales:**
+### Notas adicionales:
 - Ten en cuenta que esta acción es irreversible y eliminará todos los datos de la aplicación de forma permanente. Asegúrate de hacer una copia de seguridad de los datos importantes antes de realizar esta operación.
 ---
 
