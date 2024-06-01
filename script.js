@@ -851,6 +851,14 @@ function textToHtml() {
     window.location.href = nuevaUbicacion;
 }
 
+function walllist() {
+    var ubicacionActual = window.location.origin;
+    // Agregar la ruta o el nombre del archivo que deseas
+    var nuevaUbicacion = ubicacionActual + "/wallist/walllist";
+    // Redirigir a la nueva ubicación
+    window.location.href = nuevaUbicacion;
+}
+
 function comoUsar() {
     window.open("https://github.com/Adolfsan99/miniprograma/blob/main/README.md", "_blank");
 }
