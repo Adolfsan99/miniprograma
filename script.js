@@ -59,12 +59,28 @@ function verOCrearTarea() {
 
     var diaActualEmoji = '📆⭐';
 
-    // Calcular el progreso
+    // Mover tareas rojas y amarillas del día actual al día siguiente si son las 11:11 PM o después
+    var horaActual = fechaActual.getHours();
+    var minutosActual = fechaActual.getMinutes();
+
+    if (horaActual >= 23 && minutosActual >= 0) { 
+        //AJUSTA LA HORA DE MOVER LAS TAREAS AL SIGUIENTE DIA
+
+        tareas.forEach(tarea => {
+            if (tarea.dia === diaActual && (tarea.estado === '🔴' || tarea.estado === '🟡')) {
+                // Mover al día siguiente
+                tarea.dia = siguienteDia(diaActual);
+            }
+        });
+    }
+
+    // Guardar las tareas actualizadas en localStorage
+    localStorage.setItem('tareas', JSON.stringify(tareas));
+
     var totalTareas = tareas.length;
     var tareasCompletadas = tareas.filter(tarea => tarea.estado === '🟢').length;
     var progreso = totalTareas > 0 ? Math.round((tareasCompletadas / totalTareas) * 100) : 0;
 
-    // Generar la barra de progreso
     var progresoBarra = '';
     for (var i = 0; i < 10; i++) {
         progresoBarra += i < progreso / 10 ? '█' : '░';
@@ -73,7 +89,7 @@ function verOCrearTarea() {
     var mensaje = `📝Tareas disponibles - ✅Tu progreso ${progresoBarra} ${progreso}%\n`;
     for (var dia in dias) {
         var diaMensaje = dia === diaActual ? dias[dia].replace('📆', diaActualEmoji) : dias[dia];
-        var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1); // Filtrar solo las tareas de prioridad 1
+        var tareasDia = tareas.filter(tarea => tarea.dia === dia && tarea.prioridad === 1);
         if (tareasDia.length > 0) {
             mensaje += `${diaMensaje}\n`;
             tareasDia.forEach(tarea => {
@@ -82,24 +98,20 @@ function verOCrearTarea() {
         }
     }
 
-    // Mostrar las tareas disponibles y permitir al usuario agregar una nueva tarea
     var nuevaTarea = prompt(`${mensaje}`);
     
-    // Verificar si el usuario ingresó una nueva tarea
     if (nuevaTarea === null) {
-        return; // El usuario canceló la operación
+        return;
     } else if (nuevaTarea.trim() === '') {
         alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
-        return; // El usuario no ingresó ninguna tarea válida
+        return;
     }
 
-    // Verificar la longitud de la nueva tarea
     if (nuevaTarea.length > 70) {
         alert("⚠️Tarea demasiado larga. La tarea debe tener 70 caracteres o menos.");
-        return; // El usuario ingresó una tarea demasiado larga
+        return;
     }
 
-    // Procesar la nueva tarea ingresada por el usuario
     var partesTarea = nuevaTarea.split(',');
 
     if (partesTarea.length < 4) {
@@ -109,10 +121,9 @@ function verOCrearTarea() {
 
     var prioridad = parseInt(partesTarea[0]);
     var estado = partesTarea[1].toLowerCase();
-    var descripcion = partesTarea.slice(2, -1).join(','); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
+    var descripcion = partesTarea.slice(2, -1).join(','); 
     var dia = partesTarea[partesTarea.length - 1].toLowerCase();
 
-    // Verificar si el estado es válido
     var estadoEmoji;
     switch (estado) {
         case 'p':
@@ -129,24 +140,27 @@ function verOCrearTarea() {
             return;
     }
 
-    // Verificar si la prioridad es válida
     if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
         alert("⚠️Prioridad inválida. La tarea no se creará.");
         return;
     }
 
-    // Verificar si el día es válido
     var diasValidos = ['l', 'm', 'mi', 'j', 'v', 's', 'd', 'x'];
     if (!diasValidos.includes(dia)) {
         alert("⚠️Día inválido. La tarea no se creará.");
         return;
     }
 
-    // Crear la nueva tarea
     var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
     tareas.push(nuevaTareaObj);
     localStorage.setItem('tareas', JSON.stringify(tareas));
     alert("📝Tarea creada exitosamente.");
+}
+
+function siguienteDia(diaActual) {
+    var ordenDias = ['d', 'l', 'm', 'mi', 'j', 'v', 's'];
+    var indice = ordenDias.indexOf(diaActual);
+    return indice === -1 || indice === ordenDias.length - 1 ? 'd' : ordenDias[indice + 1];
 }
 
 
@@ -338,10 +352,11 @@ function editarTarea() {
         return;
     }
 
-    var mensaje = "Selecciona la tarea que deseas gestionar:\n";
-    tareas.forEach((tarea, index) => {
+    var mensaje = "Selecciona la tarea que deseas gestionar, tienes " + tareas.length + " tareas.\n";
+    for (var index = tareas.length - 1; index >= 0; index--) {
+        var tarea = tareas[index];
         mensaje += `${index + 1}: ${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
-    });
+    }
 
     var tareaSeleccionada = prompt(mensaje);
     if (tareaSeleccionada === null) return; // Usuario canceló
@@ -437,6 +452,7 @@ function editarTarea() {
 
     localStorage.setItem('tareas', JSON.stringify(tareas));
 }
+
 
 
 // Función para obtener el nombre completo del día a partir de su abreviatura

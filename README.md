@@ -153,6 +153,7 @@ Instrucciones para gestionar una tarea existente en la aplicación.
 - Si el usuario cancela cualquier prompt, la edición se detiene.
 - Si se ingresa una tarea inválida, se muestra una alerta: "⚠️Tarea inválida."
 - Los cambios se actualizan una vez que se completan las ediciones.
+- Las tareas no realizadas o en proceso, se moverán al dia siguiente despues de las 23:00PM
 
 ---
 
