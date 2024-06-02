@@ -869,7 +869,7 @@ function textToHtml() {
 function walllist() {
     var ubicacionActual = window.location.origin;
     // Agregar la ruta o el nombre del archivo que deseas
-    var nuevaUbicacion = ubicacionActual + "/wallist/walllist";
+    var nuevaUbicacion = ubicacionActual + "/walllist/walllist";
     // Redirigir a la nueva ubicación
     window.location.href = nuevaUbicacion;
 }
