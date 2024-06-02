@@ -549,6 +549,9 @@ function verTareasCompletadas() {
         return;
     }
 
+    // Invertir el orden de las tareas completadas
+    tareasCompletadas.reverse();
+
     var numTareasCompletadas = tareasCompletadas.length;
     var nivel = calcularNivel(numTareasCompletadas);
     var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
@@ -592,6 +595,7 @@ function verTareasCompletadas() {
         }
     }
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -865,7 +869,7 @@ function textToHtml() {
 function walllist() {
     var ubicacionActual = window.location.origin;
     // Agregar la ruta o el nombre del archivo que deseas
-    var nuevaUbicacion = ubicacionActual + "/walllist/walllist";
+    var nuevaUbicacion = ubicacionActual + "/wallist/walllist";
     // Redirigir a la nueva ubicación
     window.location.href = nuevaUbicacion;
 }
