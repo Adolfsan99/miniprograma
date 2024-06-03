@@ -59,17 +59,17 @@ function verOCrearTarea() {
 
     var diaActualEmoji = '📆⭐';
 
-    // Mover tareas rojas y amarillas del día actual al día siguiente si son las 11:11 PM o después
+    // Verificar si la hora actual es antes de las 6 am
     var horaActual = fechaActual.getHours();
     var minutosActual = fechaActual.getMinutes();
 
-    if (horaActual >= 23 && minutosActual >= 0) { 
-        //AJUSTA LA HORA DE MOVER LAS TAREAS AL SIGUIENTE DIA
+    if (horaActual < 6) {
+        // Mover tareas del día anterior al día actual
+        var diaAnterior = anteriorDia(diaActual);
 
         tareas.forEach(tarea => {
-            if (tarea.dia === diaActual && (tarea.estado === '🔴' || tarea.estado === '🟡')) {
-                // Mover al día siguiente
-                tarea.dia = siguienteDia(diaActual);
+            if (tarea.dia === diaAnterior && (tarea.estado === '🔴' || tarea.estado === '🟡')) {
+                tarea.dia = diaActual;
             }
         });
     }
@@ -157,12 +157,19 @@ function verOCrearTarea() {
     alert("📝Tarea creada exitosamente.");
 }
 
+function anteriorDia(diaActual) {
+    var ordenDias = ['d', 'l', 'm', 'mi', 'j', 'v', 's'];
+    var indice = ordenDias.indexOf(diaActual);
+    return indice === -1 || indice === 0 ? 's' : ordenDias[indice - 1];
+}
+
 function siguienteDia(diaActual) {
     var ordenDias = ['d', 'l', 'm', 'mi', 'j', 'v', 's'];
     var indice = ordenDias.indexOf(diaActual);
     return indice === -1 || indice === ordenDias.length - 1 ? 'd' : ordenDias[indice + 1];
 }
 
+///////////////////////////////////////////////////////////////////////
 
 function verOCrearRutina() {
     // Cargar la rutina existente, si la hay
