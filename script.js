@@ -195,9 +195,9 @@ function verOCrearRutina() {
 
     // Definir el mapeo para prioridades
     var prioridadMap = {
-        '1': '1️⃣',
-        '2': '2️⃣',
-        '3': '3️⃣'
+        '1': '🔥',
+        '2': '🛎️',
+        '3': '📅'
     };
 
     // Función para convertir el formato abreviado a uno más descriptivo
@@ -633,9 +633,9 @@ function editarTarea() {
 
         // Definir el mapeo para prioridades
         var prioridadMap = {
-            1: '1️⃣',
-            2: '2️⃣',
-            3: '3️⃣'
+            1: '1',
+            2: '2',
+            3: '3'
         };
 
         tareas[tareaSeleccionada].prioridad = prioridadMap[nuevaPrioridad] || nuevaPrioridad;
@@ -651,9 +651,9 @@ function editarTarea() {
 
 function convertirPrioridad(prioridad) {
     var prioridadMap = {
-        1: '1️⃣',
-        2: '2️⃣',
-        3: '3️⃣'
+        '1': '🔥',
+        '2': '🛎️',
+        '3': '📅'
     };
     return prioridadMap[prioridad] || prioridad;
 }
@@ -869,7 +869,7 @@ function calcularNivel(numTareasCompletadas) {
     } else if (numTareasCompletadas >= 500) {
         return "13💫";
     } else if (numTareasCompletadas >= 200) {
-        return "12🔥";
+        return "12⭐";
     } else if (numTareasCompletadas >= 150) {
         return "11👑";
     } else {
