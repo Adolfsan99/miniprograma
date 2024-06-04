@@ -183,14 +183,14 @@ function verOCrearRutina() {
     };
 
     var diaMap = {
-        'l': 'Lunes',
-        'm': 'Martes',
-        'mi': 'Miércoles',
-        'j': 'Jueves',
-        'v': 'Viernes',
-        's': 'Sábado',
-        'd': 'Domingo',
-        'x': 'Sin asignar'
+        'l': 'Lunes.',
+        'm': 'Martes.',
+        'mi': 'Miércoles.',
+        'j': 'Jueves.',
+        'v': 'Viernes.',
+        's': 'Sábado.',
+        'd': 'Domingo.',
+        'x': ''
     };
 
     // Definir el mapeo para prioridades
@@ -944,14 +944,14 @@ function verTareasCompletadas() {
 
 function convertirDia(dia) {
     var diaMap = {
-        'l': 'L',
-        'm': 'M',
-        'mi': 'Mi',
-        'j': 'J',
-        'v': 'V',
-        's': 'S',
-        'd': 'D',
-        'x': 'X'
+        'l': 'Lunes.',
+        'm': 'Martes.',
+        'mi': 'Miércoles.',
+        'j': 'Jueves.',
+        'v': 'Viernes.',
+        's': 'Sábado.',
+        'd': 'Domingo.',
+        'x': ''
     };
     return diaMap[dia.toLowerCase()] || dia;
 }
