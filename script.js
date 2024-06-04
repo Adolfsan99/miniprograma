@@ -532,7 +532,7 @@ function verOCrearRutina() {
 }*/
 
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 function editarTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
 
@@ -671,9 +671,8 @@ function convertirDia(dia) {
     };
     return diaMap[dia] || dia;
 }
+*/
 
-
-/*
 function editarTarea() {
     var tareas = JSON.parse(localStorage.getItem('tareas')) || [];
 
@@ -682,10 +681,10 @@ function editarTarea() {
         return;
     }
 
-    var mensaje = "Selecciona la tarea que deseas gestionar, tienes " + tareas.length + " tareas.\n";
+    var mensaje = "Selecciona la tarea que deseas gestionar.\n";
     for (var index = tareas.length - 1; index >= 0; index--) {
         var tarea = tareas[index];
-        mensaje += `${index + 1}: ${tarea.prioridad}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
+        mensaje += `${index + 1}.${convertirPrioridad(tarea.prioridad)}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
     }
 
     var tareaSeleccionada = prompt(mensaje);
@@ -782,31 +781,39 @@ function editarTarea() {
 
     localStorage.setItem('tareas', JSON.stringify(tareas));
 }
-*/
 
 
 // Función para obtener el nombre completo del día a partir de su abreviatura
 function obtenerNombreDia(abreviaturaDia) {
     switch (abreviaturaDia.toLowerCase()) {
         case 's':
-            return 's';
+            return 'S';
         case 'd':
-            return 'd';
+            return 'D';
         case 'l':
-            return 'l';
+            return 'L';
         case 'm':
-            return 'm';
+            return 'M';
         case 'mi':
-            return 'mi';
+            return 'MI';
         case 'j':
-            return 'j';
+            return 'J';
         case 'v':
-            return 'v';
+            return 'V';
         case 'x':
-            return 'x';
+            return 'X';
         default:
-            return 'Desconocido';
+            return '?';
     }
+}
+
+function convertirPrioridad(prioridad) {
+    var prioridadMap = {
+        '1': '🔥',
+        '2': '🛎️',
+        '3': '📅'
+    };
+    return prioridadMap[prioridad] || prioridad;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -904,7 +911,7 @@ function verTareasCompletadas() {
 
     var mensaje = `🟢Tareas completadas - Tu nivel: ${nivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n`;
     tareasCompletadas.forEach(tarea => {
-        mensaje += `${tarea.estado} ${tarea.descripcion}, ${convertirDia(tarea.dia)}\n`;
+        mensaje += `${tarea.estado} ${tarea.descripcion}, ${convertirDia2(tarea.dia)}\n`;
     });
 
     // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
@@ -942,7 +949,7 @@ function verTareasCompletadas() {
     }
 }
 
-function convertirDia(dia) {
+function convertirDia2(dia) {
     var diaMap = {
         'l': 'Lunes.',
         'm': 'Martes.',
