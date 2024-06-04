@@ -956,17 +956,6 @@ function convertirDia(dia) {
     return diaMap[dia.toLowerCase()] || dia;
 }
 
-function calcularNivel(numTareasCompletadas) {
-    // Ejemplo de función para calcular el nivel basado en la cantidad de tareas completadas
-    return Math.floor(numTareasCompletadas / 10) + 1;
-}
-
-function calcularTareasRestantes(numTareasCompletadas) {
-    // Ejemplo de función para calcular la cantidad de tareas restantes para subir de nivel
-    return 10 - (numTareasCompletadas % 10);
-}
-
-
 /*
 function verTareasCompletadas() {
     var tareasCompletadas = JSON.parse(localStorage.getItem('tareasCompletadas')) || [];
