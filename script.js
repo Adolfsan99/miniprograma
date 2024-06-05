@@ -57,7 +57,7 @@ function verOCrearTarea() {
         'x': '📆-Sin asignar-'
     };
 
-    var diaActualEmoji = '📆⭐';
+    var diaActualEmoji = '📆🔥';
 
     // Verificar si la hora actual es antes de las 6 am
     var horaActual = fechaActual.getHours();
@@ -196,8 +196,8 @@ function verOCrearRutina() {
     // Definir el mapeo para prioridades
     var prioridadMap = {
         '1': '🔥',
-        '2': '🛎️',
-        '3': '📅'
+        '2': '🔔',
+        '3': '📆'
     };
 
     // Función para convertir el formato abreviado a uno más descriptivo
@@ -652,8 +652,8 @@ function editarTarea() {
 function convertirPrioridad(prioridad) {
     var prioridadMap = {
         '1': '🔥',
-        '2': '🛎️',
-        '3': '📅'
+        '2': '🔔',
+        '3': '📆'
     };
     return prioridadMap[prioridad] || prioridad;
 }
@@ -681,13 +681,27 @@ function editarTarea() {
         return;
     }
 
-    var mensaje = "Selecciona la tarea que deseas gestionar.\n";
+    var mensaje = "Selecciona la tarea a gestionar. escribe 'aplazar' para aplazar tareas\n";
     for (var index = tareas.length - 1; index >= 0; index--) {
         var tarea = tareas[index];
-        mensaje += `${index + 1}.${convertirPrioridad(tarea.prioridad)}${tarea.estado}${tarea.descripcion},${obtenerNombreDia(tarea.dia)}.\n`;
+        mensaje += `${index + 1}. ${convertirPrioridad(tarea.prioridad)} ${tarea.estado} ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}.\n`;
     }
 
     var tareaSeleccionada = prompt(mensaje);
+
+    // Nueva característica
+    if (tareaSeleccionada === "aplazar") {
+        for (var i = 0; i < tareas.length; i++) {
+            if (tareas[i].prioridad === 2) {
+                tareas[i].prioridad = 3; // Cambiar la prioridad a 3
+            }
+        }
+        console.log("Estás intentando aplazar las tareas");
+        alert("🕒Todas las tareas con prioridad 2 han sido aplazadas a prioridad 3.");
+        localStorage.setItem('tareas', JSON.stringify(tareas));
+        return;
+    }
+
     if (tareaSeleccionada === null) return; // Usuario canceló
     tareaSeleccionada = parseInt(tareaSeleccionada) - 1;
 
@@ -696,7 +710,7 @@ function editarTarea() {
         return;
     }
 
-    var nuevaPrioridad = prompt("Ingresa la nueva prioridad (1, 2, 3):", tareas[tareaSeleccionada].prioridad);
+    var nuevaPrioridad = prompt("Ingresa la nueva prioridad (1: 🔥, 2: 🔔, 3: 📆):", tareas[tareaSeleccionada].prioridad);
     if (nuevaPrioridad === null) return; // Usuario canceló
     nuevaPrioridad = parseInt(nuevaPrioridad);
 
@@ -742,12 +756,6 @@ function editarTarea() {
     } else {
         var diaTexto;
         switch (nuevoDia.toLowerCase()) {
-            case 's':
-                diaTexto = 's';
-                break;
-            case 'd':
-                diaTexto = 'd';
-                break;
             case 'l':
                 diaTexto = 'l';
                 break;
@@ -762,6 +770,12 @@ function editarTarea() {
                 break;
             case 'v':
                 diaTexto = 'v';
+                break;
+            case 's':
+                diaTexto = 's';
+                break;
+            case 'd':
+                diaTexto = 'd';
                 break;
             case 'x':
                 diaTexto = 'x';
@@ -783,6 +797,7 @@ function editarTarea() {
 }
 
 
+
 // Función para obtener el nombre completo del día a partir de su abreviatura
 function obtenerNombreDia(abreviaturaDia) {
     switch (abreviaturaDia.toLowerCase()) {
@@ -795,7 +810,7 @@ function obtenerNombreDia(abreviaturaDia) {
         case 'm':
             return 'M';
         case 'mi':
-            return 'MI';
+            return 'Mi';
         case 'j':
             return 'J';
         case 'v':
@@ -810,8 +825,8 @@ function obtenerNombreDia(abreviaturaDia) {
 function convertirPrioridad(prioridad) {
     var prioridadMap = {
         '1': '🔥',
-        '2': '🛎️',
-        '3': '📅'
+        '2': '🔔',
+        '3': '📆'
     };
     return prioridadMap[prioridad] || prioridad;
 }
@@ -876,7 +891,7 @@ function calcularNivel(numTareasCompletadas) {
     } else if (numTareasCompletadas >= 500) {
         return "13💫";
     } else if (numTareasCompletadas >= 200) {
-        return "12⭐";
+        return "12🔥";
     } else if (numTareasCompletadas >= 150) {
         return "11👑";
     } else {
@@ -1566,7 +1581,7 @@ function crearOEditarNota() {
     var notaExistente = localStorage.getItem('nota') || '';
     
     // Pedir al usuario que ingrese o edite la nota, mostrando la nota existente
-    var nota = prompt("Escribe o edita tu nota:\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n*Ejemplo 1: *Cocinar;*Barrer;*Limpiar\nEjemplo 2: 📌Recordatorios;*Beber agua;*Limpiar el polvo;;📜Diario;Mayo 26 - Sigo programando una aplicacion de productividad;Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, el punto y coma ( ; ) sirve para separar las notas.", notaExistente);
+    var nota = prompt("Escribe o edita tu nota:\n*Se recomienda crear las notas siguiendo los siguientes ejemplos:\n*Ejemplo 1: *Cocinar;*Barrer;*Limpiar\nEjemplo 2: 🔥Recordatorios;*Beber agua;*Limpiar el polvo;;📜Diario;Mayo 26 - Sigo programando una aplicacion de productividad;Mayo 27 - Realice de forma efectiva mi trabajo gracias a esta app\n*Realice los ejemplos y despues dirigaje a (Ver nota) para entender mejor esta funcionalidad, el punto y coma ( ; ) sirve para separar las notas.", notaExistente);
 
     // Verificar si el usuario presionó "Cancelar"
     if (nota === null) {
