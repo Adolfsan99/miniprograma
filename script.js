@@ -243,9 +243,9 @@ function verOCrearRutina() {
 
   // Definir el mapeo para prioridades
   var prioridadMap = {
-    1: "🔥",
-    2: "🔔",
-    3: "📆",
+    1: 1,
+    2: 2,
+    3: 3,
   };
 
   // Función para convertir el formato abreviado a uno más descriptivo
