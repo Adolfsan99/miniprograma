@@ -93,18 +93,8 @@ function verOCrearTarea() {
   var horaActual = fechaActual.getHours();
   var minutosActual = fechaActual.getMinutes();
 
-  if ( horaActual < 6 ) {
-    // Mover tareas del día anterior al día actual
-    var diaAnterior = anteriorDia(diaActual);
-  
-    tareas.forEach((tarea) => {
-      if (
-        tarea.dia === diaAnterior &&
-        (tarea.estado === "🔴" || tarea.estado === "🟡")
-      ) {
-        tarea.dia = diaActual;
-      }
-    });
+  if (horaActual < 6) {
+    moverTareasDelDiaAnterior(tareas, diaActual);
   }
 
   // Guardar las tareas actualizadas en localStorage
@@ -143,6 +133,13 @@ function verOCrearTarea() {
     return;
   } else if (nuevaTarea.trim() === "") {
     alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
+    return;
+  } else if (nuevaTarea === "mover") {
+    console.log("Se está intentando mover las tareas del día anterior al día actual");
+    moverTareasDelDiaAnterior(tareas, diaActual);
+    // Guardar las tareas actualizadas en localStorage
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+    alert("📝Tareas movidas exitosamente.");
     return;
   }
 
@@ -201,6 +198,19 @@ function verOCrearTarea() {
   tareas.push(nuevaTareaObj);
   localStorage.setItem("tareas", JSON.stringify(tareas));
   alert("📝Tarea creada exitosamente.");
+}
+
+function moverTareasDelDiaAnterior(tareas, diaActual) {
+  var diaAnterior = anteriorDia(diaActual);
+
+  tareas.forEach((tarea) => {
+    if (
+      tarea.dia === diaAnterior &&
+      (tarea.estado === "🔴" || tarea.estado === "🟡")
+    ) {
+      tarea.dia = diaActual;
+    }
+  });
 }
 
 function anteriorDia(diaActual) {
