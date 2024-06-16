@@ -80,6 +80,7 @@ Instrucciones para visualizar y crear tareas en la aplicación.
 - Solo se mostrarán las tareas con Prioridad 1.
 - El día actual estará marcado con una estrella ⭐ para facilitar el seguimiento.
 - Podrás ver una barra de progreso de todas las tareas, que se irá llenando conforme vayas completando las tareas.
+- Si en vez de crear una tarea escribes en el prompt "mover" se moverán las tareas incompletas del dia anterior al dia actual.
 
 ---
 
