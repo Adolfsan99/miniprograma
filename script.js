@@ -93,7 +93,7 @@ function verOCrearTarea() {
   var horaActual = fechaActual.getHours();
   var minutosActual = fechaActual.getMinutes();
 
-  if (horaActual < 6 || horaActual > 22) {
+  if ( horaActual < 6 ) {
     // Mover tareas del día anterior al día actual
     var diaAnterior = anteriorDia(diaActual);
   
