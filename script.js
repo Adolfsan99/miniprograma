@@ -135,11 +135,14 @@ function verOCrearTarea() {
     alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
     return;
   } else if (nuevaTarea === "mover") {
-    console.log("Se está intentando mover las tareas del día anterior al día actual");
     moverTareasDelDiaAnterior(tareas, diaActual);
     // Guardar las tareas actualizadas en localStorage
     localStorage.setItem("tareas", JSON.stringify(tareas));
     alert("📝Tareas movidas exitosamente.");
+    return;
+  } else if (nuevaTarea === "crear") {
+    // Crear uueva tarea con asistencia guiada
+    crearNuevaTareaConAsistenciaGuiada(tareas, diaActual);
     return;
   }
 
@@ -211,6 +214,79 @@ function moverTareasDelDiaAnterior(tareas, diaActual) {
       tarea.dia = diaActual;
     }
   });
+}
+
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  var descripcion = prompt("Describe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  var confirmacionTiempo = confirm(`¿Puedes "${descripcion}" en menos de 2 horas?`);
+  var estadoEmoji = confirmacionTiempo ? "🟡" : "🔴";
+
+  var confirmacionPrioridad = confirm(`¿"${descripcion}" es prioritaria?`);
+  var prioridad = confirmacionPrioridad ? 1 : 2;
+
+  var opcionesDia = `1 Hoy\n2 Lunes\n3 Martes\n4 Miércoles\n5 Jueves\n6 Viernes\n7 Sábado\n8 Domingo\n9 Sin asignar`;
+  var opcionDia = prompt(`¿Cuándo harás la tarea de "${descripcion}"?\n${opcionesDia}`);
+  var diaSeleccionado;
+
+  switch (opcionDia) {
+    case "1":
+      diaSeleccionado = diaActual;
+      break;
+    case "2":
+      diaSeleccionado = "l";
+      break;
+    case "3":
+      diaSeleccionado = "m";
+      break;
+    case "4":
+      diaSeleccionado = "mi";
+      break;
+    case "5":
+      diaSeleccionado = "j";
+      break;
+    case "6":
+      diaSeleccionado = "v";
+      break;
+    case "7":
+      diaSeleccionado = "s";
+      break;
+    case "8":
+      diaSeleccionado = "d";
+      break;
+    case "9":
+      var fechaEspecifica = prompt(`Escribe el mes y día en este formato "M6-Junio 20" para asignar fecha específica a tu tarea:`);
+      if (!fechaEspecifica) {
+        alert("⚠️ Fecha inválida. La tarea no se creará.");
+        return;
+      }
+      descripcion = `${fechaEspecifica},${descripcion}`;
+      diaSeleccionado = "x";
+      break;
+    default:
+      alert("⚠️ Opción inválida. La tarea no se creará.");
+      return;
+  }
+
+  if (descripcion.length > 70) {
+    alert("⚠️ Tarea demasiado larga. La tarea debe tener 70 caracteres o menos.");
+    return;
+  }
+
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    estado: estadoEmoji,
+    descripcion: descripcion,
+    dia: diaSeleccionado,
+  };
+  
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+  alert("📝 Tarea creada exitosamente.");
 }
 
 function anteriorDia(diaActual) {
