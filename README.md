@@ -20,7 +20,7 @@ Instrucciones para visualizar y crear tareas en la aplicación.
    - Este botón te llevará a una alerta donde podrás ver las tareas existentes o crear una nueva.
 
 2. **Crear una nueva tarea de forma sencilla**:
-   - En el espacio donde debes ingresar texto, escribe "Crear", de esta manera podrás crear una tarea de forma rapida.
+   - En el espacio donde debes ingresar texto, escribe "crear", de esta manera podrás crear una tarea de forma rapida.
 
 3. **Crear una nueva tarea utilizando un prompt**:
    - Sigue el siguiente formato para ingresar una nueva tarea:
