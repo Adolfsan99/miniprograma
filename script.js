@@ -134,8 +134,14 @@ function verOCrearTarea() {
   } else if (nuevaTarea.trim() === "") {
     alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
     return;
-  } else if (nuevaTarea === "mover") {
+  } else if (nuevaTarea === "actualizar") {
     moverTareasDelDiaAnterior(tareas, diaActual);
+    // Guardar las tareas actualizadas en localStorage
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+    alert("📝Tareas actualizadas exitosamente.");
+    return;
+  } else if (nuevaTarea === "mover") {
+    moverTareasAlDiaSiguiente(tareas, diaActual);
     // Guardar las tareas actualizadas en localStorage
     localStorage.setItem("tareas", JSON.stringify(tareas));
     alert("📝Tareas movidas exitosamente.");
@@ -212,6 +218,19 @@ function moverTareasDelDiaAnterior(tareas, diaActual) {
       (tarea.estado === "🔴" || tarea.estado === "🟡")
     ) {
       tarea.dia = diaActual;
+    }
+  });
+}
+
+function moverTareasAlDiaSiguiente(tareas, diaActual) {
+  var diaSiguiente = siguienteDia(diaActual);
+
+  tareas.forEach((tarea) => {
+    if (
+      tarea.dia === diaActual &&
+      (tarea.estado === "🔴" || tarea.estado === "🟡")
+    ) {
+      tarea.dia = diaSiguiente;
     }
   });
 }
