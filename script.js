@@ -1153,7 +1153,7 @@ function walllist() {
 
 function comoUsar() {
   window.open(
-    "https://github.com/Adolfsan99/miniprograma/blob/main/README.md",
+    "https://adolfsan99.github.io/miniprograma/",
     "_blank"
   );
 }
