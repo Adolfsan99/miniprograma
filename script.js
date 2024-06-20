@@ -962,43 +962,19 @@ async function verOEscribirNota() {
 
 
 function aleatorio() {
-  var numero_aleatorio_rango_inicial = parseInt(
-    prompt(
-      "Ingresa el rango inicial de tu numero aleatorio\n*Normalmente suele ser 1",
-      "1"
-    )
-  );
+
+  numero = prompt("Ingresa un numero\n*El numero aleatorio se calculará entre 1 y el numero ingresado.");
 
   // Verificar si el usuario presionó "Cancelar" o ingresó un valor no válido
   if (
-    numero_aleatorio_rango_inicial === null ||
-    isNaN(numero_aleatorio_rango_inicial)
+    numero === null ||
+    isNaN(numero)
   ) {
     alert("⚠️Ingresa un valor numérico válido para el rango inicial.");
     return;
   }
 
-  var numero_aleatorio_rango_final = parseInt(
-    prompt(
-      "Ingresa el rango final de tu numero aleatorio\n*Si escogiste 1 en el rango inicial, puedes utilizar 100 en el rango final para generar un numero aleatorio entre 1 y 100"
-    )
-  );
-
-  if (
-    isNaN(numero_aleatorio_rango_inicial) ||
-    isNaN(numero_aleatorio_rango_final)
-  ) {
-    alert("⚠️Ingresa valores numéricos válidos.");
-    return;
-  }
-
-  var numero_aleatorio =
-    Math.floor(
-      Math.random() *
-        (numero_aleatorio_rango_final - numero_aleatorio_rango_inicial + 1)
-    ) + numero_aleatorio_rango_inicial;
-  console.log("El número aleatorio es: ", numero_aleatorio);
-  alert("🎲El número aleatorio es: " + numero_aleatorio);
+  alert(`🎲El número aleatorio es ${Math.floor(Math.random()*numero+1)}`);
 }
 
 //////////////////////////////////////////////////////////////////////////////
