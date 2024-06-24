@@ -73,7 +73,7 @@ function renderChart(data) {
     bar.className = "bar";
     bar.style.height = `${item.rendimiento * 1}px`;
     if (item.rendimiento >= 10) {
-      bar.textContent = item.rendimiento + "%";
+      /* bar.textContent = item.rendimiento + "%"; */
     } else {
       bar.style.background = "#f8312f"; // Cambia el color de fondo de la barra a rojo
     }
