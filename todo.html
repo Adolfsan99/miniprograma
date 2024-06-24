@@ -245,6 +245,33 @@
             margin-top: 5px;
             text-align: center;
         }
+
+        /* Estilo base para el scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            /* Ancho del scrollbar */
+        }
+
+        /* Barra del scrollbar */
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            /* Color de fondo de la barra */
+            border-radius: 15px;
+            /* Borde redondeado */
+        }
+
+        /* Pista del scrollbar (donde se mueve el thumb) */
+        ::-webkit-scrollbar-track {
+            background-color: #222;
+            /* Color de fondo de la pista */
+        }
+
+        /* Cambiar el cursor al interactuar con el scrollbar */
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+            border-radius: 10px;
+            /* Color de fondo del thumb al pasar el cursor */
+        }
     </style>
 </head>
 
