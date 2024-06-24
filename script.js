@@ -75,7 +75,7 @@ function renderChart(data) {
     if (item.rendimiento >= 10) {
       bar.textContent = item.rendimiento + "%";
     } else {
-      bar.style.backgroundColor = "#f8312f"; // Cambia el color de fondo de la barra a rojo
+      bar.style.background = "#f8312f"; // Cambia el color de fondo de la barra a rojo
     }
 
     const label = document.createElement("div");
