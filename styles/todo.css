@@ -1,0 +1,257 @@
+div.todo {
+  margin: auto;
+  padding: 0px;
+  display: grid;
+  text-align: center;
+  align-items: center;
+  min-height: fit-content;
+  width: auto;
+}
+
+h1,
+a {
+  font-family: Arial, Helvetica, sans-serif;
+  color: aliceblue;
+  margin: 8px 5px;
+  text-decoration: none;
+  text-align: center;
+  word-break: break-word;
+}
+
+html {
+  background: linear-gradient(90deg, #834545, #1a17cdba);
+}
+
+body {
+  margin: auto;
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: 100%;
+}
+
+div {
+  padding: 8px 0px 0px 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: auto;
+}
+
+div.app {
+  padding: 0px;
+  display: contents;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: auto;
+}
+
+div.box0 {
+  margin: inherit;
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: 100%;
+  background-color: #3b3b3b;
+}
+
+div.box1 {
+  margin: inherit;
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: 100%;
+  background-color: #45837a99;
+}
+
+div.box2 {
+  margin: auto;
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: 100%;
+  background-color: #45835470;
+}
+
+div.box3 {
+  margin: auto;
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: 100%;
+  background-color: #83458287;
+}
+
+div.creditos {
+  align-content: center;
+  margin: auto;
+  padding: 0;
+}
+
+p {
+  font-size: 40px;
+  margin: inherit;
+}
+
+button {
+  background-color: #0000002b;
+  color: white;
+  padding: 16px;
+  border: initial;
+  border-radius: 0;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  height: 140px;
+  width: 140px;
+  border-radius: 100px;
+}
+
+button.todo {
+  height: 150px;
+}
+
+button:hover {
+  background-color: #183743;
+}
+
+@media only screen and (max-width: 600px) {
+  button {
+    padding: 13px;
+    margin: 4px 4px;
+    font-size: 1.1rem;
+    width: 150px;
+    height: 125px;
+    border-radius: 60px;
+  }
+
+  p {
+    font-size: 40px;
+    margin: 2px;
+  }
+
+  textarea {
+    width: 100%;
+  }
+}
+
+textarea {
+  margin: 20px 10px 10px 10px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  border: none;
+  padding: 15px;
+  border-radius: 15px;
+  padding: 15px;
+  background-color: #0000002b;
+  color: white;
+}
+
+#status {
+  margin-top: 10px;
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.box4 {
+  margin: inherit;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
+  width: 100%;
+  background-color: #45837a99;
+}
+
+/**/
+
+/*body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }*/
+
+.chart-container {
+  font-family: Arial, sans-serif;
+  justify-content: space-around;
+  align-items: flex-end;
+  margin: 20px 10px 10px 10px;
+  max-width: 100%;
+  display: flex;
+  border: none;
+  background-color: #0000002b;
+  color: white;
+  border-radius: 15px;
+  padding: 15px;
+  height: 9rem;
+}
+
+.bar {
+  width: 1.5rem;
+  background: linear-gradient(180deg, rgb(0 255 119) 0%, rgb(13 91 26) 80%);
+  text-align: center;
+  font-size: small;
+  color: white;
+  text-shadow: 1px 2px black;
+  margin: 0 1px;
+}
+
+.bar-label {
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* Estilo base para el scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  /* Ancho del scrollbar */
+}
+
+/* Barra del scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: #5e5e5e;
+  /* Color de fondo de la barra */
+  border-radius: 15px;
+  /* Borde redondeado */
+}
+
+/* Pista del scrollbar (donde se mueve el thumb) */
+::-webkit-scrollbar-track {
+  background-color: #222;
+  /* Color de fondo de la pista */
+}
+
+/* Cambiar el cursor al interactuar con el scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  border-radius: 10px;
+  /* Color de fondo del thumb al pasar el cursor */
+}
