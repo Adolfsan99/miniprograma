@@ -1341,8 +1341,6 @@ function verTareasCompletadas() {
           }
         }
       }
-    } else {
-      //alert("⚠️El registro de tareas completadas no ha sido eliminado.");
     }
   }
 }
@@ -1362,7 +1360,7 @@ function convertirDiaCompletadas(dia) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 async function verOEscribirNota() {
   // Cargar la nota existente, si la hay
   var nota = localStorage.getItem("nota") || "";
@@ -1438,7 +1436,7 @@ async function verOEscribirNota() {
   localStorage.setItem("nota", nuevaNota);
   alert("✅Nota guardada exitosamente.");
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 function aleatorio() {
@@ -1531,7 +1529,10 @@ function importarDatos() {
 
         localStorage.setItem("nota", datos.nota || "");
         localStorage.setItem("rutina", datos.rutina || ""); // Incluir la rutina
-
+        localStorage.setItem(
+          "medicionSemanal",
+          datos.medicionSemanal || initialData
+        ); // Incluir la rutina
         alert("📥Datos importados exitosamente.");
         location.reload(); // Recargar la página para reflejar los cambios en el LocalStorage
       } catch (error) {
@@ -1554,6 +1555,7 @@ function exportarDatos() {
       JSON.parse(localStorage.getItem("tareasCompletadas")) || [], // Incluir tareasCompletadas
     nota: localStorage.getItem("nota") || "",
     rutina: localStorage.getItem("rutina") || "", // Incluir la rutina
+    medicionSemanal: localStorage.getItem("medicionSemanal") || initialData,
   };
 
   var jsonContent = JSON.stringify(datos);
