@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,17 +24,21 @@
             min-height: fit-content;
             width: auto;
         }
-        h1, a {
+
+        h1,
+        a {
             font-family: Arial, Helvetica, sans-serif;
             color: aliceblue;
             margin: 8px 5px;
-            text-decoration: none;  
+            text-decoration: none;
             text-align: center;
-            word-break: break-word;        
+            word-break: break-word;
         }
+
         html {
             background: linear-gradient(90deg, #834545, #1a17cdba);
         }
+
         div {
             margin: auto;
             padding: 0px;
@@ -44,6 +49,7 @@
             min-height: fit-content;
             width: auto;
         }
+
         div.box0 {
             margin: inherit;
             padding: 0px;
@@ -55,6 +61,7 @@
             width: 100%;
             background-color: #3b3b3b;
         }
+
         div.box1 {
             margin: inherit;
             padding: 0px;
@@ -66,6 +73,7 @@
             width: 100%;
             background-color: #45837a99;
         }
+
         div.box2 {
             margin: auto;
             padding: 0px;
@@ -77,6 +85,7 @@
             width: 100%;
             background-color: #45835470;
         }
+
         div.box3 {
             margin: auto;
             padding: 0px;
@@ -88,9 +97,11 @@
             width: 100%;
             background-color: #83458287;
         }
+
         div.creditos {
             align-content: center;
         }
+
         body {
             margin: auto;
             padding: 0px;
@@ -101,6 +112,7 @@
             min-height: fit-content;
             width: 100%;
         }
+
         button {
             background-color: #0000002b;
             color: white;
@@ -113,6 +125,7 @@
             transition: background-color 0.3s ease;
             border-radius: 100px;
         }
+
         #output {
             font-family: Arial, sans-serif;
             justify-content: center;
@@ -127,21 +140,23 @@
             border-radius: 40px;
             word-break: break-word;
             text-align: left;
-            user-select: all;
+            /*user-select: all;*/
         }
+
         textarea {
-        margin: 20px 10px 10px 10px;
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        border-radius: 15px;
-        border: none;
-        padding: 15px;
-        border-radius: 15px;
-        padding: 15px;
-        background-color: #0000002b;
-        color: white;
+            margin: 20px 10px 10px 10px;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            padding: 15px;
+            background-color: #0000002b;
+            color: white;
         }
+
         p {
             font-family: Arial, Helvetica, sans-serif;
             color: aliceblue;
@@ -149,116 +164,120 @@
         }
     </style>
 </head>
+
 <body>
-<div class="todo">
-    <h1>✒️TextTo.html<div id="clock"></div></h1>
-</div>
-<div class="box1">
-    <form id="textForm">
-        <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50" placeholder="Escribe tu texto aquí..."></textarea><br><br>
-</div>
-<div class="box2">
-    <!-- INCLUIR EL CONTADOR AQUI -->
-    <p id="charCounter">Número de caracteres: 0</p>
-    <button type="button" onclick="displayText()">OK</button>
-    <button type="button" onclick="leerTexto()">Escuchar</button>
-    <button type="button" onclick="copiarTexto()">Copiar</button>
-    <!--<button type="button" onclick="detenerTexto()">Detener</button>-->
-    <button type="button" onclick="exportText()">Exportar</button>
-    <button type="button" onclick="exitFunction()">Regresar a ✅Todo.html</button>
-</div>
-<div class="box3">
-    <div id="output"></div>
-    <p>.</p>
-</div>
-<div class="creditos">
-    <h1>Creado por: </h1>
-    <h1><a href="https://github.com/Adolfsan99">Adolfo Sánchez</a></h1>
-</div>
+    <div class="todo">
+        <h1>✒️TextTo.html<div id="clock"></div>
+        </h1>
+    </div>
+    <div class="box1">
+        <form id="textForm">
+            <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50"
+                placeholder="Escribe tu texto aquí..."></textarea><br><br>
+    </div>
+    <div class="box2">
+        <!-- INCLUIR EL CONTADOR AQUI -->
+        <p id="charCounter">Número de caracteres: 0</p>
+        <button type="button" onclick="displayText()">OK</button>
+        <button type="button" onclick="leerTexto()">Escuchar</button>
+        <button type="button" onclick="copiarTexto()">Copiar</button>
+        <!--<button type="button" onclick="detenerTexto()">Detener</button>-->
+        <button type="button" onclick="exportText()">Exportar</button>
+        <button type="button" onclick="exitFunction()">Regresar a ✅Todo.html</button>
+    </div>
+    <div class="box3">
+        <div id="output"></div>
+        <p>.</p>
+    </div>
+    <div class="creditos">
+        <h1>Creado por: </h1>
+        <h1><a href="https://github.com/Adolfsan99">Adolfo Sánchez</a></h1>
+    </div>
 
-<script>
-    function displayText() {
-        detenerTexto()
-        const textInput = document.getElementById('textInput').value;
-        const outputDiv = document.getElementById('output');
-        const charCounter = document.getElementById('charCounter');
+    <script>
+        function displayText() {
+            detenerTexto()
+            const textInput = document.getElementById('textInput').value;
+            const outputDiv = document.getElementById('output');
+            const charCounter = document.getElementById('charCounter');
 
-        // Actualizar el contenido del outputDiv con el texto ingresado
-        outputDiv.textContent = textInput;
+            // Actualizar el contenido del outputDiv con el texto ingresado
+            outputDiv.textContent = textInput;
 
-        // Actualizar el contador de caracteres
-        charCounter.textContent = `Número de caracteres: ${textInput.length}`;
-    }
-
-    async function exportText() {
-        const textInput = document.getElementById('textInput').value;
-        const blob = new Blob([textInput], { type: 'text/plain' });
-
-        const options = {
-            types: [{
-                description: 'Text Files',
-                accept: {
-                    'text/plain': ['.txt'],
-                },
-            }],
-        };
-
-        try {
-            const handle = await window.showSaveFilePicker(options);
-            const writable = await handle.createWritable();
-            await writable.write(blob);
-            await writable.close();
-        } catch (err) {
-            console.error('Error al guardar el archivo:', err);
+            // Actualizar el contador de caracteres
+            charCounter.textContent = `Número de caracteres: ${textInput.length}`;
         }
-    }
 
-    function exitFunction() {
-        detenerTexto()
-        var ubicacionActual = window.location.origin;
-        // Agregar la ruta o el nombre del archivo que deseas
-        var nuevaUbicacion = ubicacionActual + "/miniprograma/todo.html";
-        // Redirigir a la nueva ubicación
-        window.location.href = nuevaUbicacion;
-    }
+        async function exportText() {
+            const textInput = document.getElementById('textInput').value;
+            const blob = new Blob([textInput], { type: 'text/plain' });
 
-    function leerTexto() {
-        detenerTexto()
-        displayText()
-        const texto = document.getElementById('output').textContent;
-        const mensaje = new SpeechSynthesisUtterance(texto);
-        mensaje.rate = 2; // Establece la velocidad a 2x
-        window.speechSynthesis.speak(mensaje);
-    }
+            const options = {
+                types: [{
+                    description: 'Text Files',
+                    accept: {
+                        'text/plain': ['.txt'],
+                    },
+                }],
+            };
 
-    function detenerTexto() {
-        window.speechSynthesis.cancel();
-    }
+            try {
+                const handle = await window.showSaveFilePicker(options);
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (err) {
+                console.error('Error al guardar el archivo:', err);
+            }
+        }
 
-    function copiarTexto() {
-        displayText()
-        const texto = document.getElementById('output').textContent;
-        navigator.clipboard.writeText(texto).then(() => {
-            alert('Texto copiado al portapapeles');
-        }).catch(err => {
-            console.error('Error al copiar el texto: ', err);
-        });
-    }
+        function exitFunction() {
+            detenerTexto()
+            var ubicacionActual = window.location.origin;
+            // Agregar la ruta o el nombre del archivo que deseas
+            var nuevaUbicacion = ubicacionActual + "/miniprograma/todo.html";
+            // Redirigir a la nueva ubicación
+            window.location.href = nuevaUbicacion;
+        }
 
-    function updateClock() {
-        const now = new Date();
-        let hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // El '0' debe ser '12'
-        const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
-        document.getElementById('clock').textContent = timeString;
-    }
+        function leerTexto() {
+            detenerTexto()
+            displayText()
+            const texto = document.getElementById('output').textContent;
+            const mensaje = new SpeechSynthesisUtterance(texto);
+            mensaje.rate = 2; // Establece la velocidad a 2x
+            window.speechSynthesis.speak(mensaje);
+        }
 
-    setInterval(updateClock, 1000);
-    updateClock();  // Llamada inicial para establecer el reloj inmediatamente
-</script>
+        function detenerTexto() {
+            window.speechSynthesis.cancel();
+        }
+
+        function copiarTexto() {
+            displayText()
+            const texto = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert('Texto copiado al portapapeles');
+            }).catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
+        }
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // El '0' debe ser '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();  // Llamada inicial para establecer el reloj inmediatamente
+    </script>
 </body>
+
 </html>
