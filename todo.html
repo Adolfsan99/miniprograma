@@ -204,6 +204,47 @@
             width: 100%;
             background-color: #45837a99;
         }
+
+        /**/
+
+        /*body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }*/
+
+        .chart-container {
+            font-family: Arial, sans-serif;
+            justify-content: space-around;
+            align-items: flex-end;
+            margin: 20px 10px 10px 10px;
+            max-width: 100%;
+            display: flex;
+            border: none;
+            background-color: #0000002b;
+            color: white;
+            border-radius: 15px;
+            padding: 15px;
+            height: 9rem;
+        }
+
+        .bar {
+            width: 1.5rem;
+            background-color: #4caf50;
+            text-align: center;
+            font-size: small;
+            color: white;
+            text-shadow: 1px 2px black;
+            margin: 0 1px;
+        }
+
+        .bar-label {
+            margin-top: 5px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -213,13 +254,16 @@
     <div class="app">
         <div class="todo">
             <a href="" onclick="verTareasCompletadas()">
-                <h1>✅Todo.html<div id="clock"></div><div id="status">⌛Esperando texto</div>
+                <h1>✅Todo.html<div id="clock"></div>
+                    <div id="status"></div>
                 </h1>
             </a>
         </div>
 
         <div class="box1">
-
+            <div class="chart-container" id="chart-container">
+                <!-- Las barras se generarán aquí dinámicamente -->
+            </div>
             <textarea id="textbox" style="border-radius: 15px; padding: 15px;" rows="10" cols="50"
                 placeholder="Escribe algo aquí..."></textarea>
         </div>
@@ -285,8 +329,21 @@
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12; // El '0' debe ser '12'
-            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            const periodEmoji = getPeriodEmoji(hours);
+            const timeString = `${periodEmoji}${hours}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('clock').textContent = timeString;
+        }
+
+        function getPeriodEmoji(hours) {
+            if (hours >= 5 && hours < 12) {
+                return '🌅'; // Mañana
+            } else if (hours >= 12 && hours < 18) {
+                return '🌄'; // Tarde
+            } else if (hours >= 18 && hours < 22) {
+                return '🌉'; // Noche
+            } else {
+                return '🌠'; // Madrugada
+            }
         }
 
         setInterval(updateClock, 1000);
@@ -312,47 +369,16 @@
             timeout = setTimeout(() => {
                 localStorage.setItem('nota', textbox.value);
                 statusDiv.textContent = '✅¡Texto guardado!';
+
+                // Desaparecer el mensaje después de 3 segundos
+                setTimeout(() => {
+                    statusDiv.textContent = '';
+                }, 3000);
             }, 4000);
         });
+
     </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
+
 </body>
 
 </html>
