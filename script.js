@@ -258,6 +258,52 @@ function verOCrearTarea() {
 
 function verOCrearTarea() {
   var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+
+  // Función para obtener el nombre del mes desde su número
+  function obtenerNombreMes(numeroMes) {
+    var meses = [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic",
+    ];
+    return meses[numeroMes - 1];
+  }
+
+  // Función para extraer la fecha del inicio de la descripción
+  function extraerFecha(descripcion) {
+    var match = descripcion.match(/^M(\d+) (\w+) (\d+)/);
+    if (match) {
+      var numeroMes = parseInt(match[1]);
+      var nombreMes = obtenerNombreMes(numeroMes);
+      var dia = parseInt(match[3]);
+      var fecha = new Date(new Date().getFullYear(), numeroMes - 1, dia); // Crear objeto Date con el año actual
+      return fecha;
+    }
+    return null;
+  }
+
+  // Ordenar tareas por fecha
+  tareas.sort((a, b) => {
+    var fechaA = extraerFecha(a.descripcion);
+    var fechaB = extraerFecha(b.descripcion);
+
+    if (fechaA && fechaB) {
+      return fechaA - fechaB; // Ordenar por fecha
+    } else {
+      return a.descripcion.localeCompare(b.descripcion); // Ordenar alfabéticamente si no se puede extraer la fecha
+    }
+  });
+
+  // Obtener el día de la semana actual
   var fechaActual = new Date();
   var diaSemana = fechaActual.getDay();
   var diaActual = "";
@@ -299,17 +345,9 @@ function verOCrearTarea() {
 
   var diaActualEmoji = "📆⭐";
 
-  // Verificar si la hora actual es antes de las 6 am
-  var horaActual = fechaActual.getHours();
-  var minutosActual = fechaActual.getMinutes();
+  var mensaje = `📝Tareas disponibles - Tu progreso `;
 
-  if (horaActual < 6) {
-    moverTareasDelDiaAnterior(tareas, diaActual);
-  }
-
-  // Guardar las tareas actualizadas en localStorage
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
+  // Calcular progreso del día actual
   var tareasDiaActual = tareas.filter((tarea) => tarea.dia === diaActual);
   var totalTareasDiaActual = tareasDiaActual.length;
   var tareasCompletadasDiaActual = tareasDiaActual.filter(
@@ -320,30 +358,28 @@ function verOCrearTarea() {
       ? Math.round((tareasCompletadasDiaActual / totalTareasDiaActual) * 100)
       : 0;
 
-  // Actualizar rendimiento diario en localStorage
-  const medicionSemanal =
-    JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
-  const diaData = medicionSemanal.find(
-    (item) => item.dia.toLowerCase() === diaActual
-  );
-  if (diaData) {
-    diaData.rendimiento = progresoDiaActual;
-  }
-  localStorage.setItem("medicionSemanal", JSON.stringify(medicionSemanal));
-
-  renderChart(medicionSemanal);
-
+  // Construir barra de progreso
   var progresoBarra = "";
   for (var i = 0; i < 10; i++) {
     progresoBarra += i < progresoDiaActual / 10 ? "█" : "░";
   }
 
-  var mensaje = `📝Tareas disponibles - ✅Tu progreso ${progresoBarra} ${progresoDiaActual}%\n`;
-  for (var dia in dias) {
+  mensaje += `${progresoBarra} ${progresoDiaActual}%\n`;
+
+  // Convertir los días a un arreglo y ordenarlos numéricamente
+  var diasOrdenados = Object.keys(dias).sort((a, b) => {
+    if (a === "x") return 1; // "Sin asignar" debe ir al final
+    if (b === "x") return -1;
+    return parseInt(a) - parseInt(b); // Orden numérico
+  });
+
+  diasOrdenados.forEach((diaKey) => {
     var diaMensaje =
-      dia === diaActual ? dias[dia].replace("📆", diaActualEmoji) : dias[dia];
+      diaKey === diaActual
+        ? dias[diaKey].replace("📆", diaActualEmoji)
+        : dias[diaKey];
     var tareasDia = tareas.filter(
-      (tarea) => tarea.dia === dia && tarea.prioridad === 1
+      (tarea) => tarea.dia === diaKey && tarea.prioridad === 1
     );
     if (tareasDia.length > 0) {
       mensaje += `${diaMensaje}\n`;
@@ -351,11 +387,11 @@ function verOCrearTarea() {
         mensaje += `${tarea.estado}${tarea.descripcion}\n`;
       });
     }
-  }
+  });
 
   var nuevaTarea = prompt(`${mensaje}`);
 
-  if (nuevaTarea === null) {
+  if (!nuevaTarea) {
     return;
   } else if (nuevaTarea.trim() === "") {
     alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
@@ -434,7 +470,7 @@ function verOCrearTarea() {
   localStorage.setItem("tareas", JSON.stringify(tareas));
 
   // Actualizar rendimiento diario en localStorage después de agregar una nueva tarea
-  const tareasActualizadas = JSON.parse(localStorage.getItem("tareas")) || [];
+  var tareasActualizadas = JSON.parse(localStorage.getItem("tareas")) || [];
   var tareasDiaActualizadas = tareasActualizadas.filter(
     (tarea) => tarea.dia === diaActual
   );
@@ -449,9 +485,9 @@ function verOCrearTarea() {
         )
       : 0;
 
-  const medicionSemanalActualizada =
+  var medicionSemanalActualizada =
     JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
-  const diaDataActualizada = medicionSemanalActualizada.find(
+  var diaDataActualizada = medicionSemanalActualizada.find(
     (item) => item.dia.toLowerCase() === diaActual
   );
   if (diaDataActualizada) {
@@ -493,60 +529,589 @@ function moverTareasAlDiaSiguiente(tareas, diaActual) {
 }
 
 function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  // Prompt para descripción
+  var descripcion = prompt("Escribe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  // Preguntar si es urgente
+  var esUrgente = confirm("¿Es urgente?");
+  var prioridad = esUrgente ? 1 : 2;
+
+  // Preguntar si es importante
+  var esImportante = confirm("¿Es importante?");
+  if (esImportante) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  // Establecer la fecha
+  var dias = {
+    l: "Lunes",
+    m: "Martes",
+    mi: "Miércoles",
+    j: "Jueves",
+    v: "Viernes",
+    s: "Sábado",
+    d: "Domingo",
+    x: "Fecha específica",
+  };
+
+  var opcionDia = prompt(
+    `Establece una fecha (l, m, mi, j, v, s, d, x)\nDeja vacío para hoy:`
+  );
+  var diaSeleccionado = diaActual;
+  var mes = "";
+  var diaMes = "";
+
+  if (opcionDia && dias[opcionDia]) {
+    if (opcionDia === "x") {
+      // Elije el mes
+      mes = prompt("Elije el mes (1-12):");
+      if (!mes || mes < 1 || mes > 12) {
+        alert("⚠️ Mes inválido. La tarea no se creará.");
+        return;
+      }
+
+      var meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+      mes = `M${mes} ${meses[mes - 1]}`;
+
+      // Elije el día
+      diaMes = prompt("Elije el día (1-31):");
+      if (!diaMes || diaMes < 1 || diaMes > 31) {
+        alert("⚠️ Día inválido. La tarea no se creará.");
+        return;
+      }
+
+      diaSeleccionado = `${mes} ${diaMes}`;
+    } else {
+      diaSeleccionado = opcionDia;
+    }
+  } else if (opcionDia !== "") {
+    alert("⚠️ Opción inválida. La tarea no se creará.");
+    return;
+  }
+
+  // Crear nueva tarea
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    descripcion: descripcion,
+    dia: diaSeleccionado,
+  };
+
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+  alert("📝 Tarea creada exitosamente.");
+}
+
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  // Solicitar descripción de la tarea
+  var descripcion = prompt("Escribe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  // Preguntar si es urgente y establecer prioridad
+  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
+  var prioridad = esUrgente ? 1 : 2;
+
+  // Preguntar si es importante y agregar estrella si lo es
+  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
+  if (esImportante) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  // Establecer fecha
+  var opcionDia = prompt(
+    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
+  );
+  var diaSeleccionado = "";
+
+  switch (opcionDia) {
+    case "l":
+      diaSeleccionado = `M1 Ene ${descripcion}`;
+      break;
+    case "m":
+      diaSeleccionado = `M2 Feb ${descripcion}`;
+      break;
+    case "mi":
+      diaSeleccionado = `M3 Mar ${descripcion}`;
+      break;
+    case "j":
+      diaSeleccionado = `M4 Abr ${descripcion}`;
+      break;
+    case "v":
+      diaSeleccionado = `M5 May ${descripcion}`;
+      break;
+    case "s":
+      diaSeleccionado = `M6 Jun ${descripcion}`;
+      break;
+    case "d":
+      diaSeleccionado = `M7 Jul ${descripcion}`;
+      break;
+    case "x":
+      var mes = prompt("Elije el mes (1 al 12):");
+      var diaMes = prompt("Elije el día (1 al 31):");
+
+      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
+        alert("⚠️ Fecha inválida. La tarea no se creará.");
+        return;
+      }
+
+      var meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
+      break;
+    default:
+      diaSeleccionado = `${descripcion}`;
+      break;
+  }
+
+  // Crear objeto de nueva tarea
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    descripcion: descripcion,
+    dia: diaSeleccionado,
+  };
+
+  // Agregar tarea a la lista y guardar en localStorage
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+
+  // Confirmación de tarea creada
+  alert("📝 Tarea creada exitosamente.");
+}
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  // Solicitar descripción de la tarea
+  var descripcion = prompt("Escribe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  // Preguntar si es urgente y establecer prioridad
+  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
+  var prioridad = esUrgente ? 1 : 2;
+
+  // Preguntar si es importante y agregar estrella si lo es
+  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
+  if (esImportante) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  // Establecer fecha
+  var opcionDia = prompt(
+    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
+  );
+  var diaSeleccionado = "";
+
+  switch (opcionDia) {
+    case "l":
+      diaSeleccionado = `M1 Ene ${descripcion}`;
+      break;
+    case "m":
+      diaSeleccionado = `M2 Feb ${descripcion}`;
+      break;
+    case "mi":
+      diaSeleccionado = `M3 Mar ${descripcion}`;
+      break;
+    case "j":
+      diaSeleccionado = `M4 Abr ${descripcion}`;
+      break;
+    case "v":
+      diaSeleccionado = `M5 May ${descripcion}`;
+      break;
+    case "s":
+      diaSeleccionado = `M6 Jun ${descripcion}`;
+      break;
+    case "d":
+      diaSeleccionado = `M7 Jul ${descripcion}`;
+      break;
+    case "x":
+      var mes = prompt("Elije el mes (1 al 12):");
+      var diaMes = prompt("Elije el día (1 al 31):");
+
+      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
+        alert("⚠️ Fecha inválida. La tarea no se creará.");
+        return;
+      }
+
+      var meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
+      break;
+    default:
+      diaSeleccionado = `${descripcion}`;
+      break;
+  }
+
+  // Crear objeto de nueva tarea
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    descripcion: diaSeleccionado,
+    dia: diaSeleccionado,
+  };
+
+  // Agregar tarea a la lista y guardar en localStorage
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+
+  // Confirmación de tarea creada
+  alert("📝 Tarea creada exitosamente.");
+}
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  // Solicitar descripción de la tarea
+  var descripcion = prompt("Escribe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  // Preguntar si es urgente y establecer prioridad
+  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
+  var prioridad = esUrgente ? 1 : 2;
+
+  // Preguntar si es importante y agregar estrella si lo es
+  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
+  if (esImportante) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  // Establecer fecha
+  var opcionDia = prompt(
+    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
+  );
+  var diaSeleccionado = "";
+
+  switch (opcionDia) {
+    case "l":
+      diaSeleccionado = `M1 Ene ${descripcion}`;
+      break;
+    case "m":
+      diaSeleccionado = `M2 Feb ${descripcion}`;
+      break;
+    case "mi":
+      diaSeleccionado = `M3 Mar ${descripcion}`;
+      break;
+    case "j":
+      diaSeleccionado = `M4 Abr ${descripcion}`;
+      break;
+    case "v":
+      diaSeleccionado = `M5 May ${descripcion}`;
+      break;
+    case "s":
+      diaSeleccionado = `M6 Jun ${descripcion}`;
+      break;
+    case "d":
+      diaSeleccionado = `M7 Jul ${descripcion}`;
+      break;
+    case "x":
+      var mes = prompt("Elije el mes (1 al 12):");
+      var diaMes = prompt("Elije el día (1 al 31):");
+
+      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
+        alert("⚠️ Fecha inválida. La tarea no se creará.");
+        return;
+      }
+
+      var meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
+      break;
+    default:
+      diaSeleccionado = `${descripcion}`;
+      break;
+  }
+
+  // Crear objeto de nueva tarea
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    descripcion: diaSeleccionado,
+    dia: diaSeleccionado,
+  };
+
+  // Agregar tarea a la lista y guardar en localStorage
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+
+  // Confirmación de tarea creada
+  alert("📝 Tarea creada exitosamente.");
+}
+
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  // Solicitar descripción de la tarea
+  var descripcion = prompt("Escribe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  // Preguntar si es urgente y establecer prioridad
+  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
+  var prioridad = esUrgente ? 1 : 2;
+
+  // Preguntar si es importante y agregar estrella si lo es
+  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
+  if (esImportante) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  // Establecer fecha
+  var opcionDia = prompt(
+    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
+  );
+  var diaSeleccionado = "";
+
+  switch (opcionDia) {
+    case "l":
+      diaSeleccionado = `M1 Ene ${descripcion}`;
+      break;
+    case "m":
+      diaSeleccionado = `M2 Feb ${descripcion}`;
+      break;
+    case "mi":
+      diaSeleccionado = `M3 Mar ${descripcion}`;
+      break;
+    case "j":
+      diaSeleccionado = `M4 Abr ${descripcion}`;
+      break;
+    case "v":
+      diaSeleccionado = `M5 May ${descripcion}`;
+      break;
+    case "s":
+      diaSeleccionado = `M6 Jun ${descripcion}`;
+      break;
+    case "d":
+      diaSeleccionado = `M7 Jul ${descripcion}`;
+      break;
+    case "x":
+      var mes = prompt("Elije el mes (1 al 12):");
+      var diaMes = prompt("Elije el día (1 al 31):");
+
+      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
+        alert("⚠️ Fecha inválida. La tarea no se creará.");
+        return;
+      }
+
+      var meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
+      break;
+    default:
+      diaSeleccionado = `${descripcion}`;
+      break;
+  }
+
+  // Crear objeto de nueva tarea
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    descripcion: descripcion,
+    dia: diaSeleccionado,
+    estado: esUrgente ? "🔴" : "🟡", // Establecer estado según urgencia
+  };
+
+  // Agregar tarea a la lista y guardar en localStorage
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+
+  // Confirmación de tarea creada
+  alert("📝 Tarea creada exitosamente.");
+}
+
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
+  // Solicitar descripción de la tarea
+  var descripcion = prompt("Escribe la tarea a realizar:");
+  if (!descripcion) {
+    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
+    return;
+  }
+
+  // Preguntar si es importante y establecer la prioridad y la descripción final
+  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
+  var prioridad = esImportante ? 1 : 2;
+
+  // Si es importante, agregar la estrella al inicio de la descripción
+  if (esImportante) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  // Preguntar si se desea establecer una fecha específica
+  var establecerFecha = confirm(
+    `¿Deseas establecer una fecha específica para "${descripcion}"?`
+  );
+  if (establecerFecha) {
+    var mes = prompt("Elije el mes (1 al 12):");
+    var dia = prompt("Elije el día (1 al 31):");
+
+    if (!mes || !dia || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+      alert("⚠️ Fecha inválida. La tarea no se creará.");
+      return;
+    }
+
+    var meses = [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic",
+    ];
+
+    descripcion = `${descripcion}, M${mes} ${meses[mes - 1]} ${dia}`;
+  }
+
+  // Crear objeto de nueva tarea
+  var nuevaTareaObj = {
+    prioridad: prioridad,
+    descripcion: descripcion,
+    dia: diaActual,
+  };
+
+  // Agregar tarea a la lista y guardar en localStorage
+  tareas.push(nuevaTareaObj);
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+
+  // Confirmación de tarea creada
+  alert("📝 Tarea creada exitosamente.");
+}
+
+function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
   var descripcion = prompt("Describe la tarea a realizar:");
   if (!descripcion) {
     alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
     return;
   }
 
-  var confirmacionTiempo = confirm(
-    `¿Puedes "${descripcion}" en menos de 2 horas?`
-  );
-  var estadoEmoji = confirmacionTiempo ? "🟡" : "🔴";
+  // Preguntar por la urgencia (prioridad 1 o 2)
+  var confirmacionUrgencia = confirm(`¿"${descripcion}" es urgente?`);
+  var prioridad = confirmacionUrgencia ? 1 : 2;
 
-  var confirmacionPrioridad = confirm(`¿"${descripcion}" es prioritaria?`);
-  var prioridad = confirmacionPrioridad ? 1 : 2;
-
-  var opcionesDia = `1 Hoy\n2 Lunes\n3 Martes\n4 Miércoles\n5 Jueves\n6 Viernes\n7 Sábado\n8 Domingo\n9 Sin asignar`;
+  // Preguntar por la fecha específica
+  var opcionesDia = `(l: Lunes),(m: Martes),(mi: Miércoles),(j: Jueves),(v: Viernes),(s: Sábado),(d: Domingo),(x: Fecha especifica)\n*Deja este campo vacio para asignar hoy`;
   var opcionDia = prompt(
-    `¿Cuándo harás la tarea de "${descripcion}"?\n${opcionesDia}`
+    `¿Cuándo harás la tarea "${descripcion}"?\n${opcionesDia}`
   );
   var diaSeleccionado;
 
   switch (opcionDia) {
-    case "1":
+    case "":
       diaSeleccionado = diaActual;
       break;
-    case "2":
+    case "l":
       diaSeleccionado = "l";
       break;
-    case "3":
+    case "m":
       diaSeleccionado = "m";
       break;
-    case "4":
+    case "mi":
       diaSeleccionado = "mi";
       break;
-    case "5":
+    case "j":
       diaSeleccionado = "j";
       break;
-    case "6":
+    case "v":
       diaSeleccionado = "v";
       break;
-    case "7":
+    case "s":
       diaSeleccionado = "s";
       break;
-    case "8":
+    case "d":
       diaSeleccionado = "d";
       break;
-    case "9":
-      var fechaEspecifica = prompt(
-        `Escribe el mes y día en este formato "M6-Junio 20" para asignar fecha específica a tu tarea:`
-      );
-      if (!fechaEspecifica) {
-        alert("⚠️ Fecha inválida. La tarea no se creará.");
+    case "x":
+      var mes = prompt("Elije el mes (1 al 12):");
+      if (
+        !mes ||
+        isNaN(parseInt(mes)) ||
+        parseInt(mes) < 1 ||
+        parseInt(mes) > 12
+      ) {
+        alert("⚠️ Mes inválido. La tarea no se creará.");
         return;
       }
-      descripcion = `${fechaEspecifica},${descripcion}`;
+      var dia = prompt("Elije el día (1 al 31):");
+      if (
+        !dia ||
+        isNaN(parseInt(dia)) ||
+        parseInt(dia) < 1 ||
+        parseInt(dia) > 31
+      ) {
+        alert("⚠️ Día inválido. La tarea no se creará.");
+        return;
+      }
+      // Formar la fecha específica en el formato deseado
+      descripcion = `M${mes} ${obtenerNombreMes(
+        parseInt(mes)
+      )} ${dia},${descripcion}`;
       diaSeleccionado = "x";
       break;
     default:
@@ -561,6 +1126,14 @@ function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
     return;
   }
 
+  // Preguntar por la importancia (añadir estrella al inicio)
+  var confirmacionImportancia = confirm(`¿"${descripcion}" es importante?`);
+  if (confirmacionImportancia) {
+    descripcion = `⭐${descripcion}`;
+  }
+
+  var estadoEmoji = prioridad === 1 ? "🟡" : "🔴";
+
   var nuevaTareaObj = {
     prioridad: prioridad,
     estado: estadoEmoji,
@@ -571,6 +1144,25 @@ function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
   tareas.push(nuevaTareaObj);
   localStorage.setItem("tareas", JSON.stringify(tareas));
   alert("📝 Tarea creada exitosamente.");
+}
+
+// Función auxiliar para obtener el nombre del mes
+function obtenerNombreMes(numeroMes) {
+  var meses = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic",
+  ];
+  return meses[numeroMes - 1];
 }
 
 function anteriorDia(diaActual) {
@@ -1604,6 +2196,7 @@ function borrarDatos() {
   if (parseInt(respuestaUsuario) === sumaCorrecta) {
     localStorage.clear();
     alert("🗑️Datos formateados exitosamente.");
+    location.reload();
   } else {
     alert("⚠️Los datos no han sido borrados.");
   }
