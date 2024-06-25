@@ -12,10 +12,10 @@ h1,
 a {
   font-family: Arial, Helvetica, sans-serif;
   color: aliceblue;
-  margin: 8px 5px;
   text-decoration: none;
   text-align: center;
   word-break: break-word;
+  margin: 0.25rem;
 }
 
 html {
@@ -87,6 +87,7 @@ div.box2 {
   min-height: fit-content;
   width: 100%;
   background-color: #45835470;
+  padding-bottom: 0.75rem;
 }
 
 div.box3 {
@@ -104,27 +105,28 @@ div.box3 {
 div.creditos {
   align-content: center;
   margin: auto;
-  padding: 0;
+  padding: 0.5rem;
 }
 
 p {
-  font-size: 40px;
+  font-size: 2rem;
   margin: inherit;
 }
 
 button {
   background-color: #0000002b;
   color: white;
-  padding: 16px;
+  padding: 0.5rem;
   border: initial;
   border-radius: 0;
-  margin: 4px 2px;
+  margin: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.75rem;
   transition: background-color 0.3s ease;
-  height: 140px;
-  width: 140px;
-  border-radius: 100px;
+  height: 6rem;
+  width: 6rem;
+  border-radius: 15px;
+  word-break: break-word;
 }
 
 button.todo {
@@ -136,13 +138,8 @@ button:hover {
 }
 
 @media only screen and (max-width: 600px) {
-  button {
-    padding: 13px;
-    margin: 4px 4px;
-    font-size: 1.1rem;
-    width: 150px;
-    height: 125px;
-    border-radius: 60px;
+  h1,a{
+    font-size: 1.5rem;
   }
 
   p {
