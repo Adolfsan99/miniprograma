@@ -255,8 +255,8 @@ textarea {
   /* Color de fondo del thumb al pasar el cursor */
 }
 
-.button-plain,
-.button-plain:hover {
+button.button-plain,
+button.button-plain:hover {
   /* Resetear estilos para el botón */
   all: unset; /* Elimina todos los estilos */
   /* Opcionalmente, puedes establecer propiedades específicas a su valor predeterminado */
