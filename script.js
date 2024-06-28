@@ -397,16 +397,13 @@ function verOCrearTarea() {
     alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
     return;
   } else if (nuevaTarea === "actualizar") {
-    moverTareasDelDiaAnterior(tareas, diaActual);
-    // Guardar las tareas actualizadas en localStorage
-    localStorage.setItem("tareas", JSON.stringify(tareas));
-    alert("📝Tareas actualizadas exitosamente.");
+    moverTareasAlDiaActual(tareas); // Función para mover tareas 🟡🔴 al día actual
+    localStorage.setItem("tareas", JSON.stringify(tareas)); // Guardar las tareas actualizadas
+    alert("📝Tareas movidas al día actual exitosamente."); // Mensaje de confirmación
     return;
   } else if (nuevaTarea === "mover") {
     moverTareasAlDiaSiguiente(tareas, diaActual);
-    // Guardar las tareas actualizadas en localStorage
-    localStorage.setItem("tareas", JSON.stringify(tareas));
-    alert("📝Tareas movidas exitosamente.");
+
     return;
   } else if (nuevaTarea === "crear") {
     // Crear nueva tarea con asistencia guiada
@@ -515,17 +512,99 @@ function moverTareasDelDiaAnterior(tareas, diaActual) {
   });
 }
 
-function moverTareasAlDiaSiguiente(tareas, diaActual) {
-  var diaSiguiente = siguienteDia(diaActual);
+function moverTareasAlDiaActual(tareas) {
+  var fechaActual = new Date();
+  var diaSemana = fechaActual.getDay();
+  var diaActual = "";
 
-  tareas.forEach((tarea) => {
-    if (
-      tarea.dia === diaActual &&
-      (tarea.estado === "🔴" || tarea.estado === "🟡")
-    ) {
-      tarea.dia = diaSiguiente;
+  // Generación de números aleatorios para la suma de verificación
+  var num1 = Math.floor(Math.random() * 10 + 1);
+  var num2 = Math.floor(Math.random() * 10 + 1);
+  var num3 = Math.floor(Math.random() * 10 + 1);
+  var resultado = num1 + num2 + num3;
+
+  // Solicitar al usuario que realice la suma de verificación
+  var respuesta = prompt(
+    `Realiza la siguiente suma para confirmar el mover tareas\n${num1} + ${num2} + ${num3}`
+  );
+
+  // Validar la respuesta ingresada por el usuario
+  if (respuesta === resultado.toString()) {
+    // Asignar el día actual según el día de la semana
+    switch (diaSemana) {
+      case 0:
+        diaActual = "d";
+        break;
+      case 1:
+        diaActual = "l";
+        break;
+      case 2:
+        diaActual = "m";
+        break;
+      case 3:
+        diaActual = "mi";
+        break;
+      case 4:
+        diaActual = "j";
+        break;
+      case 5:
+        diaActual = "v";
+        break;
+      case 6:
+        diaActual = "s";
+        break;
     }
-  });
+
+    // Filtrar y mover tareas con estado 🟡 o 🔴 al día actual, ignorando las que tienen día "x"
+    tareas.forEach((tarea) => {
+      if (
+        (tarea.estado === "🟡" || tarea.estado === "🔴") &&
+        tarea.dia !== "x"
+      ) {
+        tarea.dia = diaActual;
+      }
+    });
+
+    // Guardar las tareas actualizadas en localStorage u otro método de persistencia
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+
+    // Mensaje de confirmación de que las tareas se han movido correctamente
+    alert("📝Tareas movidas al día actual exitosamente.");
+  } else {
+    // Mensaje de error si la suma no es correcta
+    alert("Tareas no movidas. No has completado la suma correctamente.");
+  }
+}
+
+function moverTareasAlDiaSiguiente(tareas, diaActual) {
+  var num1 = Math.floor(Math.random() * 10 + 1);
+  var num2 = Math.floor(Math.random() * 10 + 1);
+  var num3 = Math.floor(Math.random() * 10 + 1);
+  var respuesta;
+  var respultado = num1 + num2 + num3;
+
+  respuesta = prompt(
+    `Realiza la siguiente suma para confirmar el mover tareas\n${num1} + ${num2} + ${num3}`
+  );
+
+  if (respuesta == respultado) {
+    var diaSiguiente = siguienteDia(diaActual);
+
+    tareas.forEach((tarea) => {
+      if (
+        tarea.dia === diaActual &&
+        (tarea.estado === "🔴" || tarea.estado === "🟡")
+      ) {
+        tarea.dia = diaSiguiente;
+      }
+    });
+
+    // Guardar las tareas actualizadas en localStorage
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+    alert("📝Tareas movidas exitosamente.");
+  } else {
+    alert("Taraas no movidas\nNo has completado la suma");
+  }
 }
 
 function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
@@ -1574,9 +1653,9 @@ function editarTarea() {
     "Selecciona la tarea a gestionar. Escribe 'aplazar' para aplazar tareas\n";
   for (var index = tareas.length - 1; index >= 0; index--) {
     var tarea = tareas[index];
-    mensaje += `${index + 1}. ${convertirPrioridad(tarea.prioridad)} ${
-      tarea.estado
-    } ${tarea.descripcion}, ${obtenerNombreDia(tarea.dia)}.\n`;
+    mensaje += `${index + 1}.${convertirPrioridad(
+      tarea.prioridad
+    )}${obtenerNombreDia(tarea.dia)}${tarea.estado}${tarea.descripcion}.\n`;
   }
 
   var tareaSeleccionada = prompt(mensaje);
