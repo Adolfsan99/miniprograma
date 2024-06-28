@@ -635,7 +635,7 @@ function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
   // Preguntar si es importante
   var esImportante = confirm("¿Es importante?");
   if (esImportante) {
-    descripcion = `⭐${descripcion}`;
+    descripcion = `📌${descripcion}`;
   }
 
   // Establecer la fecha
@@ -1668,7 +1668,7 @@ function editarTarea() {
     var tarea = tareas[index];
     mensaje += `${index + 1}.${convertirPrioridad(
       tarea.prioridad
-    )}${obtenerNombreDia(tarea.dia)}${tarea.estado} ${tarea.descripcion}.\n`;
+    )}${obtenerNombreDia(tarea.dia)}${tarea.estado}${tarea.descripcion}.\n`;
   }
 
   var tareaSeleccionada = prompt(mensaje);
