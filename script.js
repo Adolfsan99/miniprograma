@@ -62,6 +62,10 @@ const data = JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
 const container = document.getElementById("chart-container");
 
 function renderChart(data) {
+  // Obtener el día actual en formato abreviado (l, m, mi, j, v, s, d)
+  const diasSemana = ["d", "l", "m", "mi", "j", "v", "s"]; // Ajustado para que el índice 0 sea domingo (d)
+  const diaActual = diasSemana[new Date().getDay()];
+
   container.innerHTML = "";
   data.forEach((item) => {
     const barContainer = document.createElement("div");
@@ -73,7 +77,7 @@ function renderChart(data) {
     bar.className = "bar";
     bar.style.height = `${item.rendimiento * 1}px`;
     if (item.rendimiento >= 10) {
-      /* bar.textContent = item.rendimiento + "%"; */
+      // bar.textContent = item.rendimiento + "%";
     } else {
       bar.style.background = "#f8312f"; // Cambia el color de fondo de la barra a rojo
     }
@@ -81,6 +85,11 @@ function renderChart(data) {
     const label = document.createElement("div");
     label.className = "bar-label";
     label.textContent = item.dia;
+
+    // Comparar el texto con el día actual y cambiar el color si coincide
+    if (item.dia.toLowerCase() === diaActual) {
+      label.style.color = "yellow";
+    }
 
     barContainer.appendChild(bar);
     barContainer.appendChild(label);
@@ -1655,7 +1664,7 @@ function editarTarea() {
     var tarea = tareas[index];
     mensaje += `${index + 1}.${convertirPrioridad(
       tarea.prioridad
-    )}${obtenerNombreDia(tarea.dia)}${tarea.estado}${tarea.descripcion}.\n`;
+    )}${obtenerNombreDia(tarea.dia)}${tarea.estado} ${tarea.descripcion}.\n`;
   }
 
   var tareaSeleccionada = prompt(mensaje);
