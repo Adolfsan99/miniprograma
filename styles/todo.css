@@ -228,6 +228,24 @@ textarea {
   text-align: center;
 }
 
+.button-plain,
+.button-plain:hover {
+  /* Resetear estilos para el botón */
+  all: unset; /* Elimina todos los estilos */
+  /* Opcionalmente, puedes establecer propiedades específicas a su valor predeterminado */
+  display: inline-block; /* Asegura que el botón se muestre como un elemento de bloque */
+  padding: initial; /* Restablece el relleno a su valor inicial */
+  margin: 0; /* Restablece los márgenes a cero */
+  font: unset; /* Restablece la fuente a su valor inicial */
+  text-align: initial; /* Restablece la alineación del texto */
+  color: initial; /* Restablece el color del texto */
+  background-color: initial; /* Restablece el color de fondo */
+  border: initial; /* Restablece el borde */
+  cursor: pointer; /* Establece el cursor a su valor predeterminado de botón */
+  outline: none; /* Elimina el contorno al enfocar */
+  /* Puedes agregar más propiedades según sea necesario */
+}
+
 /* Estilo base para el scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -253,22 +271,4 @@ textarea {
   background-color: #555;
   border-radius: 10px;
   /* Color de fondo del thumb al pasar el cursor */
-}
-
-button.button-plain,
-button.button-plain:hover {
-  /* Resetear estilos para el botón */
-  all: unset; /* Elimina todos los estilos */
-  /* Opcionalmente, puedes establecer propiedades específicas a su valor predeterminado */
-  display: inline-block; /* Asegura que el botón se muestre como un elemento de bloque */
-  padding: initial; /* Restablece el relleno a su valor inicial */
-  margin: 0; /* Restablece los márgenes a cero */
-  font: unset; /* Restablece la fuente a su valor inicial */
-  text-align: initial; /* Restablece la alineación del texto */
-  color: initial; /* Restablece el color del texto */
-  background-color: initial; /* Restablece el color de fondo */
-  border: initial; /* Restablece el borde */
-  cursor: pointer; /* Establece el cursor a su valor predeterminado de botón */
-  outline: none; /* Elimina el contorno al enfocar */
-  /* Puedes agregar más propiedades según sea necesario */
 }
