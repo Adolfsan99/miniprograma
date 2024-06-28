@@ -76,10 +76,14 @@ function renderChart(data) {
     const bar = document.createElement("div");
     bar.className = "bar";
     bar.style.height = `${item.rendimiento * 1}px`;
-    if (item.rendimiento >= 10) {
-      // bar.textContent = item.rendimiento + "%";
-    } else {
+
+    if (item.rendimiento < 25) {
       bar.style.background = "#f8312f"; // Cambia el color de fondo de la barra a rojo
+    } else if (item.rendimiento <= 69) {
+      bar.style.background =
+        "linear-gradient(180deg, rgb(255 120 0) 0%, rgb(255 165 0) 80%)"; // Cambia el color de fondo de la barra a naranja
+    } else {
+      bar.style.background = ""; // Restablece el color de fondo por defecto (o puedes definir otro color)
     }
 
     const label = document.createElement("div");
