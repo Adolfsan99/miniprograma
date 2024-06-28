@@ -77,7 +77,7 @@ function renderChart(data) {
     bar.className = "bar";
     bar.style.height = `${item.rendimiento * 1}px`;
 
-    if (item.rendimiento < 25) {
+    if (item.rendimiento <= 34) {
       bar.style.background = "#f8312f"; // Cambia el color de fondo de la barra a rojo
     } else if (item.rendimiento <= 69) {
       bar.style.background =
