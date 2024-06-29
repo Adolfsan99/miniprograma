@@ -5,86 +5,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TextTo.html</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // Detecta el idioma preferido del navegador
-            const userLang = navigator.language || navigator.userLanguage;
-            // Asigna el idioma detectado al atributo 'lang' del elemento <html>
-            document.documentElement.lang = userLang;
-        });
-    </script>
     <link rel="stylesheet" href="./styles/textto.css">
-    <link rel="icon" type="image/x-icon" href="favicon.png" />
-</head>
-
-<body>
-    <div class="todo">
-        <h1>✒️TextTo.html<div id="clock"></div>
-        </h1>
-    </div>
-    <div class="box1">
-        <form id="textForm">
-            <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50"
-                placeholder="Escribe tu texto aquí..."></textarea><br><br>
-        </form>
-    </div>
-    <div class="box2">
-        <!-- INCLUIR EL CONTADOR AQUI -->
-        <p id="charCounter">Número de caracteres: 0</p>
-        <button type="button" onclick="displayText()">OK</button>
-        <button type="button" onclick="leerTexto()">Escuchar</button>
-        <button type="button" onclick="toCapitalCase()">Ajustar</button>
-        <button type="button" onclick="toUpperCase()">Mayúsculas</button>
-        <button type="button" onclick="copiarTexto()">Copiar</button>
-        <button type="button" onclick="exportText()">Exportar</button>
-        <button type="button" onclick="exitFunction()">Regresar a ✅Todo.html</button>
-    </div>
-    <div class="box3">
-        <div id="output"></div>
-        <p>.</p>
-    </div>
-    <div class="creditos">
-        <h1>Creado por: </h1>
-        <h1><a href="https://github.com/Adolfsan99">Adolfo Sánchez</a></h1>
-    </div>
-
+    <!DOCTYPE html>
     <script>
-        function toUpperCase() {
-            var inputText = document.getElementById('textInput').value;
-            document.getElementById('output').textContent = inputText.toUpperCase();
-        }
 
-        function toCapitalCase() {
-            var inputText = document.getElementById('textInput').value;
-            var words = inputText.toLowerCase().split(' ');
-            for (var i = 0; i < words.length; i++) {
-                if (words[i].length > 0) {
-                    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+        // Función para ajustar texto: coloca mayúsculas después de cada "oración"
+        function toSentenceCase(text) {
+            // Dividir el texto en "oraciones" usando puntos, signos de interrogación y signos de exclamación como delimitadores
+            var sentences = text.split(/([.?!])\s+/);
+
+            // Iterar sobre las partes divididas y ajustar las "oraciones"
+            for (var i = 0; i < sentences.length; i += 2) {
+                if (sentences[i]) {
+                    sentences[i] = sentences[i].charAt(0).toUpperCase() + sentences[i].slice(1).toLowerCase();
                 }
             }
-            document.getElementById('output').textContent = words.join(' ');
+
+            // Unir las partes nuevamente para formar el texto ajustado
+            var adjustedText = sentences.join('');
+
+            return adjustedText;
         }
 
-        function displayText() {
-            detenerTexto();
-            const textInput = document.getElementById('textInput').value;
-            const outputDiv = document.getElementById('output');
-            const charCounter = document.getElementById('charCounter');
 
-            // Actualizar el contenido del outputDiv con el texto ingresado
-            outputDiv.textContent = textInput;
-
-            // Actualizar el contador de caracteres
-            charCounter.textContent = `Número de caracteres: ${textInput.length}`;
+        function stopRead() {
+            window.speechSynthesis.cancel();
         }
 
+        // Función para contar caracteres y actualizar el contador
+        function countCharacters() {
+            var inputText = document.getElementById('textInput').value;
+            var charCounter = document.getElementById('charCounter');
+            charCounter.textContent = `Número de caracteres: ${inputText.length}`;
+        }
+
+        // Función para leer el texto en voz alta
+        function readText() {
+            var inputText = document.getElementById('textInput').value;
+            var mensaje = new SpeechSynthesisUtterance(inputText);
+            mensaje.rate = 2; // Establece la velocidad a 2x
+            window.speechSynthesis.speak(mensaje);
+        }
+
+        // Función para ajustar texto y mostrarlo en output
+        function adjustText() {
+            stopRead()
+            var inputText = document.getElementById('textInput').value;
+            var outputDiv = document.getElementById('output');
+            outputDiv.textContent = toSentenceCase(inputText); // Llama a toSentenceCase para ajustar el texto
+        }
+
+        // Función para convertir texto a mayúsculas y mostrarlo en output
+        function toUpperCase() {
+            stopRead()
+            var inputText = document.getElementById('textInput').value;
+            var outputDiv = document.getElementById('output');
+            outputDiv.textContent = inputText.toUpperCase();
+        }
+
+        // Función para copiar el texto al portapapeles
+        function copyText() {
+            var inputText = document.getElementById('textInput').value;
+            navigator.clipboard.writeText(inputText).then(() => {
+                alert('Texto copiado al portapapeles');
+            }).catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
+        }
+
+        // Función para exportar el texto como archivo de texto
         async function exportText() {
-            const textInput = document.getElementById('textInput').value;
-            const blob = new Blob([textInput], { type: 'text/plain' });
+            var inputText = document.getElementById('textInput').value;
+            var blob = new Blob([inputText], { type: 'text/plain' });
 
             const options = {
                 types: [{
-                    description: 'Text Files',
+                    description: 'Archivos de Texto',
                     accept: {
                         'text/plain': ['.txt'],
                     },
@@ -101,38 +97,15 @@
             }
         }
 
-        function exitFunction() {
-            detenerTexto();
+        // Función para regresar a la página anterior
+        function goBack() {
+            stopRead()
             var ubicacionActual = window.location.origin;
             // Agregar la ruta o el nombre del archivo que deseas
             var nuevaUbicacion = ubicacionActual + "/miniprograma/todo.html";
             // Redirigir a la nueva ubicación
             window.location.href = nuevaUbicacion;
         }
-
-        function leerTexto() {
-            detenerTexto();
-            displayText();
-            const texto = document.getElementById('output').textContent;
-            const mensaje = new SpeechSynthesisUtterance(texto);
-            mensaje.rate = 2; // Establece la velocidad a 2x
-            window.speechSynthesis.speak(mensaje);
-        }
-
-        function detenerTexto() {
-            window.speechSynthesis.cancel();
-        }
-
-        function copiarTexto() {
-            displayText();
-            const texto = document.getElementById('output').textContent;
-            navigator.clipboard.writeText(texto).then(() => {
-                alert('Texto copiado al portapapeles');
-            }).catch(err => {
-                console.error('Error al copiar el texto: ', err);
-            });
-        }
-
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
@@ -148,6 +121,35 @@
         setInterval(updateClock, 1000);
         updateClock(); // Llamada inicial para establecer el reloj inmediatamente
     </script>
+</head>
+
+<body>
+    <div class="todo">
+        <h1>✒️TextTo.html<div id="clock"></div>
+        </h1>
+    </div>
+    <div class="box1">
+        <form id="textForm">
+            <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50"
+                placeholder="Escribe tu texto aquí..." oninput="countCharacters()"></textarea><br><br>
+        </form>
+    </div>
+    <div class="box2">
+        <p id="charCounter">Número de caracteres: 0</p>
+        <button type="button" onclick="readText()">Escuchar</button>
+        <button type="button" onclick="adjustText()">Ajustar</button>
+        <button type="button" onclick="toUpperCase()">Mayúsculas</button>
+        <button type="button" onclick="copyText()">Copiar</button>
+        <button type="button" onclick="exportText()">Exportar</button>
+        <button type="button" onclick="goBack()">Regresar a ✅Todo.html</button>
+    </div>
+    <div class="box3">
+        <div id="output"></div>
+    </div>
+    <div class="creditos">
+        <h1>Creado por: </h1>
+        <h1><a href="https://github.com/Adolfsan99">Adolfo Sánchez</a></h1>
+    </div>
 </body>
 
 </html>
