@@ -209,8 +209,7 @@ textarea {
   color: white;
   border-radius: 15px;
   padding: 15px;
-  height: 9rem;
-  height: fit-content;
+  min-height: 9rem;
 }
 
 .bar {
