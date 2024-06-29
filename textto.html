@@ -26,14 +26,16 @@
         <form id="textForm">
             <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50"
                 placeholder="Escribe tu texto aquí..."></textarea><br><br>
+        </form>
     </div>
     <div class="box2">
         <!-- INCLUIR EL CONTADOR AQUI -->
         <p id="charCounter">Número de caracteres: 0</p>
         <button type="button" onclick="displayText()">OK</button>
         <button type="button" onclick="leerTexto()">Escuchar</button>
+        <button type="button" onclick="toCapitalCase()">Ajustar</button>
+        <button type="button" onclick="toUpperCase()">Mayúsculas</button>
         <button type="button" onclick="copiarTexto()">Copiar</button>
-        <!--<button type="button" onclick="detenerTexto()">Detener</button>-->
         <button type="button" onclick="exportText()">Exportar</button>
         <button type="button" onclick="exitFunction()">Regresar a ✅Todo.html</button>
     </div>
@@ -47,8 +49,24 @@
     </div>
 
     <script>
+        function toUpperCase() {
+            var inputText = document.getElementById('textInput').value;
+            document.getElementById('output').textContent = inputText.toUpperCase();
+        }
+
+        function toCapitalCase() {
+            var inputText = document.getElementById('textInput').value;
+            var words = inputText.toLowerCase().split(' ');
+            for (var i = 0; i < words.length; i++) {
+                if (words[i].length > 0) {
+                    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+                }
+            }
+            document.getElementById('output').textContent = words.join(' ');
+        }
+
         function displayText() {
-            detenerTexto()
+            detenerTexto();
             const textInput = document.getElementById('textInput').value;
             const outputDiv = document.getElementById('output');
             const charCounter = document.getElementById('charCounter');
@@ -84,7 +102,7 @@
         }
 
         function exitFunction() {
-            detenerTexto()
+            detenerTexto();
             var ubicacionActual = window.location.origin;
             // Agregar la ruta o el nombre del archivo que deseas
             var nuevaUbicacion = ubicacionActual + "/miniprograma/todo.html";
@@ -93,8 +111,8 @@
         }
 
         function leerTexto() {
-            detenerTexto()
-            displayText()
+            detenerTexto();
+            displayText();
             const texto = document.getElementById('output').textContent;
             const mensaje = new SpeechSynthesisUtterance(texto);
             mensaje.rate = 2; // Establece la velocidad a 2x
@@ -106,7 +124,7 @@
         }
 
         function copiarTexto() {
-            displayText()
+            displayText();
             const texto = document.getElementById('output').textContent;
             navigator.clipboard.writeText(texto).then(() => {
                 alert('Texto copiado al portapapeles');
@@ -128,7 +146,7 @@
         }
 
         setInterval(updateClock, 1000);
-        updateClock();  // Llamada inicial para establecer el reloj inmediatamente
+        updateClock(); // Llamada inicial para establecer el reloj inmediatamente
     </script>
 </body>
 
