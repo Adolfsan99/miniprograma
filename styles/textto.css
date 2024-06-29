@@ -96,18 +96,7 @@ body {
   width: 100%;
 }
 
-button {
-  background-color: #0000002b;
-  color: white;
-  padding: 16px;
-  border: initial;
-  border-radius: 0;
-  margin: 4px 2px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-  border-radius: 100px;
-}
+button {background-color: #0000002b;color: white;padding: 0.5rem;border: initial;border-radius: 0;margin: 4px;cursor: pointer;font-size: 0.75rem;transition: background-color 0.3s ease;height: 2rem;width: auto;border-radius: 10px;word-break: break-word;}
 
 #output {
   font-family: Arial, sans-serif;
