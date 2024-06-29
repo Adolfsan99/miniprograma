@@ -62,11 +62,98 @@ const data = JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
 const container = document.getElementById("chart-container");
 
 function renderChart(data) {
-  // Obtener el día actual en formato abreviado (l, m, mi, j, v, s, d)
-  const diasSemana = ["d", "l", "m", "mi", "j", "v", "s"]; // Ajustado para que el índice 0 sea domingo (d)
+  const diasSemana = ["d", "l", "m", "mi", "j", "v", "s"];
   const diaActual = diasSemana[new Date().getDay()];
 
   container.innerHTML = "";
+
+  // Calcular el promedio de rendimiento
+  let sumRendimiento = 0;
+  data.forEach((item) => {
+    sumRendimiento += item.rendimiento;
+  });
+  const promedioRendimiento = sumRendimiento / data.length;
+
+  // Calcular el porcentaje exacto del promedio semanal
+  const porcentajePromedio = promedioRendimiento.toFixed(0); // Redondear a 2 decimales
+
+  // Definir la clasificación según el promedio
+  let clasificacion;
+  if (promedioRendimiento >= 95) {
+    clasificacion = { letra: "SS", porcentaje: porcentajePromedio };
+  } else if (promedioRendimiento >= 90) {
+    clasificacion = { letra: "S", porcentaje: porcentajePromedio };
+  } else if (promedioRendimiento >= 80) {
+    clasificacion = { letra: "A", porcentaje: porcentajePromedio };
+  } else if (promedioRendimiento >= 70) {
+    clasificacion = { letra: "B", porcentaje: porcentajePromedio };
+  } else if (promedioRendimiento >= 66) {
+    clasificacion = { letra: "C", porcentaje: porcentajePromedio };
+  } else if (promedioRendimiento >= 33) {
+    clasificacion = { letra: "D", porcentaje: porcentajePromedio };
+  } else if (promedioRendimiento >= 10) {
+    clasificacion = { letra: "E", porcentaje: porcentajePromedio };
+  } else {
+    clasificacion = { letra: "F", porcentaje: porcentajePromedio };
+  }
+
+  // Crear el elemento de clasificación con formato especial
+  const classificationContainer = document.createElement("div");
+  classificationContainer.style.fontWeight = "bold";
+  classificationContainer.style.fontSize = "36px";
+
+  // Asignar color según la clasificación
+  switch (clasificacion.letra) {
+    case "SS":
+      classificationContainer.style.color = "#4CAF50"; // Verde
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "S":
+      classificationContainer.style.color = "#8BC34A"; // Verde claro
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "A":
+      classificationContainer.style.color = "#FFEB3B"; // Amarillo
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "B":
+      classificationContainer.style.color = "#FFC107"; // Naranja
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "C":
+      classificationContainer.style.color = "#FF9800"; // Naranja oscuro
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "D":
+      classificationContainer.style.color = "#FF5722"; // Rojo anaranjado
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "E":
+      classificationContainer.style.color = "#f44336"; // Rojo
+      classificationContainer.style.marginRight = "8px";
+      break;
+    case "F":
+      classificationContainer.style.color = "#f44336"; // Rojo
+      classificationContainer.style.marginRight = "8px";
+      break;
+    default:
+      classificationContainer.style.color = "black";
+      classificationContainer.style.marginRight = "8px";
+  }
+
+  classificationContainer.textContent = clasificacion.letra;
+
+  // Crear el elemento para el porcentaje
+  const percentageText = document.createElement("div");
+  //percentageText.textContent = `${clasificacion.porcentaje}% `;
+  percentageText.style.fontSize = "16px";
+  percentageText.style.color = "white";
+
+  // Agregar ambos elementos al contenedor principal
+  container.appendChild(classificationContainer);
+  container.appendChild(percentageText);
+
+  // Generar gráficos para cada día
   data.forEach((item) => {
     const barContainer = document.createElement("div");
     barContainer.style.display = "flex";
@@ -78,19 +165,18 @@ function renderChart(data) {
     bar.style.height = `${item.rendimiento * 1}px`;
 
     if (item.rendimiento <= 34) {
-      bar.style.background = "#f8312f"; // Cambia el color de fondo de la barra a rojo
+      bar.style.background = "#f8312f"; // Rojo
     } else if (item.rendimiento <= 69) {
       bar.style.background =
-        "linear-gradient(180deg, rgb(255 120 0) 0%, rgb(255 165 0) 80%)"; // Cambia el color de fondo de la barra a naranja
+        "linear-gradient(180deg, rgb(255 120 0) 0%, rgb(255 165 0) 80%)"; // Naranja
     } else {
-      bar.style.background = ""; // Restablece el color de fondo por defecto (o puedes definir otro color)
+      bar.style.background = ""; // Puedes definir otro color por defecto
     }
 
     const label = document.createElement("div");
     label.className = "bar-label";
     label.textContent = item.dia;
 
-    // Comparar el texto con el día actual y cambiar el color si coincide
     if (item.dia.toLowerCase() === diaActual) {
       label.style.color = "yellow";
     }
