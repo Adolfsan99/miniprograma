@@ -2025,6 +2025,8 @@ function actualizarTareas() {
 
     // Actualizar el LocalStorage con las tareas filtradas
     localStorage.setItem("tareas", JSON.stringify(nuevasTareas));
+    localStorage.removeItem("medicionSemanal");
+    location.reload();
 
     // Actualizar el registro de tareas completadas en el LocalStorage
     localStorage.setItem(

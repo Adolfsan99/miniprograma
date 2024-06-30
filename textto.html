@@ -7,6 +7,34 @@
     <title>TextTo.html</title>
     <link rel="stylesheet" href="./styles/textto.css">
     <!DOCTYPE html>
+</head>
+
+<body>
+    <div class="todo">
+        <h1>✒️TextTo.html<div id="clock"></div>
+        </h1>
+    </div>
+    <div class="box1">
+        <form id="textForm">
+            <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50"
+                placeholder="Escribe tu texto aquí..." oninput="countCharacters()"></textarea><br><br>
+        </form>
+    </div>
+    <div class="box2">
+        <p id="charCounter">Número de caracteres: 0</p>
+        <button type="button" onclick="adjustText()">OK</button>
+        <button type="button" onclick="readText()">Escuchar</button>
+        <button type="button" onclick="toUpperCase()">Mayúsculas</button>
+        <button type="button" onclick="copyText()">Copiar</button>
+        <button type="button" onclick="exportText()">Exportar</button>
+        <button type="button" onclick="goBack()">✅Todo.html</button>
+    </div>
+    <div class="box3">
+        <div id="output"></div>
+    </div>
+    <div class="creditos">
+        <a href="https://github.com/Adolfsan99">Creado por: Adolfo Sánchez</a>
+    </div>
     <script>
 
         function toSentenceCase(text) {
@@ -87,9 +115,11 @@
         // Función para leer el texto en voz alta
         function readText() {
             var inputText = document.getElementById('textInput').value;
+            var outputDiv = document.getElementById('output');
             var mensaje = new SpeechSynthesisUtterance(inputText);
             mensaje.rate = 2; // Establece la velocidad a 2x
             window.speechSynthesis.speak(mensaje);
+            outputDiv.textContent = inputText;
         }
 
         // Función para ajustar texto y mostrarlo en output
@@ -166,35 +196,6 @@
         setInterval(updateClock, 1000);
         updateClock(); // Llamada inicial para establecer el reloj inmediatamente
     </script>
-</head>
-
-<body>
-    <div class="todo">
-        <h1>✒️TextTo.html<div id="clock"></div>
-        </h1>
-    </div>
-    <div class="box1">
-        <form id="textForm">
-            <textarea style="border-radius: 15px; padding: 15px;" id="textInput" rows="10" cols="50"
-                placeholder="Escribe tu texto aquí..." oninput="countCharacters()"></textarea><br><br>
-        </form>
-    </div>
-    <div class="box2">
-        <p id="charCounter">Número de caracteres: 0</p>
-        <button type="button" onclick="adjustText()">OK</button>
-        <button type="button" onclick="readText()">Escuchar</button>
-        <button type="button" onclick="toUpperCase()">Mayúsculas</button>
-        <button type="button" onclick="copyText()">Copiar</button>
-        <button type="button" onclick="exportText()">Exportar</button>
-        <button type="button" onclick="goBack()">Regresar a ✅Todo.html</button>
-    </div>
-    <div class="box3">
-        <div id="output"></div>
-    </div>
-    <div class="creditos">
-        <h1>Creado por: </h1>
-        <h1><a href="https://github.com/Adolfsan99">Adolfo Sánchez</a></h1>
-    </div>
 </body>
 
 </html>
