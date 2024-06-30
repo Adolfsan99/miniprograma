@@ -107,38 +107,65 @@ function renderChart(data) {
     case "SS":
       classificationContainer.style.color = "#4CAF50"; // Verde
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "S":
       classificationContainer.style.color = "#8BC34A"; // Verde claro
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "A":
       classificationContainer.style.color = "#FFEB3B"; // Amarillo
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "B":
       classificationContainer.style.color = "#FFC107"; // Naranja
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "C":
       classificationContainer.style.color = "#FF9800"; // Naranja oscuro
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "D":
       classificationContainer.style.color = "#FF5722"; // Rojo anaranjado
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "E":
       classificationContainer.style.color = "#f44336"; // Rojo
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     case "F":
       classificationContainer.style.color = "#f44336"; // Rojo
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
       break;
     default:
       classificationContainer.style.color = "black";
       classificationContainer.style.marginRight = "8px";
+      classificationContainer.style.height = "9rem";
+      classificationContainer.style.alignItems = "baseline";
+      classificationContainer.style.display = "flex";
   }
 
   classificationContainer.textContent = clasificacion.letra;
