@@ -34,7 +34,7 @@ body {
 }
 
 div {
-  padding: 8px 0px 0px 0px;
+  padding: 4px 0px 0px 0px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
