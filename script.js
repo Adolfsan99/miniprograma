@@ -420,7 +420,6 @@ function verOCrearTarea() {
 
 function verOCrearTarea() {
   var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-  limpiarMedicionSemanal()
   
   // Función para obtener el nombre del mes desde su número
   function obtenerNombreMes(numeroMes) {
@@ -660,6 +659,7 @@ function verOCrearTarea() {
 
   alert("📝Tarea creada exitosamente.");
   renderChart(medicionSemanalActualizada);
+  limpiarMedicionSemanal()
 }
 
 function moverTareasDelDiaAnterior(tareas, diaActual) {
