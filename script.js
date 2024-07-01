@@ -659,7 +659,6 @@ function verOCrearTarea() {
 
   alert("📝Tarea creada exitosamente.");
   renderChart(medicionSemanalActualizada);
-  limpiarMedicionSemanal()
 }
 
 function moverTareasDelDiaAnterior(tareas, diaActual) {
