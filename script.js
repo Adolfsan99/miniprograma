@@ -46,6 +46,42 @@ function checkLocalStorageUsage() {
 
 //////////////////////////////////////////////////////////////////////////////
 
+function limpiarMedicionSemanal() {
+  // Obtener el valor actual de localStorage para la clave medicionSemanal
+  let medicionSemanal = localStorage.getItem("medicionSemanal");
+
+  // Verificar si medicionSemanal existe y no está vacío
+  if (medicionSemanal) {
+    try {
+      // Convertir el valor de localStorage de cadena a un array de objetos JavaScript
+      let medicionArray = JSON.parse(medicionSemanal);
+
+      // Iterar sobre cada objeto en el array y poner rendimiento a 0
+      medicionArray.forEach((item) => {
+        item.rendimiento = 0;
+      });
+
+      // Convertir de nuevo el array de objetos a formato de cadena JSON
+      let medicionSemanalActualizada = JSON.stringify(medicionArray);
+
+      // Guardar la medicionSemanal actualizada en localStorage
+      localStorage.setItem("medicionSemanal", medicionSemanalActualizada);
+
+      // Actualizar la página para reflejar los cambios
+      location.reload();
+    } catch (error) {
+      console.error(
+        "Error al procesar medicionSemanal desde localStorage:",
+        error
+      );
+    }
+  } else {
+    console.log("No se encontró la clave medicionSemanal en localStorage.");
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 const initialData = [
   { dia: "L", rendimiento: 0 },
   { dia: "M", rendimiento: 0 },
@@ -2025,7 +2061,7 @@ function actualizarTareas() {
 
     // Actualizar el LocalStorage con las tareas filtradas
     localStorage.setItem("tareas", JSON.stringify(nuevasTareas));
-    renderChart(medicionSemanalActualizada);
+    limpiarMedicionSemanal();
 
     // Actualizar el registro de tareas completadas en el LocalStorage
     localStorage.setItem(

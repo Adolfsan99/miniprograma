@@ -189,12 +189,26 @@
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12; // El '0' debe ser '12'
-            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            const periodEmoji = getPeriodEmoji(now.getHours()); // Pasamos las horas en formato de 24 horas
+            const timeString = `${periodEmoji} ${hours}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('clock').textContent = timeString;
         }
 
+        function getPeriodEmoji(hours) {
+            if (hours >= 5 && hours < 12) {
+                return '🌅'; // Mañana
+            } else if (hours >= 12 && hours < 18) {
+                return '🌄'; // Tarde
+            } else if (hours >= 18 && hours < 23) {
+                return '🌉'; // Noche
+            } else {
+                return '🌠'; // Madrugada
+            }
+        }
+
+
         setInterval(updateClock, 1000);
-        updateClock(); // Llamada inicial para establecer el reloj inmediatamente
+        updateClock();  // Llamada inicial para establecer el reloj inmediatamente
     </script>
 </body>
 
