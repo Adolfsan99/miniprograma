@@ -1,4 +1,5 @@
 checkLocalStorageUsage();
+limpiarMedicionSemanal()
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -420,7 +421,8 @@ function verOCrearTarea() {
 
 function verOCrearTarea() {
   var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-
+  limpiarMedicionSemanal()
+  
   // Función para obtener el nombre del mes desde su número
   function obtenerNombreMes(numeroMes) {
     var meses = [
@@ -739,6 +741,7 @@ function moverTareasAlDiaActual(tareas) {
 }
 
 function moverTareasAlDiaSiguiente(tareas, diaActual) {
+  limpiarMedicionSemanal()
   var num1 = Math.floor(Math.random() * 10 + 1);
   var num2 = Math.floor(Math.random() * 10 + 1);
   var num3 = Math.floor(Math.random() * 10 + 1);
