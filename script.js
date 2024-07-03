@@ -420,7 +420,7 @@ function verOCrearTarea() {
 
 function verOCrearTarea() {
   var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-  
+
   // Función para obtener el nombre del mes desde su número
   function obtenerNombreMes(numeroMes) {
     var meses = [
@@ -739,7 +739,7 @@ function moverTareasAlDiaActual(tareas) {
 }
 
 function moverTareasAlDiaSiguiente(tareas, diaActual) {
-  limpiarMedicionSemanal()
+  limpiarMedicionSemanal();
   var num1 = Math.floor(Math.random() * 10 + 1);
   var num2 = Math.floor(Math.random() * 10 + 1);
   var num3 = Math.floor(Math.random() * 10 + 1);
@@ -1910,8 +1910,11 @@ function editarTarea() {
   }
 
   if (nuevoDia.toLowerCase() === "borrar") {
-    tareas.splice(tareaSeleccionada, 1);
+    tareas.splice(tareaSeleccionada, 1); // Elimina la tarea seleccionada
     alert("🗑️Tarea borrada exitosamente.");
+    localStorage.setItem("tareas", JSON.stringify(tareas)); // Actualiza el almacenamiento local
+    renderChart(medicionSemanalActualizada); // Renderiza la gráfica actualizada si es necesario
+    return; // Termina la función después de borrar la tarea
   } else {
     var diaTexto;
     switch (nuevoDia.toLowerCase()) {
