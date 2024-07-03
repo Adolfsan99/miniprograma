@@ -109,14 +109,14 @@ div.creditos {
 }
 
 p {
-  font-size: 2rem;
-  margin: inherit;
+  font-size: 1.75rem;
+  margin: 0;
 }
 
 button {
   background-color: #0000002b;
   color: white;
-  padding: 0.5rem;
+  padding: 1rem;
   border: initial;
   border-radius: 0;
   margin: 4px;
@@ -125,7 +125,7 @@ button {
   transition: background-color 0.3s ease;
   height: 6rem;
   width: 6rem;
-  border-radius: 15px;
+  border-radius: 100%;
   word-break: break-word;
 }
 
