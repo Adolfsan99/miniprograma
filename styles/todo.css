@@ -144,11 +144,6 @@ button:hover {
     font-size: 1.5rem;
   }
 
-  p {
-    font-size: 40px;
-    margin: 2px;
-  }
-
   textarea {
     width: 100%;
   }
