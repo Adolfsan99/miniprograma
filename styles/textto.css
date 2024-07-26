@@ -15,7 +15,6 @@ a {
   font-family: Arial, Helvetica, sans-serif;
   color: aliceblue;
   margin: 8px 5px;
-  text-decoration: none;
   text-align: center;
   word-break: break-word;
 }
@@ -174,4 +173,12 @@ p {
   background-color: #555;
   border-radius: 10px;
   /* Color de fondo del thumb al pasar el cursor */
+}
+#output span {
+display: inline-block;
+padding: 2px;
+transition: background-color 0.2s;
+}
+#output .highlight {
+background-color: rgba(0, 183, 255, 0.582);
 }

@@ -12,7 +12,6 @@ h1,
 a {
   font-family: Arial, Helvetica, sans-serif;
   color: aliceblue;
-  text-decoration: none;
   text-align: center;
   word-break: break-word;
   margin: 0.25rem;
@@ -268,3 +267,78 @@ textarea {
   border-radius: 10px;
   /* Color de fondo del thumb al pasar el cursor */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /* Estilos del Modal */
+        .modal {
+            display: none; /* Ocultado por defecto */
+            position: fixed; /* Fijo en la pantalla */
+            z-index: 1; /* Sobre otros elementos */
+            left: 0;
+            top: 0;
+            width: 100%; /* Ancho completo */
+            height: 100%; /* Altura completa */
+            overflow: auto; /* Desplazamiento si es necesario */
+            background-color: rgb(0 0 0 / 65%); /* Fondo semi-transparente */
+        }
+
+        /* Contenido del Modal */
+        .modal-content {background-color: #fefefe00;margin: 10% auto;width: 80%;max-width: 600px;position: relative;border-radius: 8px;display: flex;flex-direction: column;}
+
+        /* Botón de Cerrar */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Estilo para los botones dentro del modal */
+        .modal-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+  background-color: #0000002b;
+  color: white;
+  padding: 1rem;
+  border: initial;
+  border-radius: 0;
+  margin: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease;
+  height: 6rem;
+  width: 6rem;
+  border-radius: 100%;
+  word-break: break-word;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #183743;
+        }
