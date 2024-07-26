@@ -1507,6 +1507,14 @@ function editarTarea() {
     return;
   }
 
+
+
+  var nuevaDescripcion = prompt(
+    "Ingresa la nueva descripción:",
+    tareas[tareaSeleccionada].descripcion
+  );
+  if (nuevaDescripcion === null) return; // Usuario canceló
+
   var nuevaPrioridad = prompt(
     "Ingresa la nueva prioridad (1: 🔥, 2: 🔔, 3: 📆):",
     tareas[tareaSeleccionada].prioridad
@@ -1523,12 +1531,6 @@ function editarTarea() {
       : "f"
   );
   if (nuevoEstado === null) return; // Usuario canceló
-
-  var nuevaDescripcion = prompt(
-    "Ingresa la nueva descripción:",
-    tareas[tareaSeleccionada].descripcion
-  );
-  if (nuevaDescripcion === null) return; // Usuario canceló
 
   // Verificar la longitud de la nueva descripción
   if (nuevaDescripcion.length > 64) {
