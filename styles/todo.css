@@ -324,7 +324,7 @@ textarea {
         }
 
         .modal-buttons button {
-  background-color: #0000002b;
+  background-color: #00000066;
   color: white;
   padding: 1rem;
   border: initial;
@@ -337,7 +337,7 @@ textarea {
   width: 6rem;
   border-radius: 100%;
   word-break: break-word;
-        }
+  }
 
         .modal-buttons button:hover {
             background-color: #183743;
