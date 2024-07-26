@@ -1771,73 +1771,102 @@ function calcularTareasRestantes(numTareasCompletadas) {
   return 10 - (numTareasCompletadas % 10);
 }
 
-function verTareasCompletadas() {
-  var tareasCompletadas =
-    JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
+function exportarTareas(tareasCompletadas) {
+    // Obtener la fecha y hora actuales en formato DD-MM-YYYY HH-MM-SS
+    const ahora = new Date();
+    const dia = String(ahora.getDate()).padStart(2, '0');
+    const mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript empiezan desde 0
+    const anio = ahora.getFullYear();
+    const horas = String(ahora.getHours()).padStart(2, '0');
+    const minutos = String(ahora.getMinutes()).padStart(2, '0');
+    const segundos = String(ahora.getSeconds()).padStart(2, '0');
+    const fechaFormateada = `${dia}-${mes}-${anio} ${horas}-${minutos}-${segundos}`;
 
-  // Verificar si no hay tareas completadas
-  if (tareasCompletadas.length === 0) {
-    alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
-    return;
-  }
+    // Crear el contenido del archivo de texto
+    let contenido = "Tareas Completadas:\n\n";
+    tareasCompletadas.forEach((tarea) => {
+        contenido += `${tarea.estado} ${tarea.descripcion}, ${convertirDiaCompletadas(tarea.dia)}.\n`;
+    });
 
-  // Invertir el orden de las tareas completadas
-  tareasCompletadas.reverse();
+    // Crear un blob con el contenido del archivo
+    const blob = new Blob([contenido], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
 
-  var numTareasCompletadas = tareasCompletadas.length;
-  var nivel = calcularNivel(numTareasCompletadas);
-  var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
+    // Crear un enlace de descarga con nombre dinámico basado en la fecha y hora actuales
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Todo.html - Completed Tasks ${fechaFormateada}.txt`;
+    document.body.appendChild(a);
+    a.click();
 
-  var mensaje = `🟢Tareas completadas - Tu nivel: ${nivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n`;
-  tareasCompletadas.forEach((tarea) => {
-    mensaje += `${tarea.estado} ${tarea.descripcion}, ${convertirDiaCompletadas(
-      tarea.dia
-    )}.\n`;
-  });
-
-  // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
-  var respuestaUsuario = prompt(
-    `${mensaje}*Para la eliminación de las tareas completadas, escribe "borrar"`
-  );
-
-  // Verificar si el usuario ha ingresado una respuesta
-  if (respuestaUsuario !== null) {
-    // Verificar si la respuesta es correcta
-    if (respuestaUsuario.trim().toLowerCase() === "borrar") {
-      var confirmacion = confirm(
-        "⚠️¿Estás seguro de que deseas eliminar el registro de tareas completadas?"
-      );
-      if (confirmacion) {
-        // Generar tres números aleatorios entre 1 y 10
-        var numero1 = Math.floor(Math.random() * 10) + 1;
-        var numero2 = Math.floor(Math.random() * 10) + 1;
-        var numero3 = Math.floor(Math.random() * 10) + 1;
-        var sumaCorrecta = numero1 + numero2 + numero3;
-
-        // Pedir al usuario que resuelva la suma
-        var respuestaSuma = prompt(
-          `Para confirmar, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3}`
-        );
-
-        // Verificar si el usuario ha ingresado una respuesta
-        if (respuestaSuma !== null) {
-          // Verificar si la respuesta es correcta
-          if (
-            !isNaN(parseInt(respuestaSuma)) &&
-            parseInt(respuestaSuma) === sumaCorrecta
-          ) {
-            localStorage.removeItem("tareasCompletadas"); // Eliminar el registro de tareas completadas
-            alert("🗑️Registro de tareas completadas eliminado exitosamente.");
-          } else {
-            alert(
-              "⚠️Respuesta incorrecta. El registro de tareas completadas no ha sido eliminado."
-            );
-          }
-        }
-      }
-    }
-  }
+    // Limpiar y eliminar el enlace
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
+
+
+function verTareasCompletadas() {
+    var tareasCompletadas = JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
+
+    // Verificar si no hay tareas completadas
+    if (tareasCompletadas.length === 0) {
+        alert("⚠️Actualmente, no hay ninguna tarea completada para mostrar.");
+        return;
+    }
+
+    // Invertir el orden de las tareas completadas
+    tareasCompletadas.reverse();
+
+    var numTareasCompletadas = tareasCompletadas.length;
+    var nivel = calcularNivel(numTareasCompletadas);
+    var numTareasRestantes = calcularTareasRestantes(numTareasCompletadas);
+
+    var mensaje = `🟢Tareas completadas - Tu nivel: ${nivel}\n*Tienes (${numTareasCompletadas}🟢), requieres (${numTareasRestantes}🟢) más para subir de nivel.\n`;
+    tareasCompletadas.forEach((tarea) => {
+        mensaje += `${tarea.estado} ${tarea.descripcion}, ${convertirDiaCompletadas(tarea.dia)}.\n`;
+    });
+
+    // Pedir al usuario que resuelva la suma para confirmar la eliminación de las tareas completadas
+    /*var respuestaUsuario = prompt(`${mensaje}*Para la eliminación de las tareas completadas, escribe "borrar" o "exportar" para exportar las tareas.`);*/
+
+        var respuestaUsuario = prompt(`${mensaje}*Para la eliminación de las tareas completadas, escribe "borrar" o "exportar" para exportar las tareas.`);
+
+    // Verificar si el usuario ha ingresado una respuesta
+    if (respuestaUsuario !== null) {
+        // Verificar si la respuesta es "exportar"
+        if (respuestaUsuario.trim().toLowerCase() === "exportar") {
+            exportarTareas(tareasCompletadas);
+            return; // Salir de la función después de exportar
+        }
+
+        // Verificar si la respuesta es "borrar"
+        if (respuestaUsuario.trim().toLowerCase() === "borrar") {
+            var confirmacion = confirm("⚠️¿Estás seguro de que deseas eliminar el registro de tareas completadas?");
+            if (confirmacion) {
+                // Generar tres números aleatorios entre 1 y 10
+                var numero1 = Math.floor(Math.random() * 10) + 1;
+                var numero2 = Math.floor(Math.random() * 10) + 1;
+                var numero3 = Math.floor(Math.random() * 10) + 1;
+                var sumaCorrecta = numero1 + numero2 + numero3;
+
+                // Pedir al usuario que resuelva la suma
+                var respuestaSuma = prompt(`Para confirmar, resuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3}`);
+
+                // Verificar si el usuario ha ingresado una respuesta
+                if (respuestaSuma !== null) {
+                    // Verificar si la respuesta es correcta
+                    if (!isNaN(parseInt(respuestaSuma)) && parseInt(respuestaSuma) === sumaCorrecta) {
+                        localStorage.removeItem("tareasCompletadas"); // Eliminar el registro de tareas completadas
+                        alert("🗑️Registro de tareas completadas eliminado exitosamente.");
+                    } else {
+                        alert("⚠️Respuesta incorrecta. El registro de tareas completadas no ha sido eliminado.");
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 function convertirDiaCompletadas(dia) {
   var diaMap = {
@@ -2008,14 +2037,15 @@ function borrarDatos() {
   // Generar dos números aleatorios entre 1 y 10
   var numero1 = Math.floor(Math.random() * 10) + 1;
   var numero2 = Math.floor(Math.random() * 10) + 1;
-
+  var numero3 = Math.floor(Math.random() * 10) + 1;
+  var numero4 = Math.floor(Math.random() * 10) + 1;
   // Pedir al usuario que resuelva la suma
   var respuestaUsuario = prompt(
-    `Para confirmar el formateo de datos\nresuelve la siguiente suma: ${numero1} + ${numero2}`
+    `Para confirmar el formateo de datos\nresuelve la siguiente suma: ${numero1} + ${numero2} + ${numero3} + ${numero4}`
   );
 
   // Verificar si la respuesta es correcta
-  var sumaCorrecta = numero1 + numero2;
+  var sumaCorrecta = numero1 + numero2 + numero3 + numero4;
 
   if (parseInt(respuestaUsuario) === sumaCorrecta) {
     localStorage.clear();

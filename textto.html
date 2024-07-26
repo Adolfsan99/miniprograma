@@ -24,8 +24,8 @@
     <div class="box2">
         <p id="charCounter">Número de caracteres: 0</p>
         <button type="button" onclick="adjustText()">OK</button>
-        <button type="button" onclick="readText()">Escuchar</button>
-        <button type="button" onclick="toUpperCase()">Mayúsculas</button>
+        <button id="readButton" type="button" onclick="toggleRead()">Escuchar</button>
+        <button id="toggleCaseButton" type="button" onclick="toggleCase()">Mayúsculas</button>
         <button type="button" onclick="copyText()">Copiar</button>
         <button type="button" onclick="exportText()">Exportar</button>
         <button type="button" onclick="goBack()">✅Todo.html</button>
@@ -38,7 +38,177 @@
     </div>
     <script>
 
-        function toSentenceCase(text) {
+        // Variable global para mantener el estado del texto
+        var caseState = 0; // 0: Mayúsculas, 1: Minúsculas, 2: Capitalizar
+
+        // Función para alternar entre mayúsculas, minúsculas y capitalizar
+        function toggleCase() {
+            var inputText = document.getElementById('textInput').value;
+            var outputDiv = document.getElementById('output');
+            var toggleCaseButton = document.getElementById('toggleCaseButton');
+
+            // Alternar entre mayúsculas, minúsculas y capitalizar
+            switch (caseState) {
+                case 0: // Mayúsculas
+                    outputDiv.textContent = inputText.toUpperCase();
+                    toggleCaseButton.textContent = 'Minúsculas';
+                    caseState = 1;
+                    break;
+                case 1: // Minúsculas
+                    outputDiv.textContent = inputText.toLowerCase();
+                    toggleCaseButton.textContent = 'Capitalizar';
+                    caseState = 2;
+                    break;
+                case 2: // Capitalizar
+                    outputDiv.textContent = capitalizeText(inputText);
+                    toggleCaseButton.textContent = 'Mayúsculas';
+                    caseState = 0;
+                    break;
+            }
+        }
+
+        // Función para capitalizar el texto (primer carácter de cada oración en mayúsculas)
+        function capitalizeText(text) {
+            return text
+                .toLowerCase() // Primero convertimos todo a minúsculas
+                .replace(/(?:^|\.\s*)([a-z])/g, (match, p1) => p1.toUpperCase()); // Capitaliza el primer carácter de cada oración
+        }
+
+        // Función para contar caracteres y actualizar el contador
+        function countCharacters() {
+            var inputText = document.getElementById('textInput').value;
+            var charCounter = document.getElementById('charCounter');
+            charCounter.textContent = `Número de caracteres: ${inputText.length}`;
+        }
+
+        var isReading = false; // Estado para controlar si se está leyendo
+        var currentUtterance = null; // Para almacenar la instancia actual de SpeechSynthesisUtterance
+        var wordsArray = []; // Para almacenar los elementos <span> de las palabras
+        var currentWordIndex = 0; // Para rastrear el índice de la palabra actual
+
+        // Función para alternar entre iniciar y detener la lectura
+        function toggleRead() {
+            if (isReading) {
+                stopRead();
+            } else {
+                readText();
+            }
+        }
+
+
+        var isReading = false; // Estado para controlar si se está leyendo
+        var textToRead = ''; // Texto completo para la lectura
+        var outputDiv = document.getElementById('output'); // Elemento de salida
+        var wordsArray = []; // Array de palabras
+        var currentIndex = 0; // Índice de la palabra actual
+
+        // Función para alternar entre iniciar y detener la lectura
+        function toggleRead() {
+            if (isReading) {
+                stopRead();
+            } else {
+                readText();
+            }
+        }
+
+        // Función para leer el texto en voz alta
+        function readText() {
+            textToRead = document.getElementById('textInput').value;
+            outputDiv.innerHTML = '';
+
+            // Dividir el texto en palabras y crear elementos <span>
+            wordsArray = textToRead.split(/\s+/).filter(word => word.length > 0).map(word => {
+                var span = document.createElement('span');
+                span.textContent = word + ' ';
+                return span;
+            });
+
+            // Agregar las palabras al div
+            wordsArray.forEach(wordSpan => outputDiv.appendChild(wordSpan));
+
+            // Crear una instancia de SpeechSynthesisUtterance para todo el texto
+            var mensaje = new SpeechSynthesisUtterance(textToRead);
+            var velocidad = parseFloat(prompt("Ingresa la velocidad de lectura (0.1 a 10)"));
+
+            // Verificar si la velocidad es un número válido
+            if (!isNaN(velocidad) && velocidad >= 0.1 && velocidad <= 10) {
+                mensaje.rate = velocidad;
+
+                mensaje.onboundary = function (event) {
+                    // Resaltar la palabra actual
+                    var currentWord = getWordFromBoundary(event);
+                    wordsArray.forEach((wordSpan, index) => {
+                        if (index === currentWord) {
+                            wordSpan.classList.add('highlight');
+                        } else {
+                            wordSpan.classList.remove('highlight');
+                        }
+                    });
+                };
+
+                mensaje.onend = function () {
+                    // Quitar el resaltado al finalizar la lectura
+                    wordsArray.forEach(wordSpan => wordSpan.classList.remove('highlight'));
+                    isReading = false;
+                    document.getElementById('readButton').textContent = 'Escuchar';
+                };
+
+                // Iniciar la lectura
+                window.speechSynthesis.speak(mensaje);
+                isReading = true;
+                document.getElementById('readButton').textContent = 'Detener';
+            } else {
+                alert("La velocidad ingresada debe ser un número entre 0.1 y 10.");
+            }
+        }
+
+        // Función para obtener el índice de la palabra actual basado en el evento de límite
+        function getWordFromBoundary(event) {
+            var wordStart = event.charIndex;
+            var wordEnd = wordStart + event.charLength;
+            var wordIndex = wordsArray.findIndex(span => {
+                var text = span.textContent.trim();
+                var spanStart = textToRead.indexOf(text);
+                var spanEnd = spanStart + text.length;
+                return (wordStart >= spanStart && wordEnd <= spanEnd);
+            });
+            return wordIndex;
+        }
+
+        // Función para detener la lectura
+        function stopRead() {
+            window.speechSynthesis.cancel();
+            isReading = false;
+            document.getElementById('readButton').textContent = 'Escuchar';
+            // Quitar el resaltado de las palabras
+            wordsArray.forEach(wordSpan => wordSpan.classList.remove('highlight'));
+        }
+        // Función para ajustar texto y mostrarlo en output
+        function adjustText() {
+            stopRead();
+            var textInputElement = document.getElementById('textInput');
+            var inputText = textInputElement.value;
+            var outputDiv = document.getElementById('output');
+
+            // Confirmar si se desea aplicar correcciones ortográficas básicas
+            var aplicarCorrecciones = confirm("¿Deseas aplicar correcciones ortográficas básicas al texto?");
+
+            // Si el usuario acepta, aplicar correcciones ortográficas
+            if (aplicarCorrecciones) {
+                inputText = applyCorrections(inputText);
+            }
+
+            // Reemplazar saltos de línea por <br> y convertir múltiples espacios en uno solo para visualización
+            var formattedText = inputText
+                .replace(/\n/g, '<br>')  // Reemplazar saltos de línea por <br>
+                .replace(/\s+/g, ' ');   // Reemplazar múltiples espacios consecutivos por un solo espacio
+
+            // Mostrar el texto ajustado en el div
+            outputDiv.innerHTML = formattedText; // Usa innerHTML para interpretar <br> correctamente
+        }
+
+        // Función para aplicar correcciones ortográficas básicas sin alterar la estructura del texto
+        function applyCorrections(text) {
             // Definir correcciones de texto comunes
             const correcciones = {
                 ' a ': ' á ',
@@ -66,77 +236,13 @@
                 ' mas ': ' más '
             };
 
-            // Aplicar correcciones de texto comunes
+            // Aplicar correcciones de texto comunes sin alterar espacios y saltos de línea
             for (let [incorrecta, correcta] of Object.entries(correcciones)) {
                 let regex = new RegExp(incorrecta, 'gi');
                 text = text.replace(regex, correcta);
             }
 
-            // Dividir el texto en "oraciones" manteniendo los delimitadores
-            var sentences = text.split(/([.?!])/);
-
-            // Iterar sobre las partes divididas y ajustar las "oraciones"
-            for (var i = 0; i < sentences.length; i += 2) {
-                if (sentences[i]) {
-                    sentences[i] = sentences[i].trim();
-                    sentences[i] = sentences[i].charAt(0).toUpperCase() + sentences[i].slice(1);
-                }
-            }
-
-            // Unir las partes nuevamente para formar el texto ajustado
-            var adjustedText = sentences.join('');
-
-            // Corregir espacios adicionales y puntuación
-            adjustedText = adjustedText.replace(/\s+/g, ' ');  // Eliminar espacios múltiples
-            adjustedText = adjustedText.replace(/\s+([,.?!])/g, '$1');  // Eliminar espacios antes de puntuación
-            adjustedText = adjustedText.replace(/([.?!])\s*/g, '$1 ');  // Asegurar un espacio después de puntuación
-            adjustedText = adjustedText.replace(/,\s*/g, ', ');  // Asegurar un espacio después de comas
-            adjustedText = adjustedText.trim();  // Eliminar espacios al inicio y final
-
-            // Asegurar que haya un punto final si no hay otro signo de puntuación al final
-            if (!/[.?!]$/.test(adjustedText)) {
-                adjustedText += '.';
-            }
-
-            return adjustedText;
-        }
-
-
-        function stopRead() {
-            window.speechSynthesis.cancel();
-        }
-
-        // Función para contar caracteres y actualizar el contador
-        function countCharacters() {
-            var inputText = document.getElementById('textInput').value;
-            var charCounter = document.getElementById('charCounter');
-            charCounter.textContent = `Número de caracteres: ${inputText.length}`;
-        }
-
-        // Función para leer el texto en voz alta
-        function readText() {
-            var inputText = document.getElementById('textInput').value;
-            var outputDiv = document.getElementById('output');
-            var mensaje = new SpeechSynthesisUtterance(inputText);
-            mensaje.rate = 2; // Establece la velocidad a 2x
-            window.speechSynthesis.speak(mensaje);
-            outputDiv.textContent = inputText;
-        }
-
-        // Función para ajustar texto y mostrarlo en output
-        function adjustText() {
-            stopRead()
-            var inputText = document.getElementById('textInput').value;
-            var outputDiv = document.getElementById('output');
-            outputDiv.textContent = toSentenceCase(inputText); // Llama a toSentenceCase para ajustar el texto
-        }
-
-        // Función para convertir texto a mayúsculas y mostrarlo en output
-        function toUpperCase() {
-            stopRead()
-            var inputText = document.getElementById('textInput').value;
-            var outputDiv = document.getElementById('output');
-            outputDiv.textContent = inputText.toUpperCase();
+            return text;
         }
 
         // Función para copiar el texto al portapapeles

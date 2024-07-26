@@ -38,44 +38,23 @@
                 placeholder="Escribe algo aquí..."></textarea>
         </div>
         <div class="box1">
-            <button onclick="verOCrearTarea()">
-                <p>📝</p>Ver/crear tareas
+
+            <button onclick="openModal('tareasModal')">
+                <p>📝</p>Tareas
             </button>
-            <button onclick="editarTarea()">
-                <p>✏️</p>Gestionar tareas
+            <button onclick="openModal('herramientasModal')">
+                <p>⚙️</p>Utilidades
             </button>
-            <button onclick="actualizarTareas()">
-                <p>🪄</p>Actualizar tareas
+            <button onclick="openModal('datosModal')">
+                <p>💾</p>Datos
             </button>
-            <button onclick="verOCrearRutina()">
-                <p>🔃</p>Ver/crear rutina
-            </button>
-            <button onclick="aleatorio()">
-                <p>🎲</p>Generar n° aleatorio
-            </button>
-            <button onclick="porcentaje()">
-                <p>📊</p>Calcular porcentaje
-            </button>
-        </div>
-        <div class="box2">
             <button onclick="comoUsar()">
                 <p>❓</p>Guía de usuario
             </button>
-            <button onclick="textToHtml()">
-                <p>✒️</p>TextTo.html
-            </button>
-            <button onclick="walllist()">
-                <p>📌</p>Walllist
-            </button>
-            <button onclick="exportarDatos()">
-                <p>💾</p>Exportar datos
-            </button>
-            <button onclick="importarDatos()">
-                <p>📲</p>Importar datos
-            </button>
-            <button onclick="borrarDatos()">
-                <p>🧹</p>Limpiar datos
-            </button>
+
+        </div>
+        <div class="box2">
+
         </div>
         <div class="box3">
 
@@ -86,11 +65,95 @@
             <a href="https://github.com/Adolfsan99">Creado por: Adolfo Sánchez</a>
         </div>
 
+        <!-- Modal Tareas -->
+        <div id="tareasModal" class="modal" hidden>
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('tareasModal')">❌</span>
+                <div class="modal-buttons">
+                    <button onclick="verOCrearTarea()">
+                        <p>📝</p>Ver/crear tareas
+                    </button>
+                    <button onclick="editarTarea()">
+                        <p>✏️</p>Gestionar tareas
+                    </button>
+                    <button onclick="actualizarTareas()">
+                        <p>🪄</p>Actualizar tareas
+                    </button>
+                    <button onclick="verOCrearRutina()">
+                        <p>🔃</p>Ver/crear rutina
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Herramientas -->
+        <div id="herramientasModal" class="modal" hidden>
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('herramientasModal')">❌</span>
+
+                <div class="modal-buttons">
+                    <button onclick="aleatorio()">
+                        <p>🎲</p>Generar n° aleatorio
+                    </button>
+                    <button onclick="porcentaje()">
+                        <p>📊</p>Calcular porcentaje
+                    </button>
+                    <button onclick="textToHtml()">
+                        <p>✒️</p>TextTo.html
+                    </button>
+                    <button onclick="walllist()">
+                        <p>📌</p>Walllist
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Datos -->
+        <div id="datosModal" class="modal" hidden>
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('datosModal')">❌</span>
+
+                <div class="modal-buttons">
+                    <button onclick="exportarDatos()">
+                        <p>💾</p>Exportar datos
+                    </button>
+                    <button onclick="importarDatos()">
+                        <p>📲</p>Importar datos
+                    </button>
+                    <button onclick="borrarDatos()">
+                        <p>🧹</p>Limpiar datos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
 
     <script src="script.js"></script>
     <script>
+
+        // Función para abrir un modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        // Función para cerrar un modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Cerrar el modal al hacer clic fuera del contenido
+        window.onclick = function (event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        }
+
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
@@ -150,6 +213,44 @@
 
     </script>
 
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                    console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        }
+        else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+        // ]]>
+    </script>
 </body>
 
 </html>
