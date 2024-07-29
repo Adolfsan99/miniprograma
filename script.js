@@ -82,420 +82,301 @@ function limpiarMedicionSemanal() {
 
 //////////////////////////////////////////////////////////////////////////////
 
+// Datos iniciales
 const initialData = [
-  { dia: "L", rendimiento: 0 },
-  { dia: "M", rendimiento: 0 },
-  { dia: "Mi", rendimiento: 0 },
-  { dia: "J", rendimiento: 0 },
-  { dia: "V", rendimiento: 0 },
-  { dia: "S", rendimiento: 0 },
-  { dia: "D", rendimiento: 0 },
+    { dia: "L", rendimiento: 0 },
+    { dia: "M", rendimiento: 0 },
+    { dia: "Mi", rendimiento: 0 },
+    { dia: "J", rendimiento: 0 },
+    { dia: "V", rendimiento: 0 },
+    { dia: "S", rendimiento: 0 },
+    { dia: "D", rendimiento: 0 },
 ];
 
-// Cargar datos de localStorage o usar datos iniciales
+// Obtener datos de localStorage o usar datos iniciales
 const data = JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
-
 const container = document.getElementById("chart-container");
 
+// Número máximo de tareas (se puede ajustar según el usuario)
+const maxTareas = JSON.parse(localStorage.getItem("maxTareas")) || 3;
+localStorage.setItem("maxTareas", JSON.stringify(maxTareas));
+
+// Función para renderizar el gráfico
 function renderChart(data) {
-  const diasSemana = ["d", "l", "m", "mi", "j", "v", "s"];
-  const diaActual = diasSemana[new Date().getDay()];
+    const diasSemana = ["d", "l", "m", "mi", "j", "v", "s"];
+    const diaActual = diasSemana[new Date().getDay()];
+    container.innerHTML = "";
 
-  container.innerHTML = "";
-
-  // Calcular el promedio de rendimiento
-  let sumRendimiento = 0;
-  data.forEach((item) => {
-    sumRendimiento += item.rendimiento;
-  });
-  const promedioRendimiento = sumRendimiento / data.length;
-
-  // Calcular el porcentaje exacto del promedio semanal
-  const porcentajePromedio = promedioRendimiento.toFixed(0); // Redondear a 2 decimales
-
-  // Definir la clasificación según el promedio
-  let clasificacion;
-  if (promedioRendimiento >= 95) {
-    clasificacion = { letra: "SS", porcentaje: porcentajePromedio };
-  } else if (promedioRendimiento >= 90) {
-    clasificacion = { letra: "S", porcentaje: porcentajePromedio };
-  } else if (promedioRendimiento >= 80) {
-    clasificacion = { letra: "A", porcentaje: porcentajePromedio };
-  } else if (promedioRendimiento >= 70) {
-    clasificacion = { letra: "B", porcentaje: porcentajePromedio };
-  } else if (promedioRendimiento >= 66) {
-    clasificacion = { letra: "C", porcentaje: porcentajePromedio };
-  } else if (promedioRendimiento >= 33) {
-    clasificacion = { letra: "D", porcentaje: porcentajePromedio };
-  } else if (promedioRendimiento >= 10) {
-    clasificacion = { letra: "E", porcentaje: porcentajePromedio };
-  } else {
-    clasificacion = { letra: "F", porcentaje: porcentajePromedio };
-  }
-
-  // Crear el elemento de clasificación con formato especial
-  const classificationContainer = document.createElement("div");
-  classificationContainer.style.fontWeight = "bold";
-  classificationContainer.style.fontSize = "36px";
-
-  // Asignar color según la clasificación
-  switch (clasificacion.letra) {
-    case "SS":
-      classificationContainer.style.color = "#4CAF50"; // Verde
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "S":
-      classificationContainer.style.color = "#8BC34A"; // Verde claro
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "A":
-      classificationContainer.style.color = "#FFEB3B"; // Amarillo
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "B":
-      classificationContainer.style.color = "#FFC107"; // Naranja
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "C":
-      classificationContainer.style.color = "#FF9800"; // Naranja oscuro
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "D":
-      classificationContainer.style.color = "#FF5722"; // Rojo anaranjado
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "E":
-      classificationContainer.style.color = "#f44336"; // Rojo
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    case "F":
-      classificationContainer.style.color = "#f44336"; // Rojo
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-      break;
-    default:
-      classificationContainer.style.color = "black";
-      classificationContainer.style.marginRight = "8px";
-      classificationContainer.style.height = "9rem";
-      classificationContainer.style.alignItems = "baseline";
-      classificationContainer.style.display = "flex";
-  }
-
-  classificationContainer.textContent = clasificacion.letra;
-
-  // Crear el elemento para el porcentaje
-  const percentageText = document.createElement("div");
-  //percentageText.textContent = `${clasificacion.porcentaje}% `;
-  percentageText.style.fontSize = "16px";
-  percentageText.style.color = "white";
-
-  // Agregar ambos elementos al contenedor principal
-  container.appendChild(classificationContainer);
-  container.appendChild(percentageText);
-
-  // Generar gráficos para cada día
-  data.forEach((item) => {
-    const barContainer = document.createElement("div");
-    barContainer.style.display = "flex";
-    barContainer.style.flexDirection = "column";
-    barContainer.style.alignItems = "center";
-
-    const bar = document.createElement("div");
-    bar.className = "bar";
-    bar.style.height = `${item.rendimiento * 1}px`;
-
-    if (item.rendimiento <= 34) {
-      bar.style.background = "#f8312f"; // Rojo
-    } else if (item.rendimiento <= 69) {
-      bar.style.background =
-        "linear-gradient(180deg, rgb(255 120 0) 0%, rgb(255 165 0) 80%)"; // Naranja
+    // Calcular el promedio de rendimiento para la clasificación
+    let sumRendimiento = 0;
+    data.forEach((item) => { sumRendimiento += item.rendimiento; });
+    const promedioRendimiento = sumRendimiento / data.length;
+    const porcentajePromedio = promedioRendimiento.toFixed(0);
+    
+    let clasificacion;
+    if (promedioRendimiento >= 95) {
+        clasificacion = { letra: "SS", porcentaje: porcentajePromedio };
+    } else if (promedioRendimiento >= 90) {
+        clasificacion = { letra: "S", porcentaje: porcentajePromedio };
+    } else if (promedioRendimiento >= 80) {
+        clasificacion = { letra: "A", porcentaje: porcentajePromedio };
+    } else if (promedioRendimiento >= 70) {
+        clasificacion = { letra: "B", porcentaje: porcentajePromedio };
+    } else if (promedioRendimiento >= 66) {
+        clasificacion = { letra: "C", porcentaje: porcentajePromedio };
+    } else if (promedioRendimiento >= 33) {
+        clasificacion = { letra: "D", porcentaje: porcentajePromedio };
+    } else if (promedioRendimiento >= 10) {
+        clasificacion = { letra: "E", porcentaje: porcentajePromedio };
     } else {
-      bar.style.background = ""; // Puedes definir otro color por defecto
+        clasificacion = { letra: "F", porcentaje: porcentajePromedio };
     }
 
-    const label = document.createElement("div");
-    label.className = "bar-label";
-    label.textContent = item.dia;
-
-    if (item.dia.toLowerCase() === diaActual) {
-      label.style.color = "yellow";
+    // Mostrar clasificación
+    const classificationContainer = document.createElement("div");
+    classificationContainer.style.fontWeight = "bold";
+    classificationContainer.style.fontSize = "36px";
+    classificationContainer.style.marginRight = "8px";
+    classificationContainer.style.height = "9rem";
+    classificationContainer.style.alignItems = "baseline";
+    classificationContainer.style.display = "flex";
+    switch (clasificacion.letra) {
+        case "SS": classificationContainer.style.color = "#4CAF50"; break;
+        case "S": classificationContainer.style.color = "#8BC34A"; break;
+        case "A": classificationContainer.style.color = "#FFEB3B"; break;
+        case "B": classificationContainer.style.color = "#FFC107"; break;
+        case "C": classificationContainer.style.color = "#FF9800"; break;
+        case "D": classificationContainer.style.color = "#FF5722"; break;
+        case "E": classificationContainer.style.color = "#f44336"; break;
+        case "F": classificationContainer.style.color = "#f44336"; break;
+        default: classificationContainer.style.color = "black";
     }
+    classificationContainer.textContent = clasificacion.letra;
 
-    barContainer.appendChild(bar);
-    barContainer.appendChild(label);
-    container.appendChild(barContainer);
-  });
+    const percentageText = document.createElement("div");
+    percentageText.style.fontSize = "16px";
+    percentageText.style.color = "white";
+    //percentageText.textContent = `${clasificacion.porcentaje}%`;
+
+    container.appendChild(classificationContainer);
+    container.appendChild(percentageText);
+
+    // Mostrar barras de progreso para cada día
+    data.forEach((item) => {
+        const barContainer = document.createElement("div");
+        barContainer.style.display = "flex";
+        barContainer.style.flexDirection = "column";
+        barContainer.style.alignItems = "center";
+
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        // Ajusta la altura de la barra según el porcentaje
+        const altura = (item.rendimiento / 100) * 100; // Altura máxima de 100px
+        bar.style.height = `${altura}px`;
+
+        // Color de la barra basado en el rendimiento
+        if (item.rendimiento <= 34) {
+            bar.style.background = "#f8312f";
+        } else if (item.rendimiento <= 69) {
+            bar.style.background = "linear-gradient(180deg, rgb(255 120 0) 0%, rgb(255 165 0) 80%)";
+        } else {
+            bar.style.background = "";
+        }
+
+        const label = document.createElement("div");
+        label.className = "bar-label";
+        label.textContent = item.dia;
+        if (item.dia.toLowerCase() === diaActual) {
+            label.style.color = "yellow";
+        }
+
+        barContainer.appendChild(bar);
+        barContainer.appendChild(label);
+        container.appendChild(barContainer);
+    });
 }
-
 renderChart(data);
 
 //////////////////////////////////////////////////////////////////////////////
 
+// Función para ver o crear tareas
 function verOCrearTarea() {
-  var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+    var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+    var maxTareas = JSON.parse(localStorage.getItem("maxTareas")) || 3;  // Valor por defecto
 
-  // Función para obtener el nombre del mes desde su número
-  function obtenerNombreMes(numeroMes) {
-    var meses = [
-      "Ene",
-      "Feb",
-      "Mar",
-      "Abr",
-      "May",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dic",
-    ];
-    return meses[numeroMes - 1];
-  }
-
-  // Función para extraer la fecha del inicio de la descripción
-  function extraerFecha(descripcion) {
-    var match = descripcion.match(/^M(\d+) (\w+) (\d+)/);
-    if (match) {
-      var numeroMes = parseInt(match[1]);
-      var nombreMes = obtenerNombreMes(numeroMes);
-      var dia = parseInt(match[3]);
-      var fecha = new Date(new Date().getFullYear(), numeroMes - 1, dia); // Crear objeto Date con el año actual
-      return fecha;
+    function obtenerNombreMes(numeroMes) {
+        var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+        return meses[numeroMes - 1];
     }
-    return null;
-  }
 
-  // Ordenar tareas por fecha
-  tareas.sort((a, b) => {
-    var fechaA = extraerFecha(a.descripcion);
-    var fechaB = extraerFecha(b.descripcion);
-
-    if (fechaA && fechaB) {
-      return fechaA - fechaB; // Ordenar por fecha
-    } else {
-      return a.descripcion.localeCompare(b.descripcion); // Ordenar alfabéticamente si no se puede extraer la fecha
+    function extraerFecha(descripcion) {
+        var match = descripcion.match(/^M(\d+) (\w+) (\d+)/);
+        if (match) {
+            var numeroMes = parseInt(match[1]);
+            var nombreMes = obtenerNombreMes(numeroMes);
+            var dia = parseInt(match[3]);
+            var fecha = new Date(new Date().getFullYear(), numeroMes - 1, dia);
+            return fecha;
+        }
+        return null;
     }
-  });
 
-  // Obtener el día de la semana actual
-  var fechaActual = new Date();
-  var diaSemana = fechaActual.getDay();
-  var diaActual = "";
+    tareas.sort((a, b) => {
+        var fechaA = extraerFecha(a.descripcion);
+        var fechaB = extraerFecha(b.descripcion);
+        if (fechaA && fechaB) {
+            return fechaA - fechaB;
+        } else {
+            return a.descripcion.localeCompare(b.descripcion);
+        }
+    });
 
-  switch (diaSemana) {
-    case 0:
-      diaActual = "d";
-      break; // Domingo
-    case 1:
-      diaActual = "l";
-      break; // Lunes
-    case 2:
-      diaActual = "m";
-      break; // Martes
-    case 3:
-      diaActual = "mi";
-      break; // Miércoles
-    case 4:
-      diaActual = "j";
-      break; // Jueves
-    case 5:
-      diaActual = "v";
-      break; // Viernes
-    case 6:
-      diaActual = "s";
-      break; // Sábado
-  }
-
-  var dias = {
-    s: "📆-Sábado-",
-    d: "📆-Domingo-",
-    l: "📆-Lunes-",
-    m: "📆-Martes-",
-    mi: "📆-Miércoles-",
-    j: "📆-Jueves-",
-    v: "📆-Viernes-",
-    x: "📆-Sin asignar-",
-  };
-
-  var diaActualEmoji = "📆⭐";
-
-  var mensaje = `📝Tareas disponibles - Tu progreso `;
-
-  // Calcular progreso del día actual
-  var tareasDiaActual = tareas.filter((tarea) => tarea.dia === diaActual);
-  var totalTareasDiaActual = tareasDiaActual.length;
-  var tareasCompletadasDiaActual = tareasDiaActual.filter(
-    (tarea) => tarea.estado === "🟢"
-  ).length;
-  var progresoDiaActual =
-    totalTareasDiaActual > 0
-      ? Math.round((tareasCompletadasDiaActual / totalTareasDiaActual) * 100)
-      : 0;
-
-  // Construir barra de progreso
-  var progresoBarra = "";
-  for (var i = 0; i < 10; i++) {
-    progresoBarra += i < progresoDiaActual / 10 ? "█" : "░";
-  }
-
-  mensaje += `${progresoBarra} ${progresoDiaActual}%\n`;
-
-  // Convertir los días a un arreglo y ordenarlos numéricamente
-  var diasOrdenados = Object.keys(dias).sort((a, b) => {
-    if (a === "x") return 1; // "Sin asignar" debe ir al final
-    if (b === "x") return -1;
-    return parseInt(a) - parseInt(b); // Orden numérico
-  });
-
-  diasOrdenados.forEach((diaKey) => {
-    var diaMensaje =
-      diaKey === diaActual
-        ? dias[diaKey].replace("📆", diaActualEmoji)
-        : dias[diaKey];
-    var tareasDia = tareas.filter(
-      (tarea) => tarea.dia === diaKey && tarea.prioridad === 1
-    );
-    if (tareasDia.length > 0) {
-      mensaje += `${diaMensaje}\n`;
-      tareasDia.forEach((tarea) => {
-        mensaje += `${tarea.estado}${tarea.descripcion}\n`;
-      });
+    var fechaActual = new Date();
+    var diaSemana = fechaActual.getDay();
+    var diaActual = "";
+    switch (diaSemana) {
+        case 0: diaActual = "d"; break;
+        case 1: diaActual = "l"; break;
+        case 2: diaActual = "m"; break;
+        case 3: diaActual = "mi"; break;
+        case 4: diaActual = "j"; break;
+        case 5: diaActual = "v"; break;
+        case 6: diaActual = "s"; break;
     }
-  });
 
-  var nuevaTarea = prompt(`${mensaje}`);
+    var dias = { s: "📆-Sábado-", d: "📆-Domingo-", l: "📆-Lunes-", m: "📆-Martes-", mi: "📆-Miércoles-", j: "📆-Jueves-", v: "📆-Viernes-", x: "📆-Sin asignar-" };
+    var diaActualEmoji = "📆⭐";
+    var mensaje = `📝Tareas disponibles - Tu progreso `;
+    var tareasDiaActual = tareas.filter((tarea) => tarea.dia === diaActual);
+    var totalTareasDiaActual = tareasDiaActual.length;
+    var tareasCompletadasDiaActual = tareasDiaActual.filter((tarea) => tarea.estado === "🟢").length;
+    var progresoDiaActual = totalTareasDiaActual > 0 ? Math.round((tareasCompletadasDiaActual / maxTareas) * 100) : 0;
+    var progresoBarra = "";
+    for (var i = 0; i < 10; i++) {
+        progresoBarra += i < progresoDiaActual / 10 ? "█" : "░";
+    }
+    mensaje += `${progresoBarra} ${progresoDiaActual}%\n`;
 
-  if (!nuevaTarea) {
-    return;
-  } else if (nuevaTarea.trim() === "") {
-    alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
-    return;
-  } else if (nuevaTarea === "actualizar") {
-    moverTareasAlDiaActual(tareas); // Función para mover tareas 🟡🔴 al día actual
-    localStorage.setItem("tareas", JSON.stringify(tareas)); // Guardar las tareas actualizadas
-    alert("📝Tareas movidas al día actual exitosamente."); // Mensaje de confirmación
-    return;
-  } else if (nuevaTarea === "mover") {
-    moverTareasAlDiaSiguiente(tareas, diaActual);
+    var diasOrdenados = Object.keys(dias).sort((a, b) => {
+        if (a === "x") return 1;
+        if (b === "x") return -1;
+        return parseInt(a) - parseInt(b);
+    });
 
-    return;
-  } else if (nuevaTarea === "crear") {
-    // Crear nueva tarea con asistencia guiada
-    crearNuevaTareaConAsistenciaGuiada(tareas, diaActual);
-    return;
-  }
+    diasOrdenados.forEach((diaKey) => {
+        var diaMensaje = diaKey === diaActual ? dias[diaKey].replace("📆", diaActualEmoji) : dias[diaKey];
+        var tareasDia = tareas.filter((tarea) => tarea.dia === diaKey && tarea.prioridad === 1);
+        if (tareasDia.length > 0) {
+            mensaje += `${diaMensaje}\n`;
+            tareasDia.forEach((tarea) => {
+                mensaje += `${tarea.estado}${tarea.descripcion}\n`;
+            });
+        }
+    });
 
-  if (nuevaTarea.length > 70) {
-    alert(
-      "⚠️Tarea demasiado larga. La tarea debe tener 70 caracteres o menos."
-    );
-    return;
-  }
+    var nuevaTarea = prompt(`${mensaje}`);
+    if (!nuevaTarea) return;
+    if (nuevaTarea.trim() === "") {
+        alert("⚠️Tarea inválida. Debes ingresar una tarea válida.");
+        return;
+    }
+    if (nuevaTarea === "actualizar") {
+        moverTareasAlDiaActual(tareas);
+        localStorage.setItem("tareas", JSON.stringify(tareas));
+        alert("📝Tareas movidas al día actual exitosamente.");
+        return;
+    }
+    if (nuevaTarea === "mover") {
+        moverTareasAlDiaSiguiente(tareas, diaActual);
+        return;
+    }
+    if (nuevaTarea === "crear") {
+        crearNuevaTareaConAsistenciaGuiada(tareas, diaActual);
+        return;
+    }
 
-  var partesTarea = nuevaTarea.split(",");
+    if (nuevaTarea.length > 70) {
+        alert("⚠️Tarea demasiado larga. La tarea debe tener 70 caracteres o menos.");
+        return;
+    }
+    var partesTarea = nuevaTarea.split(",");
+    if (partesTarea.length < 4) {
+        alert("⚠️Formato de tarea inválido. La tarea no se creará.");
+        return;
+    }
+    var prioridad = parseInt(partesTarea[0]);
+    var estado = partesTarea[1].toLowerCase();
+    var descripcion = partesTarea.slice(2, -1).join(",");
+    var dia = partesTarea[partesTarea.length - 1].toLowerCase();
+    var estadoEmoji;
+    switch (estado) {
+        case "p": estadoEmoji = "🔴"; break;
+        case "e": estadoEmoji = "🟡"; break;
+        case "f": estadoEmoji = "🟢"; break;
+        default:
+            alert("⚠️Estado inválido. La tarea no se creará.");
+            return;
+    }
+    if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
+        alert("⚠️Prioridad inválida. La tarea no se creará.");
+        return;
+    }
+    var diasValidos = ["l", "m", "mi", "j", "v", "s", "d", "x"];
+    if (!diasValidos.includes(dia)) {
+        alert("⚠️Día inválido. La tarea no se creará.");
+        return;
+    }
+    var nuevaTareaObj = { prioridad: prioridad, estado: estadoEmoji, descripcion: descripcion, dia: dia };
+    tareas.push(nuevaTareaObj);
+    localStorage.setItem("tareas", JSON.stringify(tareas));
 
-  if (partesTarea.length < 4) {
-    alert("⚠️Formato de tarea inválido. La tarea no se creará.");
-    return;
-  }
-
-  var prioridad = parseInt(partesTarea[0]);
-  var estado = partesTarea[1].toLowerCase();
-  var descripcion = partesTarea.slice(2, -1).join(",");
-  var dia = partesTarea[partesTarea.length - 1].toLowerCase();
-
-  var estadoEmoji;
-  switch (estado) {
-    case "p":
-      estadoEmoji = "🔴";
-      break;
-    case "e":
-      estadoEmoji = "🟡";
-      break;
-    case "f":
-      estadoEmoji = "🟢";
-      break;
-    default:
-      alert("⚠️Estado inválido. La tarea no se creará.");
-      return;
-  }
-
-  if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
-    alert("⚠️Prioridad inválida. La tarea no se creará.");
-    return;
-  }
-
-  var diasValidos = ["l", "m", "mi", "j", "v", "s", "d", "x"];
-  if (!diasValidos.includes(dia)) {
-    alert("⚠️Día inválido. La tarea no se creará.");
-    return;
-  }
-
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    estado: estadoEmoji,
-    descripcion: descripcion,
-    dia: dia,
-  };
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
-  // Actualizar rendimiento diario en localStorage después de agregar una nueva tarea
-  var tareasActualizadas = JSON.parse(localStorage.getItem("tareas")) || [];
-  var tareasDiaActualizadas = tareasActualizadas.filter(
-    (tarea) => tarea.dia === diaActual
-  );
-  var totalTareasDiaActualizadas = tareasDiaActualizadas.length;
-  var tareasCompletadasDiaActualizadas = tareasDiaActualizadas.filter(
-    (tarea) => tarea.estado === "🟢"
-  ).length;
-  var progresoDiaActualizado =
-    totalTareasDiaActualizadas > 0
-      ? Math.round(
-          (tareasCompletadasDiaActualizadas / totalTareasDiaActualizadas) * 100
-        )
-      : 0;
-
-  var medicionSemanalActualizada =
-    JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
-  var diaDataActualizada = medicionSemanalActualizada.find(
-    (item) => item.dia.toLowerCase() === diaActual
-  );
-  if (diaDataActualizada) {
-    diaDataActualizada.rendimiento = progresoDiaActualizado;
-  }
-  localStorage.setItem(
-    "medicionSemanal",
-    JSON.stringify(medicionSemanalActualizada)
-  );
-
-  alert("📝Tarea creada exitosamente.");
-  renderChart(medicionSemanalActualizada);
+    var tareasActualizadas = JSON.parse(localStorage.getItem("tareas")) || [];
+    var tareasDiaActualizadas = tareasActualizadas.filter((tarea) => tarea.dia === diaActual);
+    var totalTareasDiaActualizadas = tareasDiaActualizadas.length;
+    var tareasCompletadasDiaActualizadas = tareasDiaActualizadas.filter((tarea) => tarea.estado === "🟢").length;
+    var progresoDiaActualizado = totalTareasDiaActualizadas > 0 ? Math.round((tareasCompletadasDiaActualizadas / maxTareas) * 100) : 0;
+    var medicionSemanalActualizada = JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
+    var diaDataActualizada = medicionSemanalActualizada.find((item) => item.dia.toLowerCase() === diaActual);
+    if (diaDataActualizada) {
+        diaDataActualizada.rendimiento = progresoDiaActualizado;
+    }
+    localStorage.setItem("medicionSemanal", JSON.stringify(medicionSemanalActualizada));
+    alert("📝Tarea creada exitosamente.");
+    renderChart(medicionSemanalActualizada);
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+// Función para establecer el máximo de tareas
+function establecerMaximoTareas() {
+    var nuevoMaximo = prompt("Introduce el número máximo de tareas para calcular el 100%.");
+    var nuevoMaximoNum = parseInt(nuevoMaximo);
+
+    if (isNaN(nuevoMaximoNum) || nuevoMaximoNum <= 0) {
+        alert("⚠️Número máximo de tareas inválido.\n*Debe ser un número mayor que 0.");
+        return;
+    }
+
+    localStorage.setItem("maxTareas", JSON.stringify(nuevoMaximoNum));
+    
+    // Actualizar el rendimiento de todos los días
+    var tareasActualizadas = JSON.parse(localStorage.getItem("tareas")) || [];
+    var medicionSemanalActualizada = JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
+    
+    medicionSemanalActualizada.forEach((item) => {
+        var tareasDelDia = tareasActualizadas.filter((tarea) => tarea.dia === item.dia.toLowerCase());
+        var totalTareasDelDia = tareasDelDia.length;
+        var tareasCompletadasDelDia = tareasDelDia.filter((tarea) => tarea.estado === "🟢").length;
+        item.rendimiento = nuevoMaximoNum > 0 ? Math.round((tareasCompletadasDelDia / nuevoMaximoNum) * 100) : 0;
+    });
+
+    localStorage.setItem("medicionSemanal", JSON.stringify(medicionSemanalActualizada));
+    alert("📝Número máximo de tareas actualizado exitosamente.");
+    renderChart(medicionSemanalActualizada);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 
 function moverTareasDelDiaAnterior(tareas, diaActual) {
   var diaAnterior = anteriorDia(diaActual);
@@ -696,533 +577,7 @@ function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
   alert("📝 Tarea creada exitosamente.");
 }
 
-function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
-  // Solicitar descripción de la tarea
-  var descripcion = prompt("Escribe la tarea a realizar:");
-  if (!descripcion) {
-    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
-    return;
-  }
-
-  // Preguntar si es urgente y establecer prioridad
-  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
-  var prioridad = esUrgente ? 1 : 2;
-
-  // Preguntar si es importante y agregar estrella si lo es
-  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
-  if (esImportante) {
-    descripcion = `⭐${descripcion}`;
-  }
-
-  // Establecer fecha
-  var opcionDia = prompt(
-    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
-  );
-  var diaSeleccionado = "";
-
-  switch (opcionDia) {
-    case "l":
-      diaSeleccionado = `M1 Ene ${descripcion}`;
-      break;
-    case "m":
-      diaSeleccionado = `M2 Feb ${descripcion}`;
-      break;
-    case "mi":
-      diaSeleccionado = `M3 Mar ${descripcion}`;
-      break;
-    case "j":
-      diaSeleccionado = `M4 Abr ${descripcion}`;
-      break;
-    case "v":
-      diaSeleccionado = `M5 May ${descripcion}`;
-      break;
-    case "s":
-      diaSeleccionado = `M6 Jun ${descripcion}`;
-      break;
-    case "d":
-      diaSeleccionado = `M7 Jul ${descripcion}`;
-      break;
-    case "x":
-      var mes = prompt("Elije el mes (1 al 12):");
-      var diaMes = prompt("Elije el día (1 al 31):");
-
-      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
-        alert("⚠️ Fecha inválida. La tarea no se creará.");
-        return;
-      }
-
-      var meses = [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic",
-      ];
-      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
-      break;
-    default:
-      diaSeleccionado = `${descripcion}`;
-      break;
-  }
-
-  // Crear objeto de nueva tarea
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    descripcion: descripcion,
-    dia: diaSeleccionado,
-  };
-
-  // Agregar tarea a la lista y guardar en localStorage
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
-  // Confirmación de tarea creada
-  alert("📝 Tarea creada exitosamente.");
-}
-function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
-  // Solicitar descripción de la tarea
-  var descripcion = prompt("Escribe la tarea a realizar:");
-  if (!descripcion) {
-    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
-    return;
-  }
-
-  // Preguntar si es urgente y establecer prioridad
-  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
-  var prioridad = esUrgente ? 1 : 2;
-
-  // Preguntar si es importante y agregar estrella si lo es
-  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
-  if (esImportante) {
-    descripcion = `⭐${descripcion}`;
-  }
-
-  // Establecer fecha
-  var opcionDia = prompt(
-    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
-  );
-  var diaSeleccionado = "";
-
-  switch (opcionDia) {
-    case "l":
-      diaSeleccionado = `M1 Ene ${descripcion}`;
-      break;
-    case "m":
-      diaSeleccionado = `M2 Feb ${descripcion}`;
-      break;
-    case "mi":
-      diaSeleccionado = `M3 Mar ${descripcion}`;
-      break;
-    case "j":
-      diaSeleccionado = `M4 Abr ${descripcion}`;
-      break;
-    case "v":
-      diaSeleccionado = `M5 May ${descripcion}`;
-      break;
-    case "s":
-      diaSeleccionado = `M6 Jun ${descripcion}`;
-      break;
-    case "d":
-      diaSeleccionado = `M7 Jul ${descripcion}`;
-      break;
-    case "x":
-      var mes = prompt("Elije el mes (1 al 12):");
-      var diaMes = prompt("Elije el día (1 al 31):");
-
-      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
-        alert("⚠️ Fecha inválida. La tarea no se creará.");
-        return;
-      }
-
-      var meses = [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic",
-      ];
-      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
-      break;
-    default:
-      diaSeleccionado = `${descripcion}`;
-      break;
-  }
-
-  // Crear objeto de nueva tarea
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    descripcion: diaSeleccionado,
-    dia: diaSeleccionado,
-  };
-
-  // Agregar tarea a la lista y guardar en localStorage
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
-  // Confirmación de tarea creada
-  alert("📝 Tarea creada exitosamente.");
-}
-function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
-  // Solicitar descripción de la tarea
-  var descripcion = prompt("Escribe la tarea a realizar:");
-  if (!descripcion) {
-    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
-    return;
-  }
-
-  // Preguntar si es urgente y establecer prioridad
-  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
-  var prioridad = esUrgente ? 1 : 2;
-
-  // Preguntar si es importante y agregar estrella si lo es
-  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
-  if (esImportante) {
-    descripcion = `⭐${descripcion}`;
-  }
-
-  // Establecer fecha
-  var opcionDia = prompt(
-    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
-  );
-  var diaSeleccionado = "";
-
-  switch (opcionDia) {
-    case "l":
-      diaSeleccionado = `M1 Ene ${descripcion}`;
-      break;
-    case "m":
-      diaSeleccionado = `M2 Feb ${descripcion}`;
-      break;
-    case "mi":
-      diaSeleccionado = `M3 Mar ${descripcion}`;
-      break;
-    case "j":
-      diaSeleccionado = `M4 Abr ${descripcion}`;
-      break;
-    case "v":
-      diaSeleccionado = `M5 May ${descripcion}`;
-      break;
-    case "s":
-      diaSeleccionado = `M6 Jun ${descripcion}`;
-      break;
-    case "d":
-      diaSeleccionado = `M7 Jul ${descripcion}`;
-      break;
-    case "x":
-      var mes = prompt("Elije el mes (1 al 12):");
-      var diaMes = prompt("Elije el día (1 al 31):");
-
-      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
-        alert("⚠️ Fecha inválida. La tarea no se creará.");
-        return;
-      }
-
-      var meses = [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic",
-      ];
-      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
-      break;
-    default:
-      diaSeleccionado = `${descripcion}`;
-      break;
-  }
-
-  // Crear objeto de nueva tarea
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    descripcion: diaSeleccionado,
-    dia: diaSeleccionado,
-  };
-
-  // Agregar tarea a la lista y guardar en localStorage
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
-  // Confirmación de tarea creada
-  alert("📝 Tarea creada exitosamente.");
-}
-
-function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
-  // Solicitar descripción de la tarea
-  var descripcion = prompt("Escribe la tarea a realizar:");
-  if (!descripcion) {
-    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
-    return;
-  }
-
-  // Preguntar si es urgente y establecer prioridad
-  var esUrgente = confirm(`¿Es urgente "${descripcion}"?`);
-  var prioridad = esUrgente ? 1 : 2;
-
-  // Preguntar si es importante y agregar estrella si lo es
-  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
-  if (esImportante) {
-    descripcion = `⭐${descripcion}`;
-  }
-
-  // Establecer fecha
-  var opcionDia = prompt(
-    `Establece una fecha (l,m,mi,j,v,s,d,x)\nDeja vacío para hoy:`
-  );
-  var diaSeleccionado = "";
-
-  switch (opcionDia) {
-    case "l":
-      diaSeleccionado = `M1 Ene ${descripcion}`;
-      break;
-    case "m":
-      diaSeleccionado = `M2 Feb ${descripcion}`;
-      break;
-    case "mi":
-      diaSeleccionado = `M3 Mar ${descripcion}`;
-      break;
-    case "j":
-      diaSeleccionado = `M4 Abr ${descripcion}`;
-      break;
-    case "v":
-      diaSeleccionado = `M5 May ${descripcion}`;
-      break;
-    case "s":
-      diaSeleccionado = `M6 Jun ${descripcion}`;
-      break;
-    case "d":
-      diaSeleccionado = `M7 Jul ${descripcion}`;
-      break;
-    case "x":
-      var mes = prompt("Elije el mes (1 al 12):");
-      var diaMes = prompt("Elije el día (1 al 31):");
-
-      if (!mes || !diaMes || mes < 1 || mes > 12 || diaMes < 1 || diaMes > 31) {
-        alert("⚠️ Fecha inválida. La tarea no se creará.");
-        return;
-      }
-
-      var meses = [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic",
-      ];
-      diaSeleccionado = `M${mes} ${meses[mes - 1]} ${diaMes}, ${descripcion}`;
-      break;
-    default:
-      diaSeleccionado = `${descripcion}`;
-      break;
-  }
-
-  // Crear objeto de nueva tarea
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    descripcion: descripcion,
-    dia: diaSeleccionado,
-    estado: esUrgente ? "🔴" : "🟡", // Establecer estado según urgencia
-  };
-
-  // Agregar tarea a la lista y guardar en localStorage
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
-  // Confirmación de tarea creada
-  alert("📝 Tarea creada exitosamente.");
-}
-
-function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
-  // Solicitar descripción de la tarea
-  var descripcion = prompt("Escribe la tarea a realizar:");
-  if (!descripcion) {
-    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
-    return;
-  }
-
-  // Preguntar si es importante y establecer la prioridad y la descripción final
-  var esImportante = confirm(`¿Es importante "${descripcion}"?`);
-  var prioridad = esImportante ? 1 : 2;
-
-  // Si es importante, agregar la estrella al inicio de la descripción
-  if (esImportante) {
-    descripcion = `⭐${descripcion}`;
-  }
-
-  // Preguntar si se desea establecer una fecha específica
-  var establecerFecha = confirm(
-    `¿Deseas establecer una fecha específica para "${descripcion}"?`
-  );
-  if (establecerFecha) {
-    var mes = prompt("Elije el mes (1 al 12):");
-    var dia = prompt("Elije el día (1 al 31):");
-
-    if (!mes || !dia || mes < 1 || mes > 12 || dia < 1 || dia > 31) {
-      alert("⚠️ Fecha inválida. La tarea no se creará.");
-      return;
-    }
-
-    var meses = [
-      "Ene",
-      "Feb",
-      "Mar",
-      "Abr",
-      "May",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dic",
-    ];
-
-    descripcion = `${descripcion}, M${mes} ${meses[mes - 1]} ${dia}`;
-  }
-
-  // Crear objeto de nueva tarea
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    descripcion: descripcion,
-    dia: diaActual,
-  };
-
-  // Agregar tarea a la lista y guardar en localStorage
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-
-  // Confirmación de tarea creada
-  alert("📝 Tarea creada exitosamente.");
-}
-
-function crearNuevaTareaConAsistenciaGuiada(tareas, diaActual) {
-  var descripcion = prompt("Describe la tarea a realizar:");
-  if (!descripcion) {
-    alert("⚠️ Tarea inválida. Debes ingresar una descripción válida.");
-    return;
-  }
-
-  // Preguntar por la urgencia (prioridad 1 o 2)
-  var confirmacionUrgencia = confirm(`¿"${descripcion}" es urgente?`);
-  var prioridad = confirmacionUrgencia ? 1 : 2;
-
-  // Preguntar por la fecha específica
-  var opcionesDia = `(l: Lunes),(m: Martes),(mi: Miércoles),(j: Jueves),(v: Viernes),(s: Sábado),(d: Domingo),(x: Fecha especifica)\n*Deja este campo vacio para asignar hoy`;
-  var opcionDia = prompt(
-    `¿Cuándo harás la tarea "${descripcion}"?\n${opcionesDia}`
-  );
-  var diaSeleccionado;
-
-  switch (opcionDia) {
-    case "":
-      diaSeleccionado = diaActual;
-      break;
-    case "l":
-      diaSeleccionado = "l";
-      break;
-    case "m":
-      diaSeleccionado = "m";
-      break;
-    case "mi":
-      diaSeleccionado = "mi";
-      break;
-    case "j":
-      diaSeleccionado = "j";
-      break;
-    case "v":
-      diaSeleccionado = "v";
-      break;
-    case "s":
-      diaSeleccionado = "s";
-      break;
-    case "d":
-      diaSeleccionado = "d";
-      break;
-    case "x":
-      var mes = prompt("Elije el mes (1 al 12):");
-      if (
-        !mes ||
-        isNaN(parseInt(mes)) ||
-        parseInt(mes) < 1 ||
-        parseInt(mes) > 12
-      ) {
-        alert("⚠️ Mes inválido. La tarea no se creará.");
-        return;
-      }
-      var dia = prompt("Elije el día (1 al 31):");
-      if (
-        !dia ||
-        isNaN(parseInt(dia)) ||
-        parseInt(dia) < 1 ||
-        parseInt(dia) > 31
-      ) {
-        alert("⚠️ Día inválido. La tarea no se creará.");
-        return;
-      }
-      // Formar la fecha específica en el formato deseado
-      descripcion = `M${mes} ${obtenerNombreMes(
-        parseInt(mes)
-      )} ${dia},${descripcion}`;
-      diaSeleccionado = "x";
-      break;
-    default:
-      alert("⚠️ Opción inválida. La tarea no se creará.");
-      return;
-  }
-
-  if (descripcion.length > 70) {
-    alert(
-      "⚠️ Tarea demasiado larga. La tarea debe tener 70 caracteres o menos."
-    );
-    return;
-  }
-
-  // Preguntar por la importancia (añadir estrella al inicio)
-  var confirmacionImportancia = confirm(`¿"${descripcion}" es importante?`);
-  if (confirmacionImportancia) {
-    descripcion = `⭐${descripcion}`;
-  }
-
-  var estadoEmoji = prioridad === 1 ? "🟡" : "🔴";
-
-  var nuevaTareaObj = {
-    prioridad: prioridad,
-    estado: estadoEmoji,
-    descripcion: descripcion,
-    dia: diaSeleccionado,
-  };
-
-  tareas.push(nuevaTareaObj);
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-  alert("📝 Tarea creada exitosamente.");
-}
+//////////////////////////////////////////////////////////////////////////
 
 // Función auxiliar para obtener el nombre del mes
 function obtenerNombreMes(numeroMes) {
@@ -1260,203 +615,184 @@ function siguienteDia(diaActual) {
 ///////////////////////////////////////////////////////////////////////
 
 function verOCrearRutina() {
-  // Cargar la rutina existente, si la hay
-  var rutina = localStorage.getItem("rutina") || "";
+    // Cargar la rutina existente, si la hay
+    var rutina = localStorage.getItem("rutina") || "";
 
-  // Definir los mapeos para estados y días
-  var estadoMap = {
-    p: "🔴",
-    e: "🟡",
-    f: "🟢",
-  };
+    // Definir los mapeos para estados y días
+    var estadoMap = {
+        p: "🔴",
+        e: "🟡",
+        f: "🟢",
+    };
 
-  var diaMap = {
-    l: "Lunes.",
-    m: "Martes.",
-    mi: "Miércoles.",
-    j: "Jueves.",
-    v: "Viernes.",
-    s: "Sábado.",
-    d: "Domingo.",
-    x: "",
-  };
+    var diaMap = {
+        l: "Lunes.",
+        m: "Martes.",
+        mi: "Miércoles.",
+        j: "Jueves.",
+        v: "Viernes.",
+        s: "Sábado.",
+        d: "Domingo.",
+        x: "",
+    };
 
-  // Definir el mapeo para prioridades
-  var prioridadMap = {
-    1: 1,
-    2: 2,
-    3: 3,
-  };
+    // Definir el mapeo para prioridades
+    var prioridadMap = {
+        1: 1,
+        2: 2,
+        3: 3,
+    };
 
-  // Función para convertir el formato abreviado a uno más descriptivo
-  function convertirRutinaFormateada(rutina) {
-    var partesRutina = rutina.split(";").filter((t) => t.trim() !== "");
-    var rutinaFormateada = partesRutina
-      .map((tarea) => {
-        var partesTarea = tarea.split(",");
-        if (partesTarea.length < 4) {
-          return ""; // Ignorar las tareas con formato incorrecto
-        }
-        var prioridad = prioridadMap[partesTarea[0]] || partesTarea[0];
-        var estado = estadoMap[partesTarea[1].toLowerCase()] || partesTarea[1];
-        var descripcion = partesTarea.slice(2, -1).join(",");
-        var dia =
-          diaMap[partesTarea[partesTarea.length - 1].toLowerCase()] ||
-          partesTarea[partesTarea.length - 1];
-        return `${prioridad}${estado}${descripcion},${dia}`;
-      })
-      .join("\n");
-    return rutinaFormateada;
-  }
-
-  // Convertir la rutina a un formato más descriptivo
-  var rutinaFormateada = convertirRutinaFormateada(rutina);
-  var nuevaRutina = prompt(
-    "🔃Rutina actual:\n" +
-      rutinaFormateada +
-      "\n\n*Ingresa la nueva rutina con el formato: 'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...'",
-    rutina
-  );
-
-  // Verificar si el usuario presionó "Cancelar"
-  if (nuevaRutina === null) {
-    return; // Salir de la función sin hacer nada
-  }
-
-  // Si el usuario ingresó una rutina vacía, solicitar confirmación
-  if (nuevaRutina.trim() === "") {
-    alert("⚠️Creación rutina inválida");
-    return;
-  }
-
-  // Procesar las tareas de la rutina y validar
-  var partesRutina = nuevaRutina.split(";").filter((t) => t.trim() !== ""); // Filtrar para eliminar cualquier tarea vacía
-
-  // Verificar si la palabra clave "crear" está al final
-  var ultimaParte = partesRutina[partesRutina.length - 1].trim().toLowerCase();
-  var crearAlFinal = ultimaParte === "crear";
-
-  // Si "crear" está al final, eliminarlo de las partes de la rutina
-  if (crearAlFinal) {
-    partesRutina.pop();
-  }
-
-  // Validar las tareas
-  for (var tarea of partesRutina) {
-    var partesTarea = tarea.split(",");
-    if (partesTarea.length < 4) {
-      alert("⚠️Formato de tarea inválido. La tarea no se creará.");
-      return;
+    // Función para convertir el formato abreviado a uno más descriptivo
+    function convertirRutinaFormateada(rutina) {
+        var partesRutina = rutina.split(";").filter((t) => t.trim() !== "");
+        var rutinaFormateada = partesRutina
+            .map((tarea) => {
+                var partesTarea = tarea.split(",");
+                if (partesTarea.length < 4) {
+                    return ""; // Ignorar las tareas con formato incorrecto
+                }
+                var prioridad = prioridadMap[partesTarea[0]] || partesTarea[0];
+                var estado = estadoMap[partesTarea[1].toLowerCase()] || partesTarea[1];
+                var descripcion = partesTarea.slice(2, -1).join(",");
+                var dia =
+                    diaMap[partesTarea[partesTarea.length - 1].toLowerCase()] ||
+                    partesTarea[partesTarea.length - 1];
+                return `${prioridad}${estado}${descripcion},${dia}`;
+            })
+            .join("\n");
+        return rutinaFormateada;
     }
 
-    var prioridad = parseInt(partesTarea[0]);
-    var estado = partesTarea[1].toLowerCase();
-    var descripcion = partesTarea.slice(2, -1).join(","); // Seleccionar solo las partes de la descripción, excluyendo el último elemento (que es el día)
-    var dia = partesTarea[partesTarea.length - 1].toLowerCase();
+    // Convertir la rutina a un formato más descriptivo
+    var rutinaFormateada = convertirRutinaFormateada(rutina);
+    var nuevaRutina = prompt(
+        "🔃Rutina actual:\n" +
+            rutinaFormateada +
+            "\n\n*Ingresa la nueva rutina con el formato: 'Prioridad,Estado,Descripción,Día;Prioridad,Estado,Descripción,Día;...'; utiliza 'crear' al final para crear las tareas de la rutina",
+        rutina
+    );
 
-    // Verificar la longitud de la descripción
-    if (descripcion.length > 64) {
-      alert(
-        "⚠️Descripción demasiado larga. La descripción debe tener 64 caracteres o menos."
-      );
-      return; // Descripción demasiado larga
+    // Verificar si el usuario presionó "Cancelar"
+    if (nuevaRutina === null) {
+        return; // Salir de la función sin hacer nada
     }
 
-    // Verificar si el estado es válido
-    var estadoEmoji;
-    switch (estado) {
-      case "p":
-        estadoEmoji = "🔴";
-        break;
-      case "e":
-        estadoEmoji = "🟡";
-        break;
-      case "f":
-        estadoEmoji = "🟢";
-        break;
-      default:
-        alert("⚠️Estado inválido. La tarea no se creará.");
+    // Si el usuario ingresó una rutina vacía, solicitar confirmación
+    if (nuevaRutina.trim() === "") {
+        alert("⚠️Creación rutina inválida");
         return;
     }
 
-    // Verificar si la prioridad es válida
-    if (isNaN(prioridad) || prioridad < 1 || prioridad > 3) {
-      alert("⚠️Prioridad inválida. La tarea no se creará.");
-      return;
-    }
+    // Procesar las tareas de la rutina y validar
+    var partesRutina = nuevaRutina.split(";").filter((t) => t.trim() !== ""); // Filtrar para eliminar cualquier tarea vacía
 
-    // Verificar si el día es válido
-    var diasValidos = ["l", "m", "mi", "j", "v", "s", "d", "x"];
-    if (!diasValidos.includes(dia)) {
-      alert("⚠️Día inválido. La tarea no se creará.");
-      return;
-    }
-  }
+    // Verificar si la palabra clave "crear" está al final
+    var ultimaParte = partesRutina[partesRutina.length - 1].trim().toLowerCase();
+    var crearAlFinal = ultimaParte === "crear";
 
-  // Guardar la rutina actualizada solo si ha cambiado y es válida
-  if (nuevaRutina !== rutina) {
-    localStorage.setItem("rutina", partesRutina.join(";"));
-    alert("✅Rutina guardada exitosamente.");
-
-    // Si "crear" estaba al final, confirmar la creación de las tareas a partir de la rutina
+    // Si "crear" está al final, eliminarlo de las partes de la rutina
     if (crearAlFinal) {
-      // Confirmar la creación de las tareas a partir de la rutina
-      var confirmacion = confirm(
-        "⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?"
-      );
-      if (!confirmacion) {
-        return; // Salir de la función sin hacer nada si el usuario cancela
-      }
-
-      // Generar tres números aleatorios para la suma
-      var num1 = Math.floor(Math.random() * 10);
-      var num2 = Math.floor(Math.random() * 10);
-      var num3 = Math.floor(Math.random() * 10);
-      var sumaCorrecta = num1 + num2 + num3;
-      var sumaUsuario = parseInt(
-        prompt(
-          `Para confirmar, resuelve la siguiente suma: ${num1} + ${num2} + ${num3}`
-        )
-      );
-      if (sumaUsuario === sumaCorrecta) {
-        // Procesar y agregar las tareas a las tareas existentes
-        var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-        for (var tarea of partesRutina) {
-          var partesTarea = tarea.split(",");
-          var prioridad = parseInt(partesTarea[0]);
-          var estado = partesTarea[1].toLowerCase();
-          var descripcion = partesTarea.slice(2, -1).join(",");
-          var dia = partesTarea[partesTarea.length - 1].toLowerCase();
-          var estadoEmoji;
-          switch (estado) {
-            case "p":
-              estadoEmoji = "🔴";
-              break;
-            case "e":
-              estadoEmoji = "🟡";
-              break;
-            case "f":
-              estadoEmoji = "🟢";
-              break;
-          }
-          var prioridadEmoji = prioridadMap[prioridad.toString()] || prioridad;
-          var nuevaTareaObj = {
-            prioridad: prioridadEmoji,
-            estado: estadoEmoji,
-            descripcion: descripcion,
-            dia: dia,
-          };
-          tareas.push(nuevaTareaObj);
-        }
-        // Guardar las tareas actualizadas en localStorage
-        localStorage.setItem("tareas", JSON.stringify(tareas));
-        alert("✅Tareas creadas exitosamente a partir de la rutina.");
-      } else {
-        alert("⚠️Respuesta incorrecta. Las tareas no se crearán.");
-      }
+        partesRutina.pop();
     }
-  }
+
+    // Convertir las partes de la rutina en el formato de objeto para la comparación
+    var tareasNuevas = partesRutina.map(tarea => {
+        var partesTarea = tarea.split(",");
+        return {
+            prioridad: prioridadMap[partesTarea[0]] || partesTarea[0],
+            estado: estadoMap[partesTarea[1].toLowerCase()] || partesTarea[1],
+            descripcion: partesTarea.slice(2, -1).join(","),
+            dia: diaMap[partesTarea[partesTarea.length - 1].toLowerCase()] || partesTarea[partesTarea.length - 1]
+        };
+    });
+
+    // Obtener las tareas actuales del localStorage
+    var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+    var tareasExistentes = tareas.map(tarea => JSON.stringify(tarea));
+
+    // Verificar si alguna de las nuevas tareas ya existe en las tareas existentes
+    var tareasYaExisten = tareasNuevas.some(tareaNueva => {
+        var tareaNuevaString = JSON.stringify(tareaNueva);
+        return tareasExistentes.includes(tareaNuevaString);
+    });
+
+    if (tareasYaExisten) {
+        alert("⚠️Las tareas no se han creado porque ya existen en la lista de tareas.");
+        return;
+    }
+
+    // Guardar la rutina actualizada solo si ha cambiado y es válida
+    if (nuevaRutina !== rutina) {
+        localStorage.setItem("rutina", partesRutina.join(";"));
+        alert("✅Rutina guardada exitosamente.");
+
+        // Si "crear" estaba al final, confirmar la creación de las tareas a partir de la rutina
+        if (crearAlFinal) {
+            // Confirmar la creación de las tareas a partir de la rutina
+            var confirmacion = confirm(
+                "⚠️¿Estás seguro de que deseas crear las tareas a partir de la rutina?"
+            );
+            if (!confirmacion) {
+                return; // Salir de la función sin hacer nada si el usuario cancela
+            }
+
+            // Generar tres números aleatorios para la suma
+            var num1 = Math.floor(Math.random() * 10);
+            var num2 = Math.floor(Math.random() * 10);
+            var num3 = Math.floor(Math.random() * 10);
+            var sumaCorrecta = num1 + num2 + num3;
+            var sumaUsuario = parseInt(
+                prompt(
+                    `Para confirmar, resuelve la siguiente suma: ${num1} + ${num2} + ${num3}`
+                )
+            );
+            if (sumaUsuario === sumaCorrecta) {
+                // Procesar y agregar las tareas a las tareas existentes
+                for (var tarea of partesRutina) {
+                    var partesTarea = tarea.split(",");
+                    var prioridad = parseInt(partesTarea[0]);
+                    var estado = partesTarea[1].toLowerCase();
+                    var descripcion = partesTarea.slice(2, -1).join(",");
+                    var dia = partesTarea[partesTarea.length - 1].toLowerCase();
+                    var estadoEmoji;
+                    switch (estado) {
+                        case "p":
+                            estadoEmoji = "🔴";
+                            break;
+                        case "e":
+                            estadoEmoji = "🟡";
+                            break;
+                        case "f":
+                            estadoEmoji = "🟢";
+                            break;
+                    }
+                    var prioridadEmoji = prioridadMap[prioridad.toString()] || prioridad;
+                    var nuevaTareaObj = {
+                        prioridad: prioridadEmoji,
+                        estado: estadoEmoji,
+                        descripcion: descripcion,
+                        dia: dia,
+                    };
+
+                    // Verificar si la tarea nueva ya existe en las tareas actuales
+                    if (!tareasExistentes.includes(JSON.stringify(nuevaTareaObj))) {
+                        tareas.push(nuevaTareaObj);
+                    } else {
+                        alert(`⚠️La tarea '${descripcion}' ya existe y no se creará.`);
+                    }
+                }
+                // Guardar las tareas actualizadas en localStorage
+                localStorage.setItem("tareas", JSON.stringify(tareas));
+                alert("✅Tareas creadas exitosamente a partir de la rutina.");
+            } else {
+                alert("⚠️Respuesta incorrecta. Las tareas no se crearán.");
+            }
+        }
+    }
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1507,143 +843,157 @@ function editarTarea() {
     return;
   }
 
-
-
-  var nuevaDescripcion = prompt(
-    "Ingresa la nueva descripción:",
-    tareas[tareaSeleccionada].descripcion
-  );
-  if (nuevaDescripcion === null) return; // Usuario canceló
-
-  var nuevaPrioridad = prompt(
-    "Ingresa la nueva prioridad (1: 🔥, 2: 🔔, 3: 📆):",
-    tareas[tareaSeleccionada].prioridad
-  );
-  if (nuevaPrioridad === null) return; // Usuario canceló
-  nuevaPrioridad = parseInt(nuevaPrioridad);
-
-  var nuevoEstado = prompt(
-    "Ingresa el nuevo estado (p: 🔴, e: 🟡, f: 🟢):",
-    tareas[tareaSeleccionada].estado === "🔴"
-      ? "p"
-      : tareas[tareaSeleccionada].estado === "🟡"
-      ? "e"
-      : "f"
-  );
-  if (nuevoEstado === null) return; // Usuario canceló
-
-  // Verificar la longitud de la nueva descripción
-  if (nuevaDescripcion.length > 64) {
-    alert(
-      "⚠️Descripción demasiado larga. La descripción debe tener 64 caracteres o menos."
+  function editarDetalleTarea() {
+    var nuevaDescripcion = prompt(
+      "Ingresa la nueva descripción:",
+      tareas[tareaSeleccionada].descripcion
     );
-    return; // Descripción demasiado larga
-  }
-
-  var nuevoDia = prompt(
-    "Ingresa el nuevo día (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n*Escribe 'borrar' para eliminar la tarea:",
-    tareas[tareaSeleccionada].dia
-  );
-  if (nuevoDia === null) return; // Usuario canceló
-
-  if (isNaN(nuevaPrioridad) || nuevaPrioridad < 1 || nuevaPrioridad > 3) {
-    alert("⚠️Prioridad inválida.");
-    return;
-  }
-
-  var estadoEmoji;
-  switch (nuevoEstado.toLowerCase()) {
-    case "p":
-      estadoEmoji = "🔴";
-      break;
-    case "e":
-      estadoEmoji = "🟡";
-      break;
-    case "f":
-      estadoEmoji = "🟢";
-      break;
-    default:
-      alert("⚠️Estado inválido.");
+    if (nuevaDescripcion === null) {
+      editarTarea(); // Vuelve a llamar a editarTarea si el usuario cancela
       return;
-  }
+    }
 
-  if (nuevoDia.toLowerCase() === "borrar") {
-    tareas.splice(tareaSeleccionada, 1); // Elimina la tarea seleccionada
-    alert("🗑️Tarea borrada exitosamente.");
-    localStorage.setItem("tareas", JSON.stringify(tareas)); // Actualiza el almacenamiento local
-    renderChart(medicionSemanalActualizada); // Renderiza la gráfica actualizada si es necesario
-    return; // Termina la función después de borrar la tarea
-  } else {
-    var diaTexto;
-    switch (nuevoDia.toLowerCase()) {
-      case "l":
-        diaTexto = "l";
+    var nuevaPrioridad = prompt(
+      "Ingresa la nueva prioridad (1: 🔥, 2: 🔔, 3: 📆):",
+      tareas[tareaSeleccionada].prioridad
+    );
+    if (nuevaPrioridad === null) {
+      editarTarea(); // Vuelve a llamar a editarTarea si el usuario cancela
+      return;
+    }
+    nuevaPrioridad = parseInt(nuevaPrioridad);
+
+    var nuevoEstado = prompt(
+      "Ingresa el nuevo estado (p: 🔴, e: 🟡, f: 🟢):",
+      tareas[tareaSeleccionada].estado === "🔴"
+        ? "p"
+        : tareas[tareaSeleccionada].estado === "🟡"
+        ? "e"
+        : "f"
+    );
+    if (nuevoEstado === null) {
+      editarTarea(); // Vuelve a llamar a editarTarea si el usuario cancela
+      return;
+    }
+
+    // Verificar la longitud de la nueva descripción
+    if (nuevaDescripcion.length > 64) {
+      alert(
+        "⚠️Descripción demasiado larga. La descripción debe tener 64 caracteres o menos."
+      );
+      return; // Descripción demasiado larga
+    }
+
+    var nuevoDia = prompt(
+      "Ingresa el nuevo día (l: Lunes, m: Martes, mi: Miércoles, j: Jueves, v: Viernes, s: Sábado, d: Domingo, x: Sin asignar)\n*Escribe 'borrar' para eliminar la tarea:",
+      tareas[tareaSeleccionada].dia
+    );
+    if (nuevoDia === null) {
+      editarTarea(); // Vuelve a llamar a editarTarea si el usuario cancela
+      return;
+    }
+
+    if (isNaN(nuevaPrioridad) || nuevaPrioridad < 1 || nuevaPrioridad > 3) {
+      alert("⚠️Prioridad inválida.");
+      return;
+    }
+
+    var estadoEmoji;
+    switch (nuevoEstado.toLowerCase()) {
+      case "p":
+        estadoEmoji = "🔴";
         break;
-      case "m":
-        diaTexto = "m";
+      case "e":
+        estadoEmoji = "🟡";
         break;
-      case "mi":
-        diaTexto = "mi";
-        break;
-      case "j":
-        diaTexto = "j";
-        break;
-      case "v":
-        diaTexto = "v";
-        break;
-      case "s":
-        diaTexto = "s";
-        break;
-      case "d":
-        diaTexto = "d";
-        break;
-      case "x":
-        diaTexto = "x";
+      case "f":
+        estadoEmoji = "🟢";
         break;
       default:
-        alert("⚠️Día inválido.");
+        alert("⚠️Estado inválido.");
         return;
     }
 
-    tareas[tareaSeleccionada].prioridad = nuevaPrioridad;
-    tareas[tareaSeleccionada].estado = estadoEmoji;
-    tareas[tareaSeleccionada].descripcion = nuevaDescripcion;
-    tareas[tareaSeleccionada].dia = diaTexto;
+    if (nuevoDia.toLowerCase() === "borrar") {
+      tareas.splice(tareaSeleccionada, 1); // Elimina la tarea seleccionada
+      alert("🗑️Tarea borrada exitosamente.");
+      localStorage.setItem("tareas", JSON.stringify(tareas)); // Actualiza el almacenamiento local
+      renderChart(medicionSemanalActualizada); // Renderiza la gráfica actualizada si es necesario
+      return; // Termina la función después de borrar la tarea
+    } else {
+      var diaTexto;
+      switch (nuevoDia.toLowerCase()) {
+        case "l":
+          diaTexto = "l";
+          break;
+        case "m":
+          diaTexto = "m";
+          break;
+        case "mi":
+          diaTexto = "mi";
+          break;
+        case "j":
+          diaTexto = "j";
+          break;
+        case "v":
+          diaTexto = "v";
+          break;
+        case "s":
+          diaTexto = "s";
+          break;
+        case "d":
+          diaTexto = "d";
+          break;
+        case "x":
+          diaTexto = "x";
+          break;
+        default:
+          alert("⚠️Día inválido.");
+          return;
+      }
 
-    alert("✏️Tarea editada exitosamente.");
-    localStorage.setItem("tareas", JSON.stringify(tareas));
+      tareas[tareaSeleccionada].prioridad = nuevaPrioridad;
+      tareas[tareaSeleccionada].estado = estadoEmoji;
+      tareas[tareaSeleccionada].descripcion = nuevaDescripcion;
+      tareas[tareaSeleccionada].dia = diaTexto;
 
-    // Actualizar el progreso y la gráfica después de editar la tarea
-    var tareasDiaActualizadas = tareas.filter(
-      (tarea) => tarea.dia === diaTexto
-    );
-    var totalTareasDiaActualizadas = tareasDiaActualizadas.length;
-    var tareasCompletadasDiaActualizadas = tareasDiaActualizadas.filter(
-      (tarea) => tarea.estado === "🟢"
-    ).length;
-    var progresoDiaActualizado =
-      totalTareasDiaActualizadas > 0
-        ? Math.round(
-            (tareasCompletadasDiaActualizadas / totalTareasDiaActualizadas) *
-              100
-          )
-        : 0;
+      alert("✏️Tarea editada exitosamente.");
+      localStorage.setItem("tareas", JSON.stringify(tareas));
 
-    const medicionSemanalActualizada =
-      JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
-    const diaDataActualizada = medicionSemanalActualizada.find(
-      (item) => item.dia.toLowerCase() === diaTexto
-    );
-    if (diaDataActualizada) {
-      diaDataActualizada.rendimiento = progresoDiaActualizado;
+      // Actualizar el progreso y la gráfica después de editar la tarea
+      var tareasDiaActualizadas = tareas.filter(
+        (tarea) => tarea.dia === diaTexto
+      );
+      var totalTareasDiaActualizadas = tareasDiaActualizadas.length;
+      var tareasCompletadasDiaActualizadas = tareasDiaActualizadas.filter(
+        (tarea) => tarea.estado === "🟢"
+      ).length;
+      var progresoDiaActualizado =
+        totalTareasDiaActualizadas > 0
+          ? Math.round(
+              (tareasCompletadasDiaActualizadas / totalTareasDiaActualizadas) *
+                100
+            )
+          : 0;
+
+      const medicionSemanalActualizada =
+        JSON.parse(localStorage.getItem("medicionSemanal")) || initialData;
+      const diaDataActualizada = medicionSemanalActualizada.find(
+        (item) => item.dia.toLowerCase() === diaTexto
+      );
+      if (diaDataActualizada) {
+        diaDataActualizada.rendimiento = progresoDiaActualizado;
+      }
+      localStorage.setItem(
+        "medicionSemanal",
+        JSON.stringify(medicionSemanalActualizada)
+      );
+
+      renderChart(medicionSemanalActualizada);
     }
-    localStorage.setItem(
-      "medicionSemanal",
-      JSON.stringify(medicionSemanalActualizada)
-    );
-
-    renderChart(medicionSemanalActualizada);
   }
+
+  editarDetalleTarea(); // Llama a la función que maneja la edición de detalles de la tarea
 }
 
 function obtenerNombreDia(abreviaturaDia) {
@@ -1677,6 +1027,7 @@ function convertirPrioridad(prioridad) {
   };
   return prioridadMap[prioridad] || prioridad;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 
