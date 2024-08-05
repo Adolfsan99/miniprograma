@@ -133,7 +133,7 @@ function renderChart(data) {
     }
 
     // Mostrar clasificación
-    const classificationContainer = document.createElement("div");
+    /*const classificationContainer = document.createElement("div");
     classificationContainer.style.fontWeight = "bold";
     classificationContainer.style.fontSize = "36px";
     classificationContainer.style.marginRight = "8px";
@@ -160,7 +160,7 @@ function renderChart(data) {
 
     container.appendChild(classificationContainer);
     container.appendChild(percentageText);
-
+    */
     // Mostrar barras de progreso para cada día
     data.forEach((item) => {
         const barContainer = document.createElement("div");
